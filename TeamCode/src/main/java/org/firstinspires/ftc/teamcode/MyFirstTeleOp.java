@@ -29,7 +29,7 @@ public class MyFirstTeleOp extends OpMode {
 
     @Override
     public void loop() {
-
+        frontLeftWheel.setPower(gamepad1.left_stick_y);
     }
 }
 
