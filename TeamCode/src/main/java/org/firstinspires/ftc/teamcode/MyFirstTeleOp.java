@@ -18,7 +18,7 @@ public class MyFirstTeleOp extends OpMode {
     @Override
     public void init() {
         frontLeftWheel = hardwareMap.dcMotor.get("frontleft");
-        frontRightWhe el = hardwareMap.dcMotor.get("frontright");
+        frontRightWheel = hardwareMap.dcMotor.get("frontright");
         backLeftWheel = hardwareMap.dcMotor.get("backleft");
         backRightWheel = hardwareMap.dcMotor.get("backright");
 
