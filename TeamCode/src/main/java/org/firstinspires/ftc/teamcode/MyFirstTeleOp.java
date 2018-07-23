@@ -18,18 +18,22 @@ public class MyFirstTeleOp extends OpMode {
     @Override
     public void init() {
         frontLeftWheel = hardwareMap.dcMotor.get("frontleft");
-        frontRightWheel = hardwareMap.dcMotor.get("frontright");
+        frontRightWhe el = hardwareMap.dcMotor.get("frontright");
         backLeftWheel = hardwareMap.dcMotor.get("backleft");
         backRightWheel = hardwareMap.dcMotor.get("backright");
 
         frontRightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
         backRightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
+
     }
 
 
     @Override
     public void loop() {
-
+        frontLeftWheel.setPower(gamepad1.left_stick_y);
+        backLeftWheel.setPower(gamepad1.left_stick_y);
+        frontRightWheel.setPower(gamepad1.right_stick_y);
+        backRightWheel.setPower(gamepad1.right_stick_y);
     }
 }
 
