@@ -36,5 +36,3 @@ public class MyFirstTeleOp extends OpMode {
         backRightWheel.setPower(gamepad1.right_stick_y);
     }
 }
-
-
