@@ -24,15 +24,13 @@ public class MyFirstTeleOp extends OpMode {
 
         frontRightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
         backRightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
-
     }
 
 
     @Override
     public void loop() {
-        frontLeftWheel.setPower(gamepad1.left_stick_y);
-        backLeftWheel.setPower(gamepad1.left_stick_y);
-        frontRightWheel.setPower(gamepad1.right_stick_y);
-        backRightWheel.setPower(gamepad1.right_stick_y);
+
     }
 }
+
+
