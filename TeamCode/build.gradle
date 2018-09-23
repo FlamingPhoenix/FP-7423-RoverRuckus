@@ -8,14 +8,8 @@
 // please think carefully as to whether such customizations are really necessary
 // before doing so.
 
+
 // Custom definitions may go here
 
 // Include common definitions from above.
 apply from: '../build.common.gradle'
-android {
-    sourceSets {
-        main {
-            java.srcDirs = ['src/main/java', 'src/main/java/flamingphoenix', 'src/main/java/org.firstinpires.ftc.teamcode.flamingphoenix']
-        }
-    }
-}
