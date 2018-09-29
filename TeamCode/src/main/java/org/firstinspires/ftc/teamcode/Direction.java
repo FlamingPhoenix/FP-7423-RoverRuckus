@@ -2,5 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 public enum Direction {
 
-    FORWARD, BACKWARD
+    FORWARD,
+    BACKWARD,
+    RIGHT,
+    LEFT
 }

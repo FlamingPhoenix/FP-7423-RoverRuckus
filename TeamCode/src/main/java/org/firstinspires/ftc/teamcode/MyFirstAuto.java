@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 
 /**
  * Created by Steve on 7/22/2018.
@@ -17,6 +19,7 @@ public class MyFirstAuto extends LinearOpMode {
     DcMotor bl;
     DcMotor br;
     DriveTrain drivetrain;
+    BNO055IMU imu;
 
     public void initialize() {
         fl = hardwareMap.dcMotor.get("frontleft");
@@ -29,6 +32,16 @@ public class MyFirstAuto extends LinearOpMode {
 
         drivetrain = new DriveTrain(fl, fr, bl, br);
 
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        imu.initialize(parameters);
     }
 
     @Override
@@ -37,8 +50,7 @@ public class MyFirstAuto extends LinearOpMode {
 
         waitForStart();
 
-        drivetrain.Drive(-0.5F, 10, Direction.BACKWARD);
-
-
+        drivetrain.Turn(0.5F,60,Direction.LEFT, imu);
+        
     }
 }
