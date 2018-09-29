@@ -45,6 +45,9 @@ public class MyFirstMechanumDrive extends OpMode {
 
     @Override
     public void loop() {
-        drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+        drive(gamepad1.left_stick_x, gamepad1.left_stick_y * -1, gamepad1.right_stick_x);
+        telemetry.addData("y1;", gamepad1.left_stick_y);
+        telemetry.addData("x1;", gamepad1.left_stick_x);
+        telemetry.update();
     }
 }
