@@ -12,19 +12,22 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 @Autonomous(name="My First Auto", group="none")
 public class MyFirstAuto extends LinearOpMode {
-    DcMotor frontLeftWheel;
-    DcMotor frontRightWheel;
-    DcMotor backLeftWheel;
-    DcMotor backRightWheel;
+    DcMotor fl;
+    DcMotor fr;
+    DcMotor bl;
+    DcMotor br;
+    DriveTrain drivetrain;
 
     public void initialize() {
-        frontLeftWheel = hardwareMap.dcMotor.get("frontleft");
-        frontRightWheel = hardwareMap.dcMotor.get("frontright");
-        backLeftWheel = hardwareMap.dcMotor.get("backleft");
-        backRightWheel = hardwareMap.dcMotor.get("backright");
+        fl = hardwareMap.dcMotor.get("frontleft");
+        fr = hardwareMap.dcMotor.get("frontright");
+        bl = hardwareMap.dcMotor.get("backleft");
+        br = hardwareMap.dcMotor.get("backright");
 
-        frontRightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
+        fl.setDirection(DcMotorSimple.Direction.REVERSE);
+        bl.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        drivetrain = new DriveTrain(fl, fr, bl, br);
 
     }
 
@@ -34,25 +37,8 @@ public class MyFirstAuto extends LinearOpMode {
 
         waitForStart();
 
-        int encoderCount;
-        encoderCount = (int) (1440D * 10D / (4 * Math.PI));
+        drivetrain.Drive(-0.5F, 10, Direction.BACKWARD);
 
-        backLeftWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        int currentCount = backLeftWheel.getCurrentPosition();
-
-        while (currentCount < encoderCount) {
-            frontLeftWheel.setPower(1);
-            frontRightWheel.setPower(1);
-            backLeftWheel.setPower(1);
-            backRightWheel.setPower(1);
-            currentCount = backLeftWheel.getCurrentPosition();
-        }
-
-        frontLeftWheel.setPower(0);
-        frontRightWheel.setPower(0);
-        backLeftWheel.setPower(0);
-        backRightWheel.setPower(0);
 
     }
 }
