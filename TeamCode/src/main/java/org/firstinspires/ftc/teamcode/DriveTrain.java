@@ -79,20 +79,22 @@ public class DriveTrain {
 
         int currentAngle= startAngle;
 
-        if (d == Direction.COUNTERCLOCKWISE)
+        if (d == Direction.COUNTERCLOCKWISE) {
             actualPower = -(power);
 
         while (currentAngle < targetAngle) {
 
             currentAngle = Math.abs(Math.round(imu.getAngularOrientation().firstAngle));
-            fl.setactualPower(-power);
-            fr.setactualPower(power);
-            bl.setactualPower(-power);
-            br.setactualPower(power);
+            fl.setPower(-actualpower);
+            fr.setPower(actualpower);
+            bl.setPower(-actualpower);
+            br.setPower(actualpower);
         }
 
         StopAll();
-    }
+        }
+
+
 
     public void StopAll(){
         fl.setPower(0);

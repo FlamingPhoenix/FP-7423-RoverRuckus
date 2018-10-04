@@ -50,7 +50,9 @@ public class MyFirstAuto extends LinearOpMode {
 
         waitForStart();
 
-        drivetrain.Turn(0.5F,60,Direction.LEFT, imu);
+        drivetrain.Turn(0.5F,60,Direction.CLOCKWISE, imu);
+        drivetrain.Drive(0.5F, 5, Direction.FORWARD);
+        drivetrain.Turn(0.5F,60,Direction.COUNTERCLOCKWISE, imu);
         
     }
 }
