@@ -14,7 +14,7 @@ public class MyFirstTeleOp extends OpMode {
     DcMotor backRightWheel;
 
     ///Initializing variables (motors, servos, sensors, and other common variables.
-    ///Remark: Initialization takes plance when user hit "Initialize" on Driver Station
+    ///Remark: Initialization takes place when user hit "Initialize" on Driver Station
     @Override
     public void init() {
         frontLeftWheel = hardwareMap.dcMotor.get("frontleft");
@@ -29,8 +29,9 @@ public class MyFirstTeleOp extends OpMode {
 
     @Override
     public void loop() {
-
+        frontLeftWheel.setPower(gamepad1.left_stick_y);
+        backLeftWheel.setPower(gamepad1.left_stick_y);
+        frontRightWheel.setPower(gamepad1.right_stick_y);
+        backRightWheel.setPower(gamepad1.right_stick_y);
     }
 }
-
-
