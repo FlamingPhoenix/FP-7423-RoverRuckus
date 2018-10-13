@@ -3,10 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.vuforia.HINT;
 
@@ -71,6 +69,7 @@ public class MyFirstAuto extends LinearOpMode {
         rover.activate();
 
         VuforiaTrackable backTarget = rover.get(3);
+        // 3 = Nebula Picture
         backTarget.setName("back");
 
         waitForStart();
@@ -96,7 +95,7 @@ public class MyFirstAuto extends LinearOpMode {
         br.setPower(0);
         fr.setPower(0);
 
-        drivetrain.DriveToImage(.7F, backTarget, this);
+        drivetrain.StrafeToImage(.5F, backTarget, this);
 
     }
 }

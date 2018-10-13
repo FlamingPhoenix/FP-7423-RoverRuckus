@@ -66,17 +66,30 @@ public class ExpirementIMU extends OpMode {
     @Override
     public void loop() {
         OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)roverTarget.getListener()).getPose();
-        Orientation orientation = Orientation.getOrientation(pose,
-                AxesReference.EXTRINSIC,
-                AxesOrder.XYZ,
-                AngleUnit.DEGREES);
-        float xAngle = orientation.firstAngle;
-        float yAngle = orientation.secondAngle;
-        float zAngle = orientation.thirdAngle;
-        telemetry.addData("x angle:", xAngle);
-        telemetry.addData("y angle:", yAngle);
-        telemetry.addData("z angle:", zAngle);
 
+        if(pose != null) {
+            Orientation orientation = Orientation.getOrientation(pose,
+                    AxesReference.EXTRINSIC,
+                    AxesOrder.XYZ,
+                    AngleUnit.DEGREES);
+
+            if (orientation != null) {
+                float xAngle = orientation.firstAngle;
+                float yAngle = orientation.secondAngle;
+                float zAngle = orientation.thirdAngle;
+                telemetry.addData("x angle:", xAngle);
+                telemetry.addData("y angle:", yAngle);
+                telemetry.addData("z angle:", zAngle);
+            }
+            else
+            {
+                telemetry.addData("orientation:", "null");
+            }
+
+        }
+        else {
+            telemetry.addData("pose value:", "null");
+        }
 
 
         telemetry.update();

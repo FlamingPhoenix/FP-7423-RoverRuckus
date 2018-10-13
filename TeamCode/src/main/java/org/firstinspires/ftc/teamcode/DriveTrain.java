@@ -109,24 +109,37 @@ public class DriveTrain {
 
     }
 
-    public void DriveToImage(float power, VuforiaTrackable imageTarget, OpMode opMode) {
+    public void StrafeToImage(float power, VuforiaTrackable imageTarget, OpMode opMode) {
         OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
 
         float actualPower = power;
 
         if (pos != null) {
             float d = pos.getColumn(3).get(2); //distance to the image in millimeter;
+            float x = pos.getColumn(3).get(0) * -1;
+            float additionalpower = 0;
             opMode.telemetry.addData("z distance:", d);
+            opMode.telemetry.addData("x position:", x);
 
             while (Math.abs(d) >= 100) {
                 pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
                 d = pos.getColumn(3).get(2);
+                x = pos.getColumn(3).get(0) * -1;
+                if(x > 15)
+                {
+                    additionalpower = -0.1F;
+                }
+                else if(x < -15)
+                {
+                    additionalpower = 0.1F;
+                }
                 opMode.telemetry.addData("z distance:", d);
+                opMode.telemetry.addData("x position:", x);
 
-                fl.setPower(actualPower);
-                fr.setPower(-(actualPower));
-                bl.setPower(-(actualPower));
-                br.setPower(actualPower);
+                fl.setPower(actualPower + additionalpower);
+                fr.setPower(-(actualPower + additionalpower));
+                bl.setPower(-(actualPower + additionalpower));
+                br.setPower(actualPower + additionalpower);
             }
         }
         opMode.telemetry.update();
@@ -138,7 +151,7 @@ public class DriveTrain {
         float turningVelocity = Math.abs(imu.getAngularVelocity().xRotationRate);
 
         while (pos == null) {
-            
+
         }
     }
 
