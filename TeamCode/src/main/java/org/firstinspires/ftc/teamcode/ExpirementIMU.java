@@ -7,46 +7,36 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
+import com.vuforia.HINT;
+
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 @TeleOp(name = "Expirement", group = "none")
 public class ExpirementIMU extends OpMode {
 
-    DcMotor fr;
-    DcMotor fl;
-    DcMotor br;
-    DcMotor bl;
 
     BNO055IMU imu;
+    VuforiaLocalizer vuforia;
+    VuforiaTrackables rover;
+    VuforiaTrackable backTarget;
+    VuforiaTrackable roverTarget;
 
 
-    public void drive(float x1, float y1, float x2) {
-        float frontLeft = y1 + x1 + x2;
-        float frontRight = y1 - x1 - x2;
-        float backLeft = y1 - x1 + x2;
-        float backRight = y1 + x1 - x2;
-
-        frontLeft = Range.clip(frontLeft, -1, 1);
-        frontRight = Range.clip(frontRight, -1, 1);
-        backLeft = Range.clip(backLeft, -1, 1);
-        backRight = Range.clip(backRight, -1, 1);
-
-        fl.setPower(frontLeft);
-        fr.setPower(frontRight);
-        bl.setPower(backLeft);
-        br.setPower(backRight);
 
 
-    }
 
     @Override
     public void init() {
-        fr = hardwareMap.dcMotor.get("frontright");
-        fl = hardwareMap.dcMotor.get("frontleft");
-        br = hardwareMap.dcMotor.get("backright");
-        bl = hardwareMap.dcMotor.get("backleft");
 
-        bl.setDirection(DcMotorSimple.Direction.REVERSE);
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -57,17 +47,37 @@ public class ExpirementIMU extends OpMode {
         parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-        imu.initialize(parameters);
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters param = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        param.vuforiaLicenseKey = "AbYPrgD/////AAAAGbvKMH3NcEVFmPLgunQe4K0d1ZQi+afRLxricyooCq+sgY9Yh1j+bBrd0CdDCcoieA6trLCKBzymC515+Ps/FECtXv3+CTW6fg3/3+nvKZ6QA18h/cNZHg5HYHmghlcCgVUmSzOLRvdOpbS4S+0Y/sWGXwFK0PbuGPSN82w8XPDBoRYSWjAf8GXeitmNSlm9n4swrMoYNpMDuWCDjSm1kWnoErjFA9NuNoFzAgO+C/rYzoYjTJRk40ETVcAsahzatRlP7PJCvNNXiBhE6iVR+x7lFlTZ841xifOIOPkfVc54olC5XYe4A5ZmQ6WFD03W5HHdQrnmKPmkgcr1yqXAJ3rLTK8FZK3KVgbxz3Eeqps0";
+        param.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        com.vuforia.Vuforia.setHint(HINT.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, 4);
+
+        vuforia = ClassFactory.getInstance().createVuforia(param);
+        rover = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
+        rover.activate();
+        backTarget = rover.get(3);
+        backTarget.setName("nebula");
+        roverTarget = rover.get(0);
+        roverTarget.setName("rover");
     }
 
     @Override
     public void loop() {
-        drive(gamepad1.left_stick_x, gamepad1.left_stick_y * -1, gamepad1.right_stick_x);
+        OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)roverTarget.getListener()).getPose();
+        Orientation orientation = Orientation.getOrientation(pose,
+                AxesReference.EXTRINSIC,
+                AxesOrder.XYZ,
+                AngleUnit.DEGREES);
+        float xAngle = orientation.firstAngle;
+        float yAngle = orientation.secondAngle;
+        float zAngle = orientation.thirdAngle;
+        telemetry.addData("x angle:", xAngle);
+        telemetry.addData("y angle:", yAngle);
+        telemetry.addData("z angle:", zAngle);
 
-        telemetry.addData("z speed:", imu.getAngularVelocity().zRotationRate);
-        telemetry.addData("y speed:", imu.getAngularVelocity().yRotationRate);
-        telemetry.addData("x speed:", imu.getAngularVelocity().xRotationRate);
-        telemetry.addData("firstAngle:", imu.getAngularOrientation().firstAngle);
+
 
         telemetry.update();
     }
