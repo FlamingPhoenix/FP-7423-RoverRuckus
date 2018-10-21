@@ -95,7 +95,7 @@ public class MyFirstAuto extends LinearOpMode {
         br.setPower(0);
         fr.setPower(0);
 
-        drivetrain.StrafeToImage(.5F, backTarget, this);
+        drivetrain.StrafeToImage(.8F, backTarget, this);
 
     }
 }
