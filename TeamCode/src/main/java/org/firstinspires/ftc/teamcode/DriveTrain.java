@@ -118,8 +118,6 @@ public class DriveTrain {
             float d = pos.getColumn(3).get(2); //distance to the image in millimeter;
             float x = pos.getColumn(3).get(0) * -1;
             float additionalpower = 0;
-            opMode.telemetry.addData("z distance:", d);
-            opMode.telemetry.addData("x position:", x);
 
             while (Math.abs(d) >= 100) {
                 pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
@@ -133,12 +131,10 @@ public class DriveTrain {
                 {
                     additionalpower = 0.1F;
                 }
-                opMode.telemetry.addData("z distance:", d);
-                opMode.telemetry.addData("x position:", x);
 
                 fl.setPower(actualPower + additionalpower);
-                fr.setPower(-(actualPower + additionalpower));
-                bl.setPower(-(actualPower + additionalpower));
+                fr.setPower( actualPower - additionalpower);
+                bl.setPower(actualPower - additionalpower);
                 br.setPower(actualPower + additionalpower);
             }
         }
