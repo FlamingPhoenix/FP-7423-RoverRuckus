@@ -17,6 +17,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+import android.util.Log;
+
 @TeleOp(name = "TestVuforia", group = "none")
 public class ExperimentVuforia extends OpMode {
 
@@ -53,14 +55,26 @@ public class ExperimentVuforia extends OpMode {
     @Override
     public void loop() {
 
-        OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) redWall.getListener()).getUpdatedRobotLocation();
+        VuforiaTrackableDefaultListener redWallListener = (VuforiaTrackableDefaultListener) redWall.getListener();
 
-        if (pose != null) {
-            Orientation orientation = Orientation.getOrientation(pose, AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+        if (redWallListener.isVisible()) {
 
-            telemetry.addData("x Angle:", orientation.firstAngle);
-            telemetry.addData("y Angle:", orientation.secondAngle);
-            telemetry.addData("z Angle:", orientation.thirdAngle);
+            OpenGLMatrix pose = redWallListener.getPose();
+            Orientation orientation = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
+            OpenGLMatrix rotationMatrix = OpenGLMatrix.rotation(AxesReference.EXTRINSIC, AxesOrder.ZXZ, AngleUnit.DEGREES, orientation.thirdAngle * -1, orientation.firstAngle * -1, 0);
+            OpenGLMatrix adjustedPose = pose.multiplied(rotationMatrix);
+            Orientation adjustedOrientation = Orientation.getOrientation(adjustedPose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
+            telemetry.addData("Raw :", "x=%f, y=%f, z=%f", orientation.firstAngle, orientation.secondAngle, orientation.thirdAngle);
+            telemetry.addData("Adj :", "x=%f, y=%f, z=%f", adjustedOrientation.firstAngle, adjustedOrientation.secondAngle, adjustedOrientation.thirdAngle);
+
+            //String s = String.format("x=%f, y=%f, z=%f;  adjX=%f, adjY=%f, adjZ=%f", orientation.firstAngle, orientation.secondAngle, orientation.thirdAngle, adjustedOrientation.firstAngle, adjustedOrientation.secondAngle, adjustedOrientation. thirdAngle);
+            Log.i("[phoenix:testVuforia]",
+                    String.format("x=%f, y=%f, z=%f;  adjX=%f, adjY=%f, adjZ=%f",
+                                   orientation.firstAngle, orientation.secondAngle, orientation.thirdAngle,
+                                   adjustedOrientation.firstAngle, adjustedOrientation.secondAngle, adjustedOrientation. thirdAngle));
+
         }
 
         telemetry.update();
