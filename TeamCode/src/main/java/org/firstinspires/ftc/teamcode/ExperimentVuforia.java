@@ -69,6 +69,7 @@ public class ExperimentVuforia extends OpMode {
             telemetry.addData("Raw :", "x=%f, y=%f, z=%f", orientation.firstAngle, orientation.secondAngle, orientation.thirdAngle);
             telemetry.addData("Adj :", "x=%f, y=%f, z=%f", adjustedOrientation.firstAngle, adjustedOrientation.secondAngle, adjustedOrientation.thirdAngle);
 
+
             //String s = String.format("x=%f, y=%f, z=%f;  adjX=%f, adjY=%f, adjZ=%f", orientation.firstAngle, orientation.secondAngle, orientation.thirdAngle, adjustedOrientation.firstAngle, adjustedOrientation.secondAngle, adjustedOrientation. thirdAngle);
             Log.i("[phoenix:testVuforia]",
                     String.format("x=%f, y=%f, z=%f;  adjX=%f, adjY=%f, adjZ=%f",

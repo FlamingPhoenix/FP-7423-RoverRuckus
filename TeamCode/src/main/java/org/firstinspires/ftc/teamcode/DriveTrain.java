@@ -170,9 +170,9 @@ public class DriveTrain {
                 float max = Max(flPower, frPower, blPower, brPower);
 
                 fl.setPower(flPower/max);
-                fr.setPower(-actualPower - additionalpower);
-                bl.setPower(-actualPower - additionalpower + blTurnAdjust);
-                br.setPower(actualPower + additionalpower);
+                fr.setPower(frPower/max);
+                bl.setPower(blPower/max);
+                br.setPower(brPower/max);
 
                 Log.i("[phoenix:StrafeToImage]", String.format("x = %f, additionalpower = %f", x, additionalpower));
                 Log.i("[phoenix:StrafeToImage]", String.format("raw x=%f, y=%f, z=%f", orientation.firstAngle, orientation.secondAngle, orientation.thirdAngle));
@@ -205,10 +205,16 @@ public class DriveTrain {
         x2 = Math.abs(x2);
         x3 = Math.abs(x3);
         x4 = Math.abs(x4);
+        float m = x1;
 
-        //todo: somebody;
+        if (x2 > m)
+            m = x2;
+        if (x3 > m)
+            m = x3;
+        if (x4 > m)
+            m = x4;
 
-        return 1;
+        return m;
     }
 
 }
