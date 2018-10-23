@@ -154,7 +154,7 @@ public class DriveTrain {
                 float blTurnAdjust = 0;
 
                 if (adjustedOrientation.secondAngle < -3) {
-                    flTurnAdjust = 0.2F * (Math.abs(adjustedOrientation.secondAngle) / 10)
+                    flTurnAdjust = 0.2F * (Math.abs(adjustedOrientation.secondAngle) / 10);
                 }
                 else if (adjustedOrientation.secondAngle > 3) {
                     blTurnAdjust = -0.2F;
