@@ -17,6 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.DriveTrain;
 
 @Autonomous(name="Eric Auto", group="none")
+
 public class EricAutonomous extends LinearOpMode {
     DcMotor fl;
     DcMotor fr;
@@ -82,7 +83,7 @@ public class EricAutonomous extends LinearOpMode {
 
         //while (pose == null) {
         //    pose = ((VuforiaTrackableDefaultListener)backTarget.getListener()).getPose();
-        drivetrain.TurnToImageErik(0.4F, Direction.CLOCKWISE, backTarget, imu, this); // at vinay, 0.4, at erik, can 0.4 or 0.5
+        drivetrain.TurnToImage(0.4F, Direction.CLOCKWISE, backTarget, imu, this); // at vinay, 0.4, at erik, can 0.4 or 0.5
             //bl.setPower(0.13);
             //fl.setPower(0.13);
             //br.setPower(-0.13);
@@ -95,7 +96,7 @@ public class EricAutonomous extends LinearOpMode {
         br.setPower(0);
         fr.setPower(0);
 
-        drivetrain.DriveToImageErik(0.4F, backTarget, this);  //
+        drivetrain.StrafeToImage(0.4F, backTarget, this);  //
 
     }
 }
