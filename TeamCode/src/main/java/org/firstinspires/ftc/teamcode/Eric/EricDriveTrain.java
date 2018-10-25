@@ -221,7 +221,7 @@ public class EricDriveTrain extends DriveTrain {
     
     
     @Override
-    public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, BNO055IMU imu) {
+    public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, BNO055IMU imu, pMode opMode) {
         //super.TurnToImage(initialPower, d, imageTarget, imu); // no contructor for method
         
           // in Erik's local TurnToImageErik, OpMode is needed to collect status data, question for steve
