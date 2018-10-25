@@ -27,7 +27,7 @@ public class EricDriveTrain extends DriveTrain {
     
     public void StrafeToImage(float power, VuforiaTrackable imageTarget, OpMode opMode)   {
         
-        super.StrafeToImage(float power, VuforiaTrackable imageTarget, OpMode opMode) // inherit constructor ? 
+        //super.StrafeToImage(float power, VuforiaTrackable imageTarget, OpMode opMode) // no constructor for method  
             
             // following code is different from super class
         
@@ -222,7 +222,7 @@ public class EricDriveTrain extends DriveTrain {
     
     @Override
     public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, BNO055IMU imu) {
-        super.TurnToImage(initialPower, d, imageTarget, imu);
+        //super.TurnToImage(initialPower, d, imageTarget, imu); // no contructor for method
         
           // in Erik's local TurnToImageErik, OpMode is needed to collect status data, question for steve
         // should modify master DriveTrain, to add OpMode variable, then inherit, or just add here in Erik's branch ? 
