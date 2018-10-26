@@ -1,11 +1,25 @@
 package org.firstinspires.ftc.teamcode.Erik;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import android.util.Log;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.teamcode.Direction;
-import org.firstinspires.ftc.teamcode.DriveTrain;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+
+import org.firstinspires.ftc.teamcode.*;
 
 public class EricDriveTrain extends DriveTrain {
 
@@ -24,7 +38,6 @@ public class EricDriveTrain extends DriveTrain {
     
     
     @Override
-    
     public void StrafeToImage(float power, VuforiaTrackable imageTarget, OpMode opMode)   {
         
         //super.StrafeToImage(float power, VuforiaTrackable imageTarget, OpMode opMode) // no constructor for method  
@@ -219,9 +232,8 @@ public class EricDriveTrain extends DriveTrain {
         StopAll();
     }
     
-    
-    @Override
-    public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, BNO055IMU imu, pMode opMode) {
+
+    public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, BNO055IMU imu, OpMode opMode) {
         //super.TurnToImage(initialPower, d, imageTarget, imu); // no contructor for method
         
           // in Erik's local TurnToImageErik, OpMode is needed to collect status data, question for steve

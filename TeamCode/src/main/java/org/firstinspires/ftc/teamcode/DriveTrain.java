@@ -21,10 +21,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 
 public class DriveTrain {
 
-    DcMotor fr;
-    DcMotor fl;
-    DcMotor br;
-    DcMotor bl;
+    protected DcMotor fr;
+    protected DcMotor fl;
+    protected DcMotor br;
+    protected DcMotor bl;
 
     public DriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright) {
 
