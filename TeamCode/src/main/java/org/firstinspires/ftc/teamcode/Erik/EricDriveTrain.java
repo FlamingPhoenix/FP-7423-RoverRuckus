@@ -232,7 +232,7 @@ public class EricDriveTrain extends DriveTrain {
         StopAll();
     }
     
-
+    @Override
     public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, BNO055IMU imu, OpMode opMode) {
         //super.TurnToImage(initialPower, d, imageTarget, imu); // no contructor for method
         

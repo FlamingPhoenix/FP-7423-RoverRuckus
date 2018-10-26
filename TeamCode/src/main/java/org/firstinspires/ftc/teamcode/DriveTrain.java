@@ -183,7 +183,7 @@ public class DriveTrain {
         StopAll();
     }
 
-    public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, BNO055IMU imu) {
+    public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, BNO055IMU imu, OpMode opMode) {
         OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
         float turningVelocity = Math.abs(imu.getAngularVelocity().xRotationRate);
 
