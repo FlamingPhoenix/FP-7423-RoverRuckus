@@ -21,7 +21,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 
 import org.firstinspires.ftc.teamcode.*;
 
-public class EricDriveTrain extends DriveTrain {
+public class ErikDriveTrain extends DriveTrain {
 
     public EricDriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright)  {
         super(frontleft, frontright, backleft, backright);
