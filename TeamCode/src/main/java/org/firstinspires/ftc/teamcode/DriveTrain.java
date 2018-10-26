@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -10,6 +12,10 @@ import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 
@@ -90,46 +96,90 @@ public class DriveTrain {
         if (d == Direction.CLOCKWISE) {
             actualPower = -(power);
         }
-            while (currentAngle < targetAngle) {
+        while (currentAngle < targetAngle) {
 
-                opMode.telemetry.addData("start:", startAngle);
-                opMode.telemetry.addData("current:", currentAngle);
-                opMode.telemetry.addData("target:", targetAngle);
-                opMode.telemetry.addData("actual:", (currentAngle-180));
-                opMode.telemetry.update();
+            opMode.telemetry.addData("start:", startAngle);
+            opMode.telemetry.addData("current:", currentAngle);
+            opMode.telemetry.addData("target:", targetAngle);
+            opMode.telemetry.addData("actual:", (currentAngle-180));
+            opMode.telemetry.update();
 
-                currentAngle = ((Math.round(imu.getAngularOrientation().firstAngle))+180);
-                fl.setPower(-(actualPower));
-                fr.setPower(actualPower);
-                bl.setPower(-(actualPower));
-                br.setPower(actualPower);
-            }
+            currentAngle = ((Math.round(imu.getAngularOrientation().firstAngle))+180);
+            fl.setPower(-(actualPower));
+            fr.setPower(actualPower);
+            bl.setPower(-(actualPower));
+            br.setPower(actualPower);
+        }
 
-            StopAll();
+        StopAll();
 
     }
 
-    public void DriveToImage(float power, VuforiaTrackable imageTarget, OpMode opMode) {
-        OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
+    public void StrafeToImage(float power, VuforiaTrackable imageTarget, OpMode opMode) {
+        VuforiaTrackableDefaultListener imageListener = (VuforiaTrackableDefaultListener) imageTarget.getListener();
+        //OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
 
         float actualPower = power;
 
-        if (pos != null) {
+        if (imageListener.isVisible()) {
+            OpenGLMatrix pos = imageListener.getPose();
             float d = pos.getColumn(3).get(2); //distance to the image in millimeter;
-            opMode.telemetry.addData("z distance:", d);
+            float x = pos.getColumn(3).get(0) * -1;
+            float additionalpower = 0;
+
 
             while (Math.abs(d) >= 100) {
                 pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
-                d = pos.getColumn(3).get(2);
-                opMode.telemetry.addData("z distance:", d);
 
-                fl.setPower(actualPower);
-                fr.setPower(-(actualPower));
-                bl.setPower(-(actualPower));
-                br.setPower(actualPower);
+                Orientation orientation = Orientation.getOrientation(pos, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
+                OpenGLMatrix rotationMatrix = OpenGLMatrix.rotation(AxesReference.EXTRINSIC, AxesOrder.ZXZ, AngleUnit.DEGREES, orientation.thirdAngle * -1, orientation.firstAngle * -1, 0);
+                OpenGLMatrix adjustedPose = pos.multiplied(rotationMatrix);
+                Orientation adjustedOrientation = Orientation.getOrientation(adjustedPose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+                opMode.telemetry.addData("Angle: ", "x = %f, y = %f, z = %f", adjustedOrientation.firstAngle, adjustedOrientation.secondAngle, adjustedOrientation.thirdAngle);
+
+                d = pos.getColumn(3).get(2);
+                x = pos.getColumn(3).get(0) * -1;
+                opMode.telemetry.addData("x: ", "x = %f", x);
+                if(x > 15)
+                {
+                    additionalpower = -0.05F;
+                }
+                else if(x < -15)
+                {
+                    additionalpower = 0.05F;
+                }
+
+                float flTurnAdjust = 0;
+                float blTurnAdjust = 0;
+
+                if (adjustedOrientation.secondAngle < -3) {
+                    flTurnAdjust = 0.2F * (Math.abs(adjustedOrientation.secondAngle) / 10);
+                }
+                else if (adjustedOrientation.secondAngle > 3) {
+                    blTurnAdjust = -0.2F;
+                }
+
+                float flPower, frPower, blPower, brPower;
+
+                flPower = actualPower + additionalpower + flTurnAdjust;
+                frPower = -actualPower - additionalpower;
+                blPower = -actualPower - additionalpower + blTurnAdjust;
+                brPower = actualPower + additionalpower;
+
+                float max = Max(flPower, frPower, blPower, brPower);
+
+                fl.setPower(flPower/max);
+                fr.setPower(frPower/max);
+                bl.setPower(blPower/max);
+                br.setPower(brPower/max);
+
+                Log.i("[phoenix:StrafeToImage]", String.format("x = %f, additionalpower = %f", x, additionalpower));
+                Log.i("[phoenix:StrafeToImage]", String.format("raw x=%f, y=%f, z=%f", orientation.firstAngle, orientation.secondAngle, orientation.thirdAngle));
+                Log.i("[phoenix:StrafeToImage]", String.format("adj x=%f, y=%f, z=%f", adjustedOrientation.firstAngle, adjustedOrientation.secondAngle, adjustedOrientation.thirdAngle));
+                opMode.telemetry.update();
             }
         }
-        opMode.telemetry.update();
         StopAll();
     }
 
@@ -138,7 +188,7 @@ public class DriveTrain {
         float turningVelocity = Math.abs(imu.getAngularVelocity().xRotationRate);
 
         while (pos == null) {
-            
+
         }
     }
 
@@ -147,6 +197,24 @@ public class DriveTrain {
         fr.setPower(0);
         bl.setPower(0);
         br.setPower(0);
+    }
+
+
+    private float Max(float x1, float x2, float x3, float x4) {
+        x1 = Math.abs(x1);
+        x2 = Math.abs(x2);
+        x3 = Math.abs(x3);
+        x4 = Math.abs(x4);
+        float m = x1;
+
+        if (x2 > m)
+            m = x2;
+        if (x3 > m)
+            m = x3;
+        if (x4 > m)
+            m = x4;
+
+        return m;
     }
 
 }
