@@ -16,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.*;
 
-@Autonomous(name="Eric Auto", group="none")
+@Autonomous(name="Erik Auto", group="none")
 
 public class EricAutonomous extends LinearOpMode {
     DcMotor fl;
@@ -38,7 +38,7 @@ public class EricAutonomous extends LinearOpMode {
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //*******************************************************/////
-        ///Use Eric's Drive Train to experiment Eric's change
+        ///Use Erik's Drive Train to experiment Erik's change
         drivetrain = new EricDriveTrain(fl, fr, bl, br);
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
