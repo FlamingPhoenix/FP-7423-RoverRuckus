@@ -17,6 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.DriveTrain;
 
 @Autonomous(name="Eric Auto", group="none")
+
 public class EricAutonomous extends LinearOpMode {
     DcMotor fl;
     DcMotor fr;
@@ -67,29 +68,35 @@ public class EricAutonomous extends LinearOpMode {
         VuforiaTrackables rover = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
         rover.activate();
 
-        VuforiaTrackable backTarget = rover.get(3);
-        // 3 = Nebula Picture
-        backTarget.setName("back");
+        VuforiaTrackable backTarget = rover.get(2);
+        backTarget.setName("front");
 
         waitForStart();
 
+        /*
+        drivetrain.Turn(0.15F,90,Direction.CLOCKWISE, imu, this);
+        drivetrain.Drive(0.25F, 5, Direction.FORWARD);
+        drivetrain.Turn(
+                0.15F,90,Direction.COUNTERCLOCKWISE, imu, this);
+*/
+        //OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)backTarget.getListener()).getPose();
 
-        OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)backTarget.getListener()).getPose();
+        //while (pose == null) {
+        //    pose = ((VuforiaTrackableDefaultListener)backTarget.getListener()).getPose();
+        drivetrain.TurnToImage(0.4F, Direction.CLOCKWISE, backTarget, imu, this); // at vinay, 0.4, at erik, can 0.4 or 0.5
+            //bl.setPower(0.13);
+            //fl.setPower(0.13);
+            //br.setPower(-0.13);
+            //fr.setPower(-0.13);
+        //
 
-        while (pose == null) {
-            pose = ((VuforiaTrackableDefaultListener)backTarget.getListener()).getPose();
-            bl.setPower(0.1);
-            fl.setPower(0.1);
-            br.setPower(-0.1);
-            fr.setPower(-0.1);
-        }
 
         bl.setPower(0);
         fl.setPower(0);
         br.setPower(0);
         fr.setPower(0);
 
-        drivetrain.StrafeToImage(.8F, backTarget, this);
+        drivetrain.StrafeToImage(0.4F, backTarget, this);  //
 
     }
 }
