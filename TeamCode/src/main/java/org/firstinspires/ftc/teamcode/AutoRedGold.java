@@ -1,27 +1,26 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.vuforia.HINT;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.teamcode.MyClass.PositionToImage;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
  * Created by Steve on 7/22/2018.
  */
 
-@Autonomous(name="My First Auto", group="none")
-public class MyFirstAuto extends LinearOpMode {
+@Autonomous(name="Auto Red Gold", group="none")
+public class AutoRedGold extends LinearOpMode {
     DcMotor fl;
     DcMotor fr;
     DcMotor bl;
@@ -75,12 +74,12 @@ public class MyFirstAuto extends LinearOpMode {
 
         waitForStart();
 
-
-        //drivetrain.Turn(0.15F,90,Direction.CLOCKWISE, imu, this);
-        //drivetrain.Drive(0.25F, 5, Direction.FORWARD);
-        //drivetrain.Turn(
-        //        0.15F,90,Direction.COUNTERCLOCKWISE, imu, this);
-
+        /*
+        drivetrain.Turn(0.15F,90,Direction.CLOCKWISE, imu, this);
+        drivetrain.Drive(0.25F, 5, Direction.FORWARD);
+        drivetrain.Turn(
+                0.15F,90,Direction.COUNTERCLOCKWISE, imu, this);
+*/
         OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)backTarget.getListener()).getPose();
 
         while (pose == null) {
@@ -97,7 +96,6 @@ public class MyFirstAuto extends LinearOpMode {
         fr.setPower(0);
 
         drivetrain.StrafeToImage(.8F, backTarget, this);
-
 
     }
 }
