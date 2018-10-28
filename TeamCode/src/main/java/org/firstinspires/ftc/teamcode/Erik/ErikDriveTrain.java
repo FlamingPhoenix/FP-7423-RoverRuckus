@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.*;
 
 public class ErikDriveTrain extends DriveTrain {
 
-    public EricDriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright)  {
+    public ErikDriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright)  {
         super(frontleft, frontright, backleft, backright);
         
       // is there anything else to be added here ?     
