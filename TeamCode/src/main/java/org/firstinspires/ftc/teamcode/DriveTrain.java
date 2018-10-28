@@ -39,6 +39,7 @@ public class DriveTrain {
         lastKnownPosition = new PositionToImage(); //instantiate this first
 
     }
+
     public void Strafe(float power, float distance, Direction d /*, OpMode op*/) {
 
         float x = (2240F * distance)/(4F * (float)Math.PI);
@@ -67,6 +68,7 @@ public class DriveTrain {
 
         StopAll();
     }
+
     public void Drive(float power, float distance, Direction d) {
 
         float x = (1120F * distance)/(4F * (float)Math.PI);
@@ -131,7 +133,7 @@ public class DriveTrain {
             float additionalpower = 0;
 
 
-            while (Math.abs(d) >= 100) {
+            while ((Math.abs(d) >= 100) && (imageListener.isVisible())) {
                 pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
 
                 Orientation orientation = Orientation.getOrientation(pos, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
@@ -189,7 +191,17 @@ public class DriveTrain {
             }
         }
         StopAll();
-    }
+
+        float remainDistance = lastKnownPosition.translation.get(2) - 100;
+        opMode.telemetry.addData("Remaining Distance: ", "x = %f", remainDistance);
+        if (remainDistance > 30)
+            this.Strafe(0.5F, remainDistance, Direction.RIGHT);
+        opMode.telemetry.update();
+     }
+
+     public PositionToImage getLastKnownPosition() {
+        return lastKnownPosition;
+     }
 
     public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, BNO055IMU imu, OpMode opMode) {
         OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
@@ -206,7 +218,6 @@ public class DriveTrain {
         bl.setPower(0);
         br.setPower(0);
     }
-
 
     private float Max(float x1, float x2, float x3, float x4) {
         x1 = Math.abs(x1);

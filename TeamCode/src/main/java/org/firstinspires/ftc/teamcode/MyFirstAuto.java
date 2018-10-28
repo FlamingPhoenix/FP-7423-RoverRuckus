@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.teamcode.MyClass.PositionToImage;
 
 /**
  * Created by Steve on 7/22/2018.
@@ -96,6 +97,7 @@ public class MyFirstAuto extends LinearOpMode {
         fr.setPower(0);
 
         drivetrain.StrafeToImage(.8F, backTarget, this);
+        PositionToImage position = drivetrain.getLastKnownPosition();
 
     }
 }
