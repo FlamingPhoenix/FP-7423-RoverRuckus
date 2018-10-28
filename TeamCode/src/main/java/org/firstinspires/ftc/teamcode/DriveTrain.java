@@ -18,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 import org.firstinspires.ftc.teamcode.MyClass.PositionToImage;
 
 public class DriveTrain {
@@ -89,33 +90,54 @@ public class DriveTrain {
 
     }
 
-    public void Turn(float power, int angle, Direction d, BNO055IMU imu, OpMode opMode) {
-        int startAngle = ((Math.round(imu.getAngularOrientation().firstAngle))+180);
+    public void Turn(float power, int angle, Direction d, MyBoschIMU imu, OpMode opMode) {
 
-        int targetAngle = startAngle + angle;
+        Orientation startOrientation = imu.resetAndStart(d);
 
-        int currentAngle = startAngle;
-
+        float targetAngle;
+        float currentAngle;
         float actualPower = power;
         if (d == Direction.CLOCKWISE) {
             actualPower = -(power);
-        }
-            while (currentAngle < targetAngle) {
 
-                opMode.telemetry.addData("start:", startAngle);
+            targetAngle = startOrientation.firstAngle - angle;
+            currentAngle = startOrientation.firstAngle;
+            while (currentAngle > targetAngle) {
+
+                opMode.telemetry.addData("start:", startOrientation.firstAngle);
                 opMode.telemetry.addData("current:", currentAngle);
                 opMode.telemetry.addData("target:", targetAngle);
-                opMode.telemetry.addData("actual:", (currentAngle-180));
                 opMode.telemetry.update();
 
-                currentAngle = ((Math.round(imu.getAngularOrientation().firstAngle))+180);
+                currentAngle = imu.getAngularOrientation().firstAngle;
                 fl.setPower(-(actualPower));
                 fr.setPower(actualPower);
                 bl.setPower(-(actualPower));
                 br.setPower(actualPower);
             }
+        }
+        else {
+            actualPower = power;
 
-            StopAll();
+            targetAngle = startOrientation.firstAngle + angle;
+            currentAngle = startOrientation.firstAngle;
+            while (currentAngle < targetAngle) {
+
+                opMode.telemetry.addData("start:", startOrientation.firstAngle);
+                opMode.telemetry.addData("current:", currentAngle);
+                opMode.telemetry.addData("target:", targetAngle);
+                opMode.telemetry.update();
+
+                currentAngle = imu.getAngularOrientation().firstAngle;
+                fl.setPower(-(actualPower));
+                fr.setPower(actualPower);
+                bl.setPower(-(actualPower));
+                br.setPower(actualPower);
+            }
+        }
+
+
+        StopAll();
 
     }
 

@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.util.TypeConversion;
 import com.qualcomm.robotcore.hardware.configuration.I2cSensor;
 
 
-@I2cDeviceType
 public class MyPixy extends I2cDeviceSynchDevice<I2cDeviceSynch> {
     private static final I2cAddr defaultI2cAddr = I2cAddr.create7bit(0x54);
 

@@ -62,7 +62,14 @@ public class MyBoschIMU implements BNO055IMU {
     public Orientation getAngularOrientation() {
 
         Orientation orientation = myIMU.getAngularOrientation();
-        orientation.firstAngle = 0; //Here is the logic we need
+
+        if (startOrientation.firstAngle > 0 && turningDirection == Direction.COUNTERCLOCKWISE && orientation.firstAngle < 0) {
+             orientation.firstAngle = orientation.firstAngle + 360;
+        }
+        else if (startOrientation.firstAngle < 0 && turningDirection == Direction.CLOCKWISE && orientation.firstAngle > 0) {
+             orientation.firstAngle = orientation.firstAngle - 360;
+        }
+
 
         return orientation;
     }

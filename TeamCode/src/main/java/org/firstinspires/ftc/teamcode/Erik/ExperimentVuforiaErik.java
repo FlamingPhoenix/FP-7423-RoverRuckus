@@ -59,7 +59,7 @@ public class ExperimentVuforiaErik extends OpMode {
 
         String tag = "Msg from loop - ";
 
-
+ 
         if (pose2 != null & pose1 !=null ) {
             // code below is to do a comparison between pose1 transformation and getRobotLocation, after comapring
             // getRobotLocation and getUpdatedRobotLocation, they seem to be quite similar
