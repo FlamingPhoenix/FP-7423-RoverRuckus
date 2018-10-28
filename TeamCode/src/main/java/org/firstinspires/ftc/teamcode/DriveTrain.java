@@ -18,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+import org.firstinspires.ftc.teamcode.MyClass.PositionToImage;
 
 public class DriveTrain {
 
@@ -26,6 +27,8 @@ public class DriveTrain {
     protected DcMotor br;
     protected DcMotor bl;
 
+    protected PositionToImage lastKnownPosition;
+
     public DriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright) {
 
         fr = frontright;
@@ -33,6 +36,7 @@ public class DriveTrain {
         br = backright;
         bl = backleft;
 
+        lastKnownPosition = new PositionToImage(); //instantiate this first
 
     }
     public void Strafe(float power, float distance, Direction d /*, OpMode op*/) {
@@ -117,7 +121,6 @@ public class DriveTrain {
 
     public void StrafeToImage(float power, VuforiaTrackable imageTarget, OpMode opMode) {
         VuforiaTrackableDefaultListener imageListener = (VuforiaTrackableDefaultListener) imageTarget.getListener();
-        //OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
 
         float actualPower = power;
 
@@ -138,8 +141,13 @@ public class DriveTrain {
                 Orientation adjustedOrientation = Orientation.getOrientation(adjustedPose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
                 opMode.telemetry.addData("Angle: ", "x = %f, y = %f, z = %f", adjustedOrientation.firstAngle, adjustedOrientation.secondAngle, adjustedOrientation.thirdAngle);
 
-                d = pos.getColumn(3).get(2);
-                x = pos.getColumn(3).get(0) * -1;
+                //Keep track the last known location
+                lastKnownPosition.translation = pos.getTranslation();
+                lastKnownPosition.orientation = adjustedOrientation;
+
+                d = lastKnownPosition.translation.get(2);
+                x = lastKnownPosition.translation.get(0) * -1;
+
                 opMode.telemetry.addData("x: ", "x = %f", x);
                 if(x > 15)
                 {
