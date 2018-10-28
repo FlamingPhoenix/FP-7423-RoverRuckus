@@ -77,13 +77,13 @@ public class MyFirstAuto extends LinearOpMode {
 
 
         //drivetrain.Turn(0.15F,90,Direction.CLOCKWISE, imu, this);
-        drivetrain.Drive(0.25F, 5, Direction.FORWARD);
+        //drivetrain.Drive(0.25F, 5, Direction.FORWARD);
         //drivetrain.Turn(
-          //      0.15F,90,Direction.COUNTERCLOCKWISE, imu, this);
+        //        0.15F,90,Direction.COUNTERCLOCKWISE, imu, this);
 
-        //OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)backTarget.getListener()).getPose();
+        OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)backTarget.getListener()).getPose();
 
-      /*  while (pose == null) {
+        while (pose == null) {
             pose = ((VuforiaTrackableDefaultListener)backTarget.getListener()).getPose();
             bl.setPower(0.1);
             fl.setPower(0.1);
@@ -97,6 +97,7 @@ public class MyFirstAuto extends LinearOpMode {
         fr.setPower(0);
 
         drivetrain.StrafeToImage(.8F, backTarget, this);
+
 
     }
 }
