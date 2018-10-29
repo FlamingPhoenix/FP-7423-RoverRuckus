@@ -19,9 +19,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-@TeleOp(name = "Vuforia-GLTest", group = "none")
+@TeleOp(name = "GL-Transform-Erik", group = "none")
 
-public class ExperimentVuforiaGLTransform extends OpMode {
+public class ErikGLTransform extends OpMode {
     VuforiaLocalizer vuforia;
     VuforiaTrackable redWall;
     VuforiaTrackable backWall;

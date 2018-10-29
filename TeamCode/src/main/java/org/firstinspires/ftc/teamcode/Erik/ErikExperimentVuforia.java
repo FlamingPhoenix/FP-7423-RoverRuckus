@@ -18,9 +18,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-@TeleOp(name = "TestVuforiaErik", group = "none")
+@TeleOp(name = "VuforiaErik", group = "none")
 
-public class ExperimentVuforiaErik extends OpMode {
+public class ErikExperimentVuforia extends OpMode {
     VuforiaLocalizer vuforia;
     VuforiaTrackable redWall;
     VuforiaTrackable backWall;
