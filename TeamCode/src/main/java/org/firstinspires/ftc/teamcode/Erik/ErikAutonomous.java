@@ -16,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.*;
 
-@Autonomous(name="Erik Auto", group="none")
+@Autonomous(name="Erik Auto Subclass", group="none")
 public class ErikAutonomous extends LinearOpMode {
     DcMotor fl;
     DcMotor fr;

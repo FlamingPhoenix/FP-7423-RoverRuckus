@@ -18,9 +18,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-@TeleOp(name = "TestVuforiaErik", group = "none")
+@TeleOp(name = "VuforiaErik", group = "none")
 
-public class ExperimentVuforiaErik extends OpMode {
+public class ErikExperimentVuforia extends OpMode {
     VuforiaLocalizer vuforia;
     VuforiaTrackable redWall;
     VuforiaTrackable backWall;
@@ -59,7 +59,7 @@ public class ExperimentVuforiaErik extends OpMode {
 
         String tag = "Msg from loop - ";
 
- 
+
         if (pose2 != null & pose1 !=null ) {
             // code below is to do a comparison between pose1 transformation and getRobotLocation, after comapring
             // getRobotLocation and getUpdatedRobotLocation, they seem to be quite similar
