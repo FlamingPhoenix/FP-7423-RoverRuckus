@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
 /**
  * Created by Steve on 7/22/2018.
@@ -26,7 +27,7 @@ public class AutoRedSilver extends LinearOpMode {
     DcMotor bl;
     DcMotor br;
     DriveTrain drivetrain;
-    BNO055IMU imu;
+    MyBoschIMU imu;
 
     VuforiaLocalizer vuforia;
 
@@ -41,16 +42,9 @@ public class AutoRedSilver extends LinearOpMode {
 
         drivetrain = new DriveTrain(fl, fr, bl, br);
 
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        imu = new MyBoschIMU(hardwareMap);
 
-        imu.initialize(parameters);
+        imu.initialize(new BNO055IMU.Parameters());
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters param = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -82,12 +76,13 @@ public class AutoRedSilver extends LinearOpMode {
 */
         OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)backTarget.getListener()).getPose();
 
+        /*
         while (pose == null) {
             pose = ((VuforiaTrackableDefaultListener)backTarget.getListener()).getPose();
-            bl.setPower(0.1);
-            fl.setPower(0.1);
-            br.setPower(-0.1);
-            fr.setPower(-0.1);
+            bl.setPower(0.15);
+            fl.setPower(0.15);
+            br.setPower(-0.15);
+            fr.setPower(-0.15);
         }
 
         bl.setPower(0);
@@ -95,7 +90,15 @@ public class AutoRedSilver extends LinearOpMode {
         br.setPower(0);
         fr.setPower(0);
 
-        drivetrain.StrafeToImage(.8F, backTarget, this);
+        */
+
+        drivetrain.Turn(.4F, 45, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Strafe(.4F, 6, Direction.LEFT);
+
+        while (pose == null)
+        {
+            drivetrain.Drive(.4F, 1, Direction.BACKWARD);
+        }
 
     }
 }
