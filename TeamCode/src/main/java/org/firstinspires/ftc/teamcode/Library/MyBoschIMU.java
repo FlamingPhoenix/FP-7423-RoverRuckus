@@ -100,8 +100,8 @@ public class MyBoschIMU implements BNO055IMU {
 
     @Override
     public AngularVelocity getAngularVelocity() {
-        return getAngularVelocity();
-    }
+        return myIMU.getAngularVelocity();
+    } // add myIMU Nov 1 to return.
 
     @Override
     public Acceleration getLinearAcceleration() {

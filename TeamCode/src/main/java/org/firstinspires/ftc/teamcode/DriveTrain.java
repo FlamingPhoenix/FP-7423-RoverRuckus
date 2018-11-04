@@ -30,6 +30,7 @@ public class DriveTrain {
 
     protected PositionToImage lastKnownPosition;
 
+
     public DriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright) {
 
         fr = frontright;
@@ -78,6 +79,12 @@ public class DriveTrain {
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         int currentPosition = 0;
+
+        //added code below to support reverse driving, tested Oct 29, it is good
+
+        if (d == Direction.BACKWARD) {
+            power = -1 * power;
+        }
 
         while (currentPosition < targetEncoderValue) {
 
@@ -225,7 +232,7 @@ public class DriveTrain {
         return lastKnownPosition;
      }
 
-    public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, BNO055IMU imu, OpMode opMode) {
+    public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, MyBoschIMU imu, OpMode opMode) {
         OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
         float turningVelocity = Math.abs(imu.getAngularVelocity().xRotationRate);
 
@@ -258,4 +265,38 @@ public class DriveTrain {
         return m;
     }
 
+    // is it ok to have a method and it is further defined in subclass, but not here, do I need virtual key word ?
+    public void DriveStraight(float power, float distance, Direction d, MyBoschIMU myIMU, OpMode opMode){
+
+    }
+
+    public boolean DriveUntilImageVisible (float power, Direction direction, float distanceLimit, VuforiaTrackable imageTarget, OpMode opMode) {
+     //The function will move robot forward or backward until it sees the image, then stop
+      // or until distanceLimit is completed but if it still can't see image, then also stop
+        OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
+        float x = (1120F * distanceLimit)/(4F * (float)Math.PI);
+        int targetEncoderValue = Math.round(x);
+
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        int currentPosition = 0;
+
+        if(direction == Direction.BACKWARD){
+            power = -power;
+        }
+
+        while(pos == null && currentPosition < targetEncoderValue){
+            fl.setPower(power);
+            fr.setPower(power);
+            bl.setPower(power);
+            fr.setPower(power);
+            pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
+        }
+
+        if(pos != null){
+            return true;
+        }
+        StopAll();
+        return false;
+    }
 }
