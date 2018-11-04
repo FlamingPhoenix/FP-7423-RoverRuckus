@@ -42,7 +42,7 @@ public class AutoRedSilver extends LinearOpMode {
 
         drivetrain = new DriveTrain(fl, fr, bl, br);
 
-        imu = new MyBoschIMU(hardwareMap); // erik and Aryan made changes using myBoschIMU
+        imu = new MyBoschIMU(hardwareMap);
 
         imu.initialize(new BNO055IMU.Parameters());
 
@@ -76,12 +76,13 @@ public class AutoRedSilver extends LinearOpMode {
 */
         OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)backTarget.getListener()).getPose();
 
+        /*
         while (pose == null) {
             pose = ((VuforiaTrackableDefaultListener)backTarget.getListener()).getPose();
-            bl.setPower(0.1);
-            fl.setPower(0.1);
-            br.setPower(-0.1);
-            fr.setPower(-0.1);
+            bl.setPower(0.15);
+            fl.setPower(0.15);
+            br.setPower(-0.15);
+            fr.setPower(-0.15);
         }
 
         bl.setPower(0);
@@ -89,7 +90,15 @@ public class AutoRedSilver extends LinearOpMode {
         br.setPower(0);
         fr.setPower(0);
 
-        drivetrain.StrafeToImage(.8F, backTarget, this);
+        */
+
+        drivetrain.Turn(.4F, 45, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Strafe(.4F, 6, Direction.LEFT);
+
+        while (pose == null)
+        {
+            drivetrain.Drive(.4F, 1, Direction.BACKWARD);
+        }
 
     }
 }

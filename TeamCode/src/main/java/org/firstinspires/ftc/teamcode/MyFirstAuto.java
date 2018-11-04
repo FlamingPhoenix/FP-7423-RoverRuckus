@@ -84,12 +84,14 @@ public class MyFirstAuto extends LinearOpMode {
             br.setPower(-0.1);
             fr.setPower(-0.1);
         }
-        */
+
 
         bl.setPower(0);
         fl.setPower(0);
         br.setPower(0);
         fr.setPower(0);
+
+        */
 
         drivetrain.StrafeToImage(.8F, backTarget, this);
         PositionToImage position = drivetrain.getLastKnownPosition();
