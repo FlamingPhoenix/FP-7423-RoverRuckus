@@ -83,7 +83,7 @@ public class ErikGLTransform extends OpMode {
          * plane) is then CCW, as one would normally expect from the usual classic 2D geometry.
          */
         OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
-                .translation(mmBotWidth/2,150,0)
+                .translation(0,0,0)  // old (mmBotWidth/2,150,0), for testing, change to 0,0,0
                 .multiplied(Orientation.getRotationMatrix(
                         AxesReference.EXTRINSIC, AxesOrder.YXY,
                         AngleUnit.DEGREES, -90,  90, 0));
@@ -135,6 +135,7 @@ public class ErikGLTransform extends OpMode {
         Log.i("image is ",Boolean.toString(((VuforiaTrackableDefaultListener)redWall.getListener()).isVisible()));
 
         OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)(VuforiaTrackableDefaultListener) redWall.getListener()).getRobotLocation(); // change to get robotlocation, .getUpdatedRobotLocation();
+        Orientation orientation = Orientation.getOrientation(robotLocationTransform, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
         if (robotLocationTransform != null) {
             lastLocation = robotLocationTransform;
@@ -145,6 +146,9 @@ public class ErikGLTransform extends OpMode {
         */
         if (lastLocation != null) {
             //  RobotLog.vv(TAG, "robot=%s", format(lastLocation));
+            telemetry.addData("Angle per field x = %f", orientation.firstAngle);
+            telemetry.addData("Angle per field y = %f", orientation.secondAngle);
+            telemetry.addData("Angle per field z = %f", orientation.thirdAngle);
             telemetry.addData("Robot last Pos", format(lastLocation));
             Log.i("Robot last Pos =", format(lastLocation));
             Log.i("get-translation x= ", Float.toString(lastLocation.getTranslation().get(0)));

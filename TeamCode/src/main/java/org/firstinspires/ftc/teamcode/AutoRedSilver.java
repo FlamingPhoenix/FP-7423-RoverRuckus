@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
 /**
  * Created by Steve on 7/22/2018.
@@ -26,7 +27,7 @@ public class AutoRedSilver extends LinearOpMode {
     DcMotor bl;
     DcMotor br;
     DriveTrain drivetrain;
-    BNO055IMU imu;
+    MyBoschIMU imu;
 
     VuforiaLocalizer vuforia;
 
@@ -41,16 +42,9 @@ public class AutoRedSilver extends LinearOpMode {
 
         drivetrain = new DriveTrain(fl, fr, bl, br);
 
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        imu = new MyBoschIMU(hardwareMap); // erik and Aryan made changes using myBoschIMU
 
-        imu.initialize(parameters);
+        imu.initialize(new BNO055IMU.Parameters());
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters param = new VuforiaLocalizer.Parameters(cameraMonitorViewId);

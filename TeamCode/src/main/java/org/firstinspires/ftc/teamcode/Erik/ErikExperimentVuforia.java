@@ -72,10 +72,12 @@ public class ErikExperimentVuforia extends OpMode {
             Orientation orientation2 = Orientation.getOrientation(pose2, AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
             //telemetry.addData("x Angle(by GetUpdatedRobotLocation):", orientation.firstAngle);
 
-            telemetry.addData("y Angle(by getPose plus MatrixTransform):", adjustedOrientation.secondAngle);
-            telemetry.addData("x Cood(by GetPose and MatrixTransform, adj):", adjustedPose.getColumn(3).get(0)); //pose1.getColumn(3).get(0)
-            telemetry.addData("y Cood(by GetPose and MatrixTransform, adj):", adjustedPose.getColumn(3).get(1)); //pose1.getColumn(3).get(1)
-            telemetry.addData("z Cood(by GetPose and MatrixTransform, adj):", adjustedPose.getColumn(3).get(2)); //pose1.getColumn(3).get(2)
+            //comment out three lines add data below, to save screen space, and help with comparison with GL transform
+
+            //telemetry.addData("y Angle(by getPose plus MatrixTransform):", adjustedOrientation.secondAngle);
+            //telemetry.addData("x Cood(by GetPose and MatrixTransform, adj):", adjustedPose.getColumn(3).get(0)); //pose1.getColumn(3).get(0)
+            //telemetry.addData("y Cood(by GetPose and MatrixTransform, adj):", adjustedPose.getColumn(3).get(1)); //pose1.getColumn(3).get(1)
+            //telemetry.addData("z Cood(by GetPose and MatrixTransform, adj):", adjustedPose.getColumn(3).get(2)); //pose1.getColumn(3).get(2)
 
 
             telemetry.addData("y Angle(by GetRobotLocation):", orientation2.secondAngle);
