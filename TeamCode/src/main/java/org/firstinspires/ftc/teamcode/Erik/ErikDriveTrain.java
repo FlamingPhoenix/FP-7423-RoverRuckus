@@ -52,12 +52,12 @@ public class ErikDriveTrain extends DriveTrain {
         Orientation orientation = Orientation.getOrientation(pos1, AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
         float actualPower = power;
-        float delta_x_power = 0.08f;  // at vinay, 0.075, at erik, 0.08
+        float delta_x_power = 0.075f;  // at vinay, 0.075, at erik, 0.08
         float x;
         float d;
         float y;
         float camToCenter;
-        float turn_power = 0.05f;  // at vinay, 0.1, at erik 0.05
+        float turn_power = 0.1f;  // at vinay, 0.1, at erik 0.05
         float y_angle; // control varialble for turning, instead of x
         int turn_flag = 0; // for turning based on y angle.
 
@@ -101,7 +101,7 @@ public class ErikDriveTrain extends DriveTrain {
             //opMode.telemetry.addData("z Angle:", orientation.thirdAngle);
             opMode.telemetry.update();
 
-            while (Math.abs(d) >= 150) {
+            while (Math.abs(d) >= 100) {
                 //pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
 
                 if (x > 60f) {
