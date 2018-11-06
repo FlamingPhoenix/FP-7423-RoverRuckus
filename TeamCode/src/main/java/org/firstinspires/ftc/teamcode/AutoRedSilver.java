@@ -97,8 +97,10 @@ public class AutoRedSilver extends LinearOpMode {
 
         while (pose == null)
         {
-            drivetrain.Drive(.4F, 1, Direction.BACKWARD);
+            drivetrain.Turn(.4F, 10, Direction.CLOCKWISE,imu,this);
         }
 
+        drivetrain.StrafeToImage(.4F, backTarget,this);
+        drivetrain.Drive(.4F,7,Direction.FORWARD);
     }
 }
