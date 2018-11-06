@@ -77,6 +77,9 @@ public class ErikAutonomous extends LinearOpMode {
 
         waitForStart();
 
+        drivetrain.Drive(0.2F, 17F, Direction.FORWARD);
+        drivetrain.Strafe(0.4F, 17F, Direction.LEFT);
+
         /*
         drivetrain.Turn(0.15F,90,Direction.CLOCKWISE, imu, this);
         drivetrain.Drive(0.25F, 5, Direction.FORWARD);
@@ -103,10 +106,10 @@ public class ErikAutonomous extends LinearOpMode {
         drivetrain.StrafeToImage(0.3F, backTarget, this);  //
 
         // drive backward for certain distance.
-        drivetrain.Drive(0.2f, 30f, Direction.BACKWARD);
+        drivetrain.Drive(0.2f, 39f, Direction.BACKWARD);
 
         // can try drive straight..a method defined in subclass and just a skeleton at super class(DriveTrain)
-        drivetrain.DriveStraight(0.2f, 40f, Direction.FORWARD, imu, this);
+        //drivetrain.DriveStraight(0.2f, 40f, Direction.FORWARD, imu, this);
 
     }
 }
