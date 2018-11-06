@@ -98,6 +98,7 @@ public class ErikAutonomous extends LinearOpMode {
         bl.setPower(0);
         fl.setPower(0);
         br.setPower(0);
+
         fr.setPower(0);
 
         drivetrain.StrafeToImage(0.3F, backTarget, this);  //
