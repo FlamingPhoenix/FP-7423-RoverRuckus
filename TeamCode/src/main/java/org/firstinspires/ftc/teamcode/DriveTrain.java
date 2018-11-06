@@ -80,7 +80,7 @@ public class DriveTrain {
         fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         int currentPosition = 0;
 
-        //added code below to support reverse driving, tested Oct 29, it is good
+        //added code below to support reverse driving, tested Oct 29, Erik did ofc this
 
         if (d == Direction.BACKWARD) {
             power = -1 * power;
