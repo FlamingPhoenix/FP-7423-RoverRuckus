@@ -16,8 +16,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaRelicRecovery;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import android.util.Log;
+
+import java.util.List;
 
 @TeleOp(name = "TestVuforia", group = "none")
 public class ExperimentVuforia extends OpMode {
@@ -27,6 +31,12 @@ public class ExperimentVuforia extends OpMode {
     VuforiaTrackable backWall;
     VuforiaTrackable blueWall;
     VuforiaTrackable frontWall;
+
+    private TFObjectDetector tfod;
+
+    private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
+    private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
+    private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
 
     @Override
     public void init() {
@@ -50,6 +60,17 @@ public class ExperimentVuforia extends OpMode {
         frontWall.setName("frontwall");
         backWall = rover.get(3);
         backWall.setName("backwall");
+
+
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+
+        if (tfod != null)
+            tfod.activate();
+
     }
 
     @Override
@@ -75,6 +96,34 @@ public class ExperimentVuforia extends OpMode {
                     String.format("x=%f, y=%f, z=%f;  adjX=%f, adjY=%f, adjZ=%f",
                                    orientation.firstAngle, orientation.secondAngle, orientation.thirdAngle,
                                    adjustedOrientation.firstAngle, adjustedOrientation.secondAngle, adjustedOrientation. thirdAngle));
+
+
+            if (tfod != null) {
+                // getUpdatedRecognitions() will return null if no new information is available since
+                // the last time that call was made.
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                if (updatedRecognitions != null) {
+                    telemetry.addData("# Object Detected", updatedRecognitions.size());
+
+                    int silverCount = 0;
+
+                    for (Recognition recognition : updatedRecognitions) {
+                        if (recognition.getLabel() .equals( LABEL_GOLD_MINERAL)) {
+                            telemetry.addData("Gold:", recognition.getLeft());
+                            Log.i("[phoenix:testVuforia]", String.format("Gold: %f", recognition.getLeft()));
+                        }
+                        else if (recognition.getLabel() .equals( LABEL_SILVER_MINERAL)) {
+                            silverCount += 1;
+                            String label = String.format("Silver %d:", silverCount);
+                            telemetry.addData(label, recognition.getLeft());
+                            Log.i("[phoenix:testVuforia]", String.format("Silver %d: %f", silverCount, recognition.getLeft()));
+                        }
+                    }
+                }
+            }
+            else
+                telemetry.addData("# problem", "tfod is null");
+
 
         }
 
