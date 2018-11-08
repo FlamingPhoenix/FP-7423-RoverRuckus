@@ -195,7 +195,7 @@ public class DriveTrain {
                 if (adjustedOrientation.secondAngle < -3) {
                     flTurnAdjust = 0.2F * (Math.abs(adjustedOrientation.secondAngle) / 10);
                 }
-                else if (adjustedOrientation.secondAngle > 3) {
+                else if (adjustedOrientation.secondAngle > 3) { // here needs to apply same formular as above..
                     blTurnAdjust = -0.2F;
                 }
 
@@ -267,6 +267,14 @@ public class DriveTrain {
 
     // is it ok to have a method and it is further defined in subclass, but not here, do I need virtual key word ?
     public void DriveStraight(float power, float distance, Direction d, MyBoschIMU myIMU, OpMode opMode){
+
+    }
+    // this is skeleton the detail is defined in ERIK DRIVETRAINNNNNN
+    public void ProDrive(float power, float distance, Direction d, OpMode opMode ) {
+    //
+    }
+    // this is skeleton the detail is defined in ERIK DRIVETRAINnnnnn
+    public void ProTurn(float power, int angle, Direction d, MyBoschIMU imu, OpMode opMode) {
 
     }
 
