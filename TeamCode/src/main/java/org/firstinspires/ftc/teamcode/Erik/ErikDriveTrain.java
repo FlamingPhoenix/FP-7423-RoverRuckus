@@ -25,6 +25,12 @@ import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
 public class ErikDriveTrain extends DriveTrain {
 
+    // these constants can be used to proportionally control DC Motor power in response to error to target(angle, distance etc)
+    public  static final double  HEADING_GAIN       =  0.04;   //0.018, Rate at which we respond to heading error, ie angle error
+    public  static final double  LATERAL_GAIN   =  0.05; //0.0027,  Rate at which we respond to off-axis error
+    public  static final double  AXIAL_GAIN     =  0.05;  // 0.0017, Rate at which we respond to target distance errors
+    // above numbers are not necessary for our robot, it is just a starting point..
+
     public ErikDriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright)  {
         super(frontleft, frontright, backleft, backright);
         
@@ -260,7 +266,8 @@ public class ErikDriveTrain extends DriveTrain {
         // add following code for new robot, testing new robot.
         opMode.telemetry.addData("just entered turning loop, initial turningRobotSpeed = ", turningRobotSpeed);
         opMode.telemetry.update();
-       sleepTime = 1001;
+       // can increase sleep time, so that the fast turn covers more angle change,and thus reduce slow turn time..
+        sleepTime = 1001; // can consider double.
 
         bl.setPower(turningRobotSpeed);
         fl.setPower(turningRobotSpeed);
@@ -386,4 +393,106 @@ public class ErikDriveTrain extends DriveTrain {
 
     }
 
+    // can have proportional turn, proportional drive, p
+
+    // below is proportional drive, ie, turn at normal speed and then slow down towards the end as we get closer to the target angle
+    // consider using cliprange function, Range.clip(calculated Motor Power, -1, 1)
+    @Override
+    public void ProTurn(float power, int angle, Direction d, MyBoschIMU imu, OpMode opMode) {
+
+        Orientation startOrientation = imu.resetAndStart(d);
+
+        float propower = power;
+        float angle_Error = 0.0f;
+        float targetAngle;
+        float currentAngle;
+        float actualPower = power;
+        if (d == Direction.CLOCKWISE) {
+            actualPower = -(power);
+
+            targetAngle = startOrientation.firstAngle - angle;
+            currentAngle = startOrientation.firstAngle;
+            while (currentAngle > targetAngle) {
+
+                angle_Error =  currentAngle - targetAngle;
+                propower = actualPower * Range.clip(((float)HEADING_GAIN)*angle_Error, -1, 1);
+                opMode.telemetry.addData("CW propower", propower);
+                Log.i("CW ProTurn propower is ", Float.toString(propower));
+                opMode.telemetry.addData("start:", startOrientation.firstAngle);
+                opMode.telemetry.addData("current:", currentAngle);
+                opMode.telemetry.addData("target:", targetAngle);
+                opMode.telemetry.update();
+
+                currentAngle = imu.getAngularOrientation().firstAngle;
+                fl.setPower(-(propower));
+                fr.setPower(propower);
+                bl.setPower(-(propower));
+                br.setPower(propower);
+            }
+        }
+        else {
+            actualPower = power;
+
+            targetAngle = startOrientation.firstAngle + angle;
+            currentAngle = startOrientation.firstAngle;
+            while (currentAngle < targetAngle) {
+
+                angle_Error = targetAngle - currentAngle;
+                propower = actualPower * Range.clip(((float)HEADING_GAIN)*angle_Error, -1, 1);
+                opMode.telemetry.addData("CCW propower", propower);
+                Log.i("CCWProTurn propower is ", Float.toString(propower));
+                opMode.telemetry.addData("start:", startOrientation.firstAngle);
+                opMode.telemetry.addData("current:", currentAngle);
+                opMode.telemetry.addData("target:", targetAngle);
+                opMode.telemetry.update();
+
+                currentAngle = imu.getAngularOrientation().firstAngle;
+                fl.setPower(-(propower));
+                fr.setPower(propower);
+                bl.setPower(-(propower));
+                br.setPower(propower);
+            }
+        }
+
+
+        StopAll();
+
+    }
+
+    // below is proportional drive, ie, drive normal speed and then slow down towards the end as we get closer to the target distance
+    @Override
+    public void ProDrive(float power, float distance, Direction d, OpMode opMode) {
+        float distance_Error = 0.0f;
+        float pro_power = power;
+        float x = (1120F * distance)/(4F * (float)Math.PI);
+        int targetEncoderValue = Math.round(x);
+
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        int currentPosition = 0;
+
+        //added code below to support reverse driving, tested Oct 29, Erik did ofc this
+
+        if (d == Direction.BACKWARD) {
+            power = -1 * power;
+        }
+
+        while (currentPosition < targetEncoderValue) {
+
+            currentPosition = (Math.abs(fl.getCurrentPosition()));
+            distance_Error = 25.4f*(distance - currentPosition*(4F * (float)Math.PI) / 1120f);
+            opMode.telemetry.addData("distance_error", distance_Error);
+            Log.i("distance error", Float.toString(distance_Error));
+            pro_power = power*Range.clip(distance_Error*((float) AXIAL_GAIN), -1, 1);
+            opMode.telemetry.addData("propower, after clip ", pro_power);
+            Log.i("aft-clip-prodrive-pwris", Float.toString(pro_power));
+            fl.setPower(pro_power);
+            fr.setPower(pro_power);
+            bl.setPower(pro_power);
+            br.setPower(pro_power);
+        }
+
+        StopAll();
+
+    }
 }
