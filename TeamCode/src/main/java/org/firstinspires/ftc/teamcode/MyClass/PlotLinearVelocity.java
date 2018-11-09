@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.MyClass;
 
 import android.util.Log;
 
@@ -14,14 +14,17 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.teamcode.Direction;
+import org.firstinspires.ftc.teamcode.DriveTrain;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
-@Autonomous(name="Plot Angular Velocity", group="none")
-public class PlotAngularVelocity extends LinearOpMode {
+@Autonomous(name="Plot Linear Velocity", group="none")
+public class PlotLinearVelocity extends LinearOpMode{
     DcMotor fl;
     DcMotor fr;
     DcMotor bl;
@@ -39,73 +42,67 @@ public class PlotAngularVelocity extends LinearOpMode {
         fl.setDirection(DcMotorSimple.Direction.REVERSE);
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        //drivetrain = new DriveTrain(fl, fr, bl, br);
         imu = new MyBoschIMU(hardwareMap); // erik and Aryan made changes using myBoschIMU
         imu.initialize(new BNO055IMU.Parameters());
 
         waitForStart();
 
-        //Log.i("[phoenix:PlotAngVel]", String.format("Initiating loop"));
-        for (float power = 1; power >= .15; power-=.05){
 
+        for (float power = 1; power >= .15; power-=.05){
             float diffAverage = 0;
             float velocityAverage = 0;
 
             for (int i = 0; i < 4; i++){
-                Orientation startOrientation = imu.resetAndStart(Direction.COUNTERCLOCKWISE);
-                float startAngle = 0;
-                if (startOrientation != null)
-                    startAngle = startOrientation.firstAngle;
+                double startPosition = imu.getPosition().x;
+                Drive(power);
 
-                float v = Turn(power);
-                sleep (3000);
-                float currentAngle = imu.getAngularOrientation().firstAngle;
+                double v = Drive(power);
+                sleep (8000);
+                double currentPosition = imu.getPosition().x;
 
                 velocityAverage += v;
-                diffAverage += (currentAngle - startAngle);
-
-
+                diffAverage += (currentPosition - startPosition);
             }
 
             diffAverage = diffAverage / 4;
             velocityAverage = velocityAverage / 4;
 
-            Log.i("[phoenix:PlotAngVel]", String.format("%f: %f: %f",
+            Log.i("[phoenix:PlotLineVel]", String.format("%f: %f: %f",
                     power, diffAverage, velocityAverage));
         }
 
     }
 
-    float Turn(float power) {
+    double Drive (float power) {
+        int startPosition = 0;
 
-        //Log.i("[phoenix:PlotAngVel]", String.format("Beginning Turn at %f power.", power));
-         Orientation startOrientation = imu.resetAndStart(Direction.COUNTERCLOCKWISE);
-         float startAngle = 0;
-         if (startOrientation != null)
-            startAngle = startOrientation.firstAngle;
+        float x = (1120F * 10)/(4F * (float)Math.PI);
+        int targetEncoderValue = Math.round(x);
 
-         float endingAngle = startAngle + 90;
-         float currentAngle = startAngle;
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        int currentPosition = 0;
+        currentPosition = startPosition;
 
-         while (currentAngle < endingAngle) {
-             fl.setPower(power);
-             bl.setPower(power);
-             fr.setPower(-power);
-             br.setPower(-power);
-             currentAngle = imu.getAngularOrientation().firstAngle;
-         }
 
-        //Log.i("[phoenix:PlotAngVel]", String.format("Getting angular velocity"));
-        AngularVelocity v =  imu.getAngularVelocity();
-        float speed = v.xRotationRate;
+        while (currentPosition < targetEncoderValue) {
+
+            currentPosition = (Math.abs(fl.getCurrentPosition()));
+            fl.setPower(power);
+            fr.setPower(power);
+            bl.setPower(power);
+            br.setPower(power);
+        }
+
+        Velocity v = imu.getVelocity();
+        double speed = v.xVeloc;
 
         fl.setPower(0);
         bl.setPower(0);
         fr.setPower(0);
         br.setPower(0);
 
-        //Log.i("[phoenix:PlotAngVel]", String.format("speed = %f", speed));
-        //Log.i("[phoenix:PlotAngVel)", String.format("additionalAngle = %f", (currentAngle + 90)));
         return speed;
     }
+
 }
