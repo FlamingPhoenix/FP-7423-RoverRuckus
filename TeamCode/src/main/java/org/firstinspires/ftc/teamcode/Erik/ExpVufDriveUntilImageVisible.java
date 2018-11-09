@@ -17,8 +17,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.*;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
-@Autonomous(name="Erik drive until image visible", group="none")
-public class ExperimentVuforiaDriveUntilImageVisible extends LinearOpMode {
+@Autonomous(name="Erik-drive-til-image-vis", group="none")
+public class ExpVufDriveUntilImageVisible extends LinearOpMode {
     DcMotor fl;
     DcMotor fr;
     DcMotor bl;
