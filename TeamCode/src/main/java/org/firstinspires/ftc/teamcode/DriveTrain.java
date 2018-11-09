@@ -52,7 +52,7 @@ public class DriveTrain {
             actualPower = -(power);
 
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         int currentPosition = 0;
 
         while (currentPosition < targetEncoderValue) {
@@ -77,7 +77,7 @@ public class DriveTrain {
         int targetEncoderValue = Math.round(x);
 
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         int currentPosition = 0;
 
         //added code below to support reverse driving, tested Oct 29, Erik did ofc this
@@ -195,8 +195,9 @@ public class DriveTrain {
                 if (adjustedOrientation.secondAngle < -3) {
                     flTurnAdjust = 0.2F * (Math.abs(adjustedOrientation.secondAngle) / 10);
                 }
-                else if (adjustedOrientation.secondAngle > 3) { // here needs to apply same formular as above..
-                    blTurnAdjust = -0.2F;
+                else if (adjustedOrientation.secondAngle > 3) {
+                    blTurnAdjust = -0.2F * (Math.abs(adjustedOrientation.secondAngle) / 10);
+                    // Aryan changed this; Copied Math.abs from first if branch into second branch
                 }
 
                 float flPower, frPower, blPower, brPower;
@@ -286,8 +287,12 @@ public class DriveTrain {
         int targetEncoderValue = Math.round(x);
 
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         int currentPosition = 0;
+        opMode.telemetry.addData("init encode value",fl.getCurrentPosition());
+        Log.i("init encode value", Integer.toString(fl.getCurrentPosition()));
+        opMode.telemetry.addData("target encode value",targetEncoderValue);
+        Log.i("distance error", Integer.toString(targetEncoderValue));
 
         if(direction == Direction.BACKWARD){
             power = -power;
@@ -297,8 +302,11 @@ public class DriveTrain {
             fl.setPower(power);
             fr.setPower(power);
             bl.setPower(power);
-            fr.setPower(power);
+            br.setPower(power);
             pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
+            currentPosition = fl.getCurrentPosition();
+            opMode.telemetry.addData("current encode value",currentPosition);
+            Log.i("init encode value", Integer.toString(currentPosition));
         }
 
         if(pos != null){
