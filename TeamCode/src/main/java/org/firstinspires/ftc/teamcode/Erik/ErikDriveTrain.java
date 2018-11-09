@@ -43,8 +43,7 @@ public class ErikDriveTrain extends DriveTrain {
     // like Drive(), Strafe(), Turn()[need to add logic to avoid non-stop turning], StopAll() etc.
 
     // add function used to be called DriveToImageErik, now changed name to StrafeToImage and then inherit from super class
-    
-    
+
     @Override
     public void StrafeToImage(float power, VuforiaTrackable imageTarget, OpMode opMode)   {
         
@@ -243,10 +242,10 @@ public class ErikDriveTrain extends DriveTrain {
     @Override
     public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, MyBoschIMU imu, OpMode opMode) {
         //super.TurnToImage(initialPower, d, imageTarget, imu); // no contructor for method
-        
+
           // in Erik's local TurnToImageErik, OpMode is needed to collect status data, question for steve
-        // should modify master DriveTrain, to add OpMode variable, then inherit, or just add here in Erik's branch ? 
-        
+        // should modify master DriveTrain, to add OpMode variable, then inherit, or just add here in Erik's branch ?
+
         // pasted as is for now..
         OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
 
@@ -353,7 +352,7 @@ public class ErikDriveTrain extends DriveTrain {
 //        opMode.telemetry.update();
 
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         int currentPosition = 0;
 
 
@@ -468,7 +467,7 @@ public class ErikDriveTrain extends DriveTrain {
         int targetEncoderValue = Math.round(x);
 
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         int currentPosition = 0;
 
         //added code below to support reverse driving, tested Oct 29, Erik did ofc this
