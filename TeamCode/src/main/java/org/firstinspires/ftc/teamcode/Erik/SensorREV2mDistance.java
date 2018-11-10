@@ -51,7 +51,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  *
  * @see <a href="http://revrobotics.com">REV Robotics Web Page</a>
  */
-@TeleOp(name = "Erik-Distance Sensor", group = "Sensor")
+@TeleOp(name = "Distance Sensor", group = "Sensor")
 //@Disabled
 public class SensorREV2mDistance extends LinearOpMode {
 
