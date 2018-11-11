@@ -21,39 +21,7 @@ import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
  */
 
 @Autonomous(name="Auto Red Silver", group="none")
-public class AutoRedSilver extends LinearOpMode {
-    DcMotor fl;
-    DcMotor fr;
-    DcMotor bl;
-    DcMotor br;
-    DriveTrain drivetrain;
-    MyBoschIMU imu;
-
-    VuforiaLocalizer vuforia;
-
-    public void initialize() {
-        fl = hardwareMap.dcMotor.get("frontleft");
-        fr = hardwareMap.dcMotor.get("frontright");
-        bl = hardwareMap.dcMotor.get("backleft");
-        br = hardwareMap.dcMotor.get("backright");
-
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
-        bl.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        drivetrain = new DriveTrain(fl, fr, bl, br);
-
-        imu = new MyBoschIMU(hardwareMap);
-
-        imu.initialize(new BNO055IMU.Parameters());
-
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters param = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        param.vuforiaLicenseKey = "AbYPrgD/////AAAAGbvKMH3NcEVFmPLgunQe4K0d1ZQi+afRLxricyooCq+sgY9Yh1j+bBrd0CdDCcoieA6trLCKBzymC515+Ps/FECtXv3+CTW6fg3/3+nvKZ6QA18h/cNZHg5HYHmghlcCgVUmSzOLRvdOpbS4S+0Y/sWGXwFK0PbuGPSN82w8XPDBoRYSWjAf8GXeitmNSlm9n4swrMoYNpMDuWCDjSm1kWnoErjFA9NuNoFzAgO+C/rYzoYjTJRk40ETVcAsahzatRlP7PJCvNNXiBhE6iVR+x7lFlTZ841xifOIOPkfVc54olC5XYe4A5ZmQ6WFD03W5HHdQrnmKPmkgcr1yqXAJ3rLTK8FZK3KVgbxz3Eeqps0";
-        param.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        com.vuforia.Vuforia.setHint(HINT.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, 4);
-
-        vuforia = ClassFactory.getInstance().createVuforia(param);
-    }
+public class AutoRedSilver extends AutoBase {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -62,7 +30,7 @@ public class AutoRedSilver extends LinearOpMode {
         VuforiaTrackables rover = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
         rover.activate();
 
-        VuforiaTrackable backTarget = rover.get(3);
+        VuforiaTrackable backTarget = rover.get(2);
         // 3 = Nebula Picture
         backTarget.setName("back");
 
@@ -92,8 +60,9 @@ public class AutoRedSilver extends LinearOpMode {
 
         */
 
-        drivetrain.Turn(.4F, 45, Direction.COUNTERCLOCKWISE, imu, this);
-        drivetrain.Strafe(.4F, 6, Direction.LEFT);
+        drivetrain.Turn(.3F, 10, Direction.COUNTERCLOCKWISE, imu, this);
+        sleep(20000);
+       /* drivetrain.Strafe(.4F, 6, Direction.LEFT);
 
         while (pose == null)
         {
@@ -101,6 +70,6 @@ public class AutoRedSilver extends LinearOpMode {
         }
 
         drivetrain.StrafeToImage(.4F, backTarget,this);
-        drivetrain.Drive(.4F,7,Direction.FORWARD);
+        drivetrain.Drive(.4F,7,Direction.FORWARD);*/
     }
 }
