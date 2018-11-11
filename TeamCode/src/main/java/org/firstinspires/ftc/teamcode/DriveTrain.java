@@ -13,6 +13,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -106,12 +107,15 @@ public class DriveTrain {
         float targetAngle;
         float currentAngle;
         float actualPower = power;
+        float stoppingAngle = 0;
+
         if (d == Direction.CLOCKWISE) {
             actualPower = -(power);
 
             targetAngle = startOrientation.firstAngle - angle;
             currentAngle = startOrientation.firstAngle;
-            while (currentAngle > targetAngle) {
+
+            while ((currentAngle - stoppingAngle) > targetAngle) {
 
                 opMode.telemetry.addData("start:", startOrientation.firstAngle);
                 opMode.telemetry.addData("current:", currentAngle);
@@ -119,6 +123,10 @@ public class DriveTrain {
                 opMode.telemetry.update();
 
                 currentAngle = imu.getAngularOrientation().firstAngle;
+                AngularVelocity v =  imu.getAngularVelocity();
+                float speed = Math.abs(v.xRotationRate);
+                stoppingAngle = ( 5/16 * (speed - 120)) + 30;
+
                 fl.setPower(-(actualPower));
                 fr.setPower(actualPower);
                 bl.setPower(-(actualPower));
@@ -130,7 +138,7 @@ public class DriveTrain {
 
             targetAngle = startOrientation.firstAngle + angle;
             currentAngle = startOrientation.firstAngle;
-            while (currentAngle < targetAngle) {
+            while ((currentAngle + stoppingAngle) < targetAngle) {
 
                 opMode.telemetry.addData("start:", startOrientation.firstAngle);
                 opMode.telemetry.addData("current:", currentAngle);
@@ -138,6 +146,10 @@ public class DriveTrain {
                 opMode.telemetry.update();
 
                 currentAngle = imu.getAngularOrientation().firstAngle;
+                AngularVelocity v =  imu.getAngularVelocity();
+                float speed = Math.abs(v.xRotationRate);
+                stoppingAngle = ( 5/16 * (speed - 120)) + 30;
+
                 fl.setPower(-(actualPower));
                 fr.setPower(actualPower);
                 bl.setPower(-(actualPower));
