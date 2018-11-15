@@ -279,21 +279,21 @@ public class ErikAutRedSilver extends LinearOpMode {
                 Log.i("current time is ", Long.toString(currentTime));
                 break;
             case 1:  // position A
-                drivetrain.Drive(0.3f, 25F, Direction.FORWARD);
+                drivetrain.Drive(0.3f, 27F, Direction.FORWARD);
                 telemetry.addData("position A ", "gold found is 1");
                 Log.i("gold is A ", Integer.toString(gold_Found));
                 telemetry.addData("current time is ", currentTime);
                 Log.i("current time is ", Long.toString(currentTime));
                 break;
             case 2:  // position B
-                drivetrain.Drive(0.3f, 13F, Direction.FORWARD);
+                drivetrain.Drive(0.3f, 14F, Direction.FORWARD);
                 telemetry.addData("position B ", "gold found is 2");
                 Log.i("gold is B ", Integer.toString(gold_Found));
                 telemetry.addData("current time is ", currentTime);
                 Log.i("current time is ", Long.toString(currentTime));
                 break;
             case 3:  // position C
-                drivetrain.Drive(0.3f, 2F, Direction.FORWARD);
+                drivetrain.Drive(0.3f, 1.5F, Direction.FORWARD);
                 telemetry.addData("position C ", "gold found is 3");
                 Log.i("gold is C ", Integer.toString(gold_Found));
                 telemetry.addData("current time is ", currentTime);
@@ -306,20 +306,20 @@ public class ErikAutRedSilver extends LinearOpMode {
 
         telemetry.update();
 
-        bl.setPower(0);
-        fl.setPower(0);
-        br.setPower(0);
-        fr.setPower(0);
+        drivetrain.StopAll();
+
+        // get to center
+        drivetrain.Strafe(0.3f, 13F, Direction.LEFT);
+
+        drivetrain.StopAll();
 
         drivetrain.TurnToImage(0.4F, Direction.CLOCKWISE, backTarget, imu, this); // at vinay, 0.4, at erik, can 0.4 or 0.5
 
-        bl.setPower(0);
-        fl.setPower(0);
-        br.setPower(0);
-        fr.setPower(0);
+        drivetrain.StopAll();
 
         drivetrain.StrafeToImage(0.3F, backTarget, this);  //
 
+        drivetrain.StopAll();
         /* this is reserved for waiting for alliance partner to set marker..
         telemetry.addData("will wait, 5 sec sleep ", "for alliance partner to set marker");
         Log.i("XZ after 5 sec wait", "for alliance partner to set marker");
@@ -332,6 +332,10 @@ public class ErikAutRedSilver extends LinearOpMode {
             e.printStackTrace();
         }
         */
+        if (tfod != null) { // now it is ok to shutdown tfod/vuforia
+            tfod.deactivate();
+            tfod.shutdown();
+        }
 
         // drive backward for certain distance.
         drivetrain.Drive(0.3f, 31f, Direction.FORWARD);
