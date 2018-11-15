@@ -31,6 +31,8 @@ public class DriveTrain {
 
     protected PositionToImage lastKnownPosition;
 
+   private float PPR = 560F;
+
 
     public DriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright) {
 
@@ -45,7 +47,7 @@ public class DriveTrain {
 
     public void Strafe(float power, float distance, Direction d /*, OpMode op*/) {
 
-        float x = (2240F * distance)/(4F * (float)Math.PI);
+        float x = (PPR * 2 * distance)/(4F * (float)Math.PI);
         int targetEncoderValue = Math.round(x);
 
         float actualPower = power;
@@ -74,7 +76,7 @@ public class DriveTrain {
 
     public void Drive(float power, float distance, Direction d) {
 
-        float x = (1120F * distance)/(4F * (float)Math.PI);
+        float x = (PPR * distance)/(4F * (float)Math.PI);
         int targetEncoderValue = Math.round(x);
 
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -295,7 +297,7 @@ public class DriveTrain {
      //The function will move robot forward or backward until it sees the image, then stop
       // or until distanceLimit is completed but if it still can't see image, then also stop
         OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
-        float x = (1120F * distanceLimit)/(4F * (float)Math.PI);
+        float x = (PPR * distanceLimit)/(4F * (float)Math.PI);
         int targetEncoderValue = Math.round(x);
 
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

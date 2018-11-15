@@ -49,6 +49,8 @@ public class AutoRedSilver extends AutoBase {
 
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions.size() == 1)
+
+
             {
                 if (updatedRecognitions.get(0).getLabel().equals(LABEL_SILVER_MINERAL))
                 {
