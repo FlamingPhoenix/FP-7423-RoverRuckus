@@ -260,13 +260,13 @@ public class ErikDriveTrain extends DriveTrain {
         long sleepTime;
 
         turningstep = 0.01F;
-        turningRobotSpeed = initialPower;
+        turningRobotSpeed = - initialPower; // turningRobotSpeed = initialPower, here is reverse turn
        // turningRobotSpeed = turningMax;
         // add following code for new robot, testing new robot.
         opMode.telemetry.addData("just entered turning loop, initial turningRobotSpeed = ", turningRobotSpeed);
         opMode.telemetry.update();
        // can increase sleep time, so that the fast turn covers more angle change,and thus reduce slow turn time..
-        sleepTime = 1001; // can consider double.
+        sleepTime = 401; // it was 1001, change to 701 still too much, only need 45 degree for redsilver, so try 401
 
         bl.setPower(turningRobotSpeed);
         fl.setPower(turningRobotSpeed);
@@ -289,7 +289,7 @@ public class ErikDriveTrain extends DriveTrain {
             e.printStackTrace();
         }
 
-        turningRobotSpeed = 0.15f; // at vinay, 0.13 ,at erik, 0.17
+        turningRobotSpeed = - 0.15f; // turningRobotSpeed = 0.15f, at vinay, 0.13 ,at erik, 0.17
 
 
         while (pos == null) {
