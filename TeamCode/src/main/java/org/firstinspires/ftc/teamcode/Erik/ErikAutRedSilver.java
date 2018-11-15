@@ -173,7 +173,7 @@ public class ErikAutRedSilver extends LinearOpMode {
                                             drivetrain.Strafe(0.4f, 6, Direction.LEFT);
                                             //tfod.deactivate();
                                             //tfod.shutdown();
-                                            gold_Found = 2;  // gold is in B position
+                                            gold_Found = 3;  // gold is in C position
                                             telemetry.addData("at end of gold loop", "gold 2");
                                             Log.i("gold loop", "at end of gold loop");
                                             telemetry.update();
@@ -183,7 +183,7 @@ public class ErikAutRedSilver extends LinearOpMode {
                                             drivetrain.Strafe(0.4f, 12, Direction.LEFT);
                                             //tfod.deactivate();
                                             //tfod.shutdown();
-                                            gold_Found = 3;  // gold is in B position
+                                            gold_Found = 2;  // gold is in B position
                                             telemetry.addData("at end of gold loop", "gold 3");
                                             Log.i("gold loop", "at end of gold loop");
                                             telemetry.update();
@@ -293,7 +293,7 @@ public class ErikAutRedSilver extends LinearOpMode {
                 Log.i("current time is ", Long.toString(currentTime));
                 break;
             case 3:  // position C
-                drivetrain.Drive(0.3f, 1F, Direction.FORWARD);
+                drivetrain.Drive(0.3f, 2F, Direction.FORWARD);
                 telemetry.addData("position C ", "gold found is 3");
                 Log.i("gold is C ", Integer.toString(gold_Found));
                 telemetry.addData("current time is ", currentTime);
@@ -305,6 +305,11 @@ public class ErikAutRedSilver extends LinearOpMode {
         }
 
         telemetry.update();
+
+        bl.setPower(0);
+        fl.setPower(0);
+        br.setPower(0);
+        fr.setPower(0);
 
         drivetrain.TurnToImage(0.4F, Direction.CLOCKWISE, backTarget, imu, this); // at vinay, 0.4, at erik, can 0.4 or 0.5
 
