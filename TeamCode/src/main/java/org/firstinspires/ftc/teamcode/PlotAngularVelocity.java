@@ -20,7 +20,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
-@Autonomous(name="Plot Angular Velocity", group="none")
 public class PlotAngularVelocity extends LinearOpMode {
     DcMotor fl;
     DcMotor fr;

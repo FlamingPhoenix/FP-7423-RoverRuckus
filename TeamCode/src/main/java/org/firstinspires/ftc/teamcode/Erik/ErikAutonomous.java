@@ -232,16 +232,15 @@ public class ErikAutonomous extends LinearOpMode {
         bl.setPower(0);
         fl.setPower(0);
         br.setPower(0);
-
         fr.setPower(0);
 
         drivetrain.StrafeToImage(0.3F, backTarget, this);  //
 
         // drive backward for certain distance.
-        drivetrain.Drive(0.2f, 39f, Direction.BACKWARD);
+        drivetrain.Drive(0.2f, 39f, Direction.FORWARD);
 
         // can try drive straight..a method defined in subclass and just a skeleton at super class(DriveTrain)
-        //drivetrain.DriveStraight(0.2f, 40f, Direction.FORWARD, imu, this);
+        drivetrain.DriveStraight(0.2f, 40f, Direction.FORWARD, imu, this);
 
     }
     //@Override
