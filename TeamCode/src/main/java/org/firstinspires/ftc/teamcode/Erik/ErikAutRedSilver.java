@@ -270,25 +270,34 @@ public class ErikAutRedSilver extends LinearOpMode {
 
         // above is code without attempting to knock off Gold
         // here we need to decide which position is Gold and then drive respectively
+        currentTime = Math.round(runtime.milliseconds());
         switch (gold_Found) {
             case 0: // didnt detect gold
-                currentTime = Math.round(runtime.milliseconds());
                 telemetry.addData("gold found flag not set", gold_Found);
                 Log.i("gold found flag not set", Integer.toString(gold_Found));
-                telemetry.update();
                 telemetry.addData("current time is ", currentTime);
                 Log.i("current time is ", Long.toString(currentTime));
                 break;
             case 1:  // position A
                 drivetrain.Drive(0.3f, 25F, Direction.FORWARD);
                 telemetry.addData("position A ", "gold found is 1");
+                Log.i("gold is A ", Integer.toString(gold_Found));
+                telemetry.addData("current time is ", currentTime);
                 Log.i("current time is ", Long.toString(currentTime));
                 break;
             case 2:  // position B
                 drivetrain.Drive(0.3f, 13F, Direction.FORWARD);
+                telemetry.addData("position B ", "gold found is 2");
+                Log.i("gold is B ", Integer.toString(gold_Found));
+                telemetry.addData("current time is ", currentTime);
+                Log.i("current time is ", Long.toString(currentTime));
                 break;
             case 3:  // position C
                 drivetrain.Drive(0.3f, 1F, Direction.FORWARD);
+                telemetry.addData("position C ", "gold found is 3");
+                Log.i("gold is C ", Integer.toString(gold_Found));
+                telemetry.addData("current time is ", currentTime);
+                Log.i("current time is ", Long.toString(currentTime));
                 break;
             default:  // didnt detect Gold
                 telemetry.addData("gold found flag not set", gold_Found);
