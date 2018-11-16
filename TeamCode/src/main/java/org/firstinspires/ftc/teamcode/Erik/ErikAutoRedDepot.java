@@ -25,10 +25,10 @@ import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
 import java.util.List;
 
-@Autonomous(name="Erik Red Silver", group="none")
+@Autonomous(name="Erik Red Depot", group="none") // used to be called red silver, silver/gold messed up
 //@TeleOp(name="Erik Auto Subclass", group="none")
 
-public class ErikAutRedSilver extends LinearOpMode {
+public class ErikAutoRedDepot extends LinearOpMode {
 
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -254,8 +254,8 @@ public class ErikAutRedSilver extends LinearOpMode {
         telemetry.addData("before rover get image", "..");
         Log.i("scan image", "bbefore rover get image");
 
-        VuforiaTrackable backTarget = rover.get(2);
-        backTarget.setName("front");
+        VuforiaTrackable backTarget = rover.get(3);  // front was 2
+        backTarget.setName("back"); // was front, should be back
 
 
         telemetry.update();
@@ -286,7 +286,7 @@ public class ErikAutRedSilver extends LinearOpMode {
                 Log.i("current time is ", Long.toString(currentTime));
                 break;
             case 2:  // position B
-                drivetrain.Drive(0.3f, 14F, Direction.FORWARD);
+                drivetrain.Drive(0.3f, 12.5F, Direction.FORWARD);
                 telemetry.addData("position B ", "gold found is 2");
                 Log.i("gold is B ", Integer.toString(gold_Found));
                 telemetry.addData("current time is ", currentTime);
@@ -338,10 +338,10 @@ public class ErikAutRedSilver extends LinearOpMode {
         }
 
         // drive backward for certain distance.
-        drivetrain.Drive(0.3f, 31f, Direction.FORWARD);
+        drivetrain.Drive(0.3f, 58f, Direction.BACKWARD);
 
         // can try drive straight..a method defined in subclass and just a skeleton at super class(DriveTrain)
-        drivetrain.Drive(0.3f, 55f, Direction.BACKWARD);
+        drivetrain.Drive(0.3f, 89f, Direction.FORWARD);
 
     }
 
