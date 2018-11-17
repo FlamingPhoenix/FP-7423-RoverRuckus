@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
 import java.util.List;
 
-@Autonomous(name="Erik Red Depot", group="none") // used to be called red silver, silver/gold messed up
+@Autonomous(name="Oxford Red Depot", group="none") // used to be called red silver, silver/gold messed up
 //@TeleOp(name="Erik Auto Subclass", group="none")
 
 public class ErikAutoRedDepot extends LinearOpMode {

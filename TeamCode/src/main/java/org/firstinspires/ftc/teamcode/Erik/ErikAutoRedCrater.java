@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
 import java.util.List;
 
-@Autonomous(name="Erik Red Crater", group="none") //used to be called Red Gold, messed up Gold/Silver
+@Autonomous(name="Oxford Red Crater", group="none") //used to be called Red Gold, messed up Gold/Silver
 //@TeleOp(name="Erik Auto Subclass", group="none")
 
 public class ErikAutoRedCrater extends LinearOpMode {

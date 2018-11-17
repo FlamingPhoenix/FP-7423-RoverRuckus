@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 import java.util.List;
 
 //@Autonomous(name="Erik Blue Silver", group="none") this was the old name, and silver/gold messed up
-@Autonomous(name="Erik Blue Depot", group="none")
+@Autonomous(name="Oxford Blue Depot", group="none")
 //@TeleOp(name="Erik ", group="none")
 
 public class ErikAutoBlueDepot extends LinearOpMode {
