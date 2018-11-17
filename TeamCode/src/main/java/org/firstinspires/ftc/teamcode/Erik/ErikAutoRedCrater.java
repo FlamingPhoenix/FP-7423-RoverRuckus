@@ -55,8 +55,8 @@ public class ErikAutoRedCrater extends LinearOpMode {
         bl = hardwareMap.dcMotor.get("backleft");
         br = hardwareMap.dcMotor.get("backright");
 
-        fr.setDirection(DcMotorSimple.Direction.REVERSE);
-        br.setDirection(DcMotorSimple.Direction.REVERSE);
+        fl.setDirection(DcMotorSimple.Direction.REVERSE);
+        bl.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //*******************************************************/////
         ///Use Erik's Drive Train to experiment Erik's change
@@ -153,9 +153,9 @@ public class ErikAutoRedCrater extends LinearOpMode {
                                         drivetrain.StopAll();
                                         if (currentTime < (secondHitTime - 2000)) { // this is first time hit
 
-                                            drivetrain.Strafe(0.25f, 18, Direction.RIGHT);
+                                            drivetrain.Strafe(1f, 35, Direction.RIGHT);
                                             drivetrain.StopAll();
-                                            drivetrain.Strafe(0.4f, 18, Direction.LEFT);
+                                            drivetrain.Strafe(1f, 35, Direction.LEFT);
                                             drivetrain.StopAll();
                                             //tfod.deactivate();
                                             //tfod.shutdown();
@@ -165,9 +165,9 @@ public class ErikAutoRedCrater extends LinearOpMode {
                                             telemetry.update();
                                         } else if (currentTime > (secondHitTime + 3000)) { // third time hit
                                             //drivetrain.StopAll();
-                                            drivetrain.Strafe(0.25f, 6, Direction.RIGHT);
+                                            drivetrain.Strafe(1f, 7.5F, Direction.RIGHT);
                                             drivetrain.StopAll();
-                                            drivetrain.Strafe(0.4f, 6, Direction.LEFT);
+                                            drivetrain.Strafe(1f, 7.5F, Direction.LEFT);
                                             //tfod.deactivate();
                                             //tfod.shutdown();
                                             gold_Found = 3;  // gold is in C position
@@ -175,9 +175,9 @@ public class ErikAutoRedCrater extends LinearOpMode {
                                             Log.i("gold loop", "at end of gold loop");
                                             telemetry.update();
                                         } else {
-                                            drivetrain.Strafe(0.25f, 12, Direction.RIGHT);
+                                            drivetrain.Strafe(1f, 15.6F, Direction.RIGHT);
                                             drivetrain.StopAll();
-                                            drivetrain.Strafe(0.4f, 12, Direction.LEFT);
+                                            drivetrain.Strafe(1f, 15.6F, Direction.LEFT);
                                             //tfod.deactivate();
                                             //tfod.shutdown();
                                             gold_Found = 2;  // gold is in B position
@@ -314,7 +314,7 @@ public class ErikAutoRedCrater extends LinearOpMode {
 
         drivetrain.StopAll();
 
-        drivetrain.StrafeToImage(0.3F, backTarget, this);  //
+        drivetrain.StrafeToImage(0.45F, backTarget, this);  //
 
         drivetrain.StopAll();
         /* this is reserved for waiting for alliance partner to set marker..

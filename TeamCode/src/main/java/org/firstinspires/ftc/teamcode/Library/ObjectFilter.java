@@ -4,6 +4,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import java.util.List;
 import java.util.ArrayList;
 
+/*
 public class ObjectFilter {
     protected static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     protected static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -58,3 +59,4 @@ public class ObjectFilter {
         goldPosition.numberOfObjects = recognitions.size();
     }
 }
+*/

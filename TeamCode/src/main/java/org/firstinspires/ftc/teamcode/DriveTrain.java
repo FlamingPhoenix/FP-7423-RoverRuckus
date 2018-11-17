@@ -31,7 +31,7 @@ public class DriveTrain {
 
     protected PositionToImage lastKnownPosition;
 
-   private float PPR = 560F;
+   private float PPR = 560F;  // 560 for new robot 1120 for old robot
 
 
     public DriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright) {

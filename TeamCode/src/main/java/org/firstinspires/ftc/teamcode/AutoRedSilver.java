@@ -116,6 +116,9 @@ public class AutoRedSilver extends AutoBase {
 
             telemetry.addData("Gold Position :", "%f", goldPosition);
 
+              //insert marcus=cool
+            //boolean marcus=cool = false
+
             if (goldPosition == MineralPosition.RIGHT)
                 drivetrain.Turn(0.25F, (int) mineralAngle, Direction.CLOCKWISE, imu, this);
             else if (goldPosition == MineralPosition.CENTER) {
