@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Erik;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.*;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
+@Disabled
 @Autonomous(name="Erik-drive-til-image-vis", group="none")
 public class ExpVufDriveUntilImageVisible extends LinearOpMode {
     DcMotor fl;

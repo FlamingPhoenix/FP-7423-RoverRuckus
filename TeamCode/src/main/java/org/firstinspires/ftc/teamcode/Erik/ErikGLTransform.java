@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Erik;
 
 import android.util.Log;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -19,6 +20,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+@Disabled
 @TeleOp(name = "GL-Transform-Erik", group = "none")
 
 public class ErikGLTransform extends OpMode {

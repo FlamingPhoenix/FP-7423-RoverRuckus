@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Erik;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Direction;
 import org.firstinspires.ftc.teamcode.DriveTrain;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
+@Disabled
 @Autonomous(name = "Erik Test ProDrive", group = "none")
 public class ExperimentProDrive extends LinearOpMode {
 

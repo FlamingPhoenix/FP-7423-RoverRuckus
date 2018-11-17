@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Erik;
 
 import android.util.Log;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.vuforia.HINT;
@@ -18,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-
+@Disabled
 @TeleOp(name = "VuforiaErik", group = "none")
 
 public class ErikExperimentVuforia extends OpMode {
