@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.vuforia.HINT;
@@ -23,6 +24,7 @@ import android.util.Log;
 
 import java.util.List;
 
+@Disabled
 @TeleOp(name = "TestVuforia", group = "none")
 public class ExperimentVuforia extends OpMode {
 
