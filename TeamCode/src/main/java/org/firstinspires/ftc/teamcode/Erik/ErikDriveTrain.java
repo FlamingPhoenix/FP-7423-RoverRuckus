@@ -273,7 +273,7 @@ public class ErikDriveTrain extends DriveTrain {
         opMode.telemetry.addData("just entered turning loop, initial turningRobotSpeed = ", turningRobotSpeed);
         opMode.telemetry.update();
        // can increase sleep time, so that the fast turn covers more angle change,and thus reduce slow turn time..
-        sleepTime = 401; // it was 1001, change to 701 still too much, only need 45 degree for redsilver, so try 401
+        sleepTime = 0; // it was 1001, change to 701 still too much, only need 45 degree for redsilver, so try 401
 
         bl.setPower(turningRobotSpeed);
         fl.setPower(turningRobotSpeed);

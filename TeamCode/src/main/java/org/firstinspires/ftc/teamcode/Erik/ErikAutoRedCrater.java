@@ -55,8 +55,7 @@ public class ErikAutoRedCrater extends LinearOpMode {
         bl = hardwareMap.dcMotor.get("backleft");
         br = hardwareMap.dcMotor.get("backright");
 
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
-        bl.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         //*******************************************************/////
         ///Use Erik's Drive Train to experiment Erik's change
@@ -182,10 +181,10 @@ public class ErikAutoRedCrater extends LinearOpMode {
                                         } else {
                                             drivetrain.Strafe(0.4f, 16F, Direction.RIGHT);
                                             drivetrain.StopAll();
-                                            sleep(500);
-                                            drivetrain.Strafe(0.4f, 16F, Direction.LEFT);
+                                            sleep(1500);
+                                            drivetrain.Strafe(0.4f, 15F, Direction.LEFT);
                                             drivetrain.StopAll();
-                                            sleep(500);                                            //tfod.deactivate();
+                                            sleep(1500);                                            //tfod.deactivate();
                                             //tfod.shutdown();
                                             gold_Found = 2;  // gold is in B position
                                             telemetry.addData("at end of gold loop", "gold 3");
@@ -193,8 +192,6 @@ public class ErikAutoRedCrater extends LinearOpMode {
                                             telemetry.update();
                                         }
                                     }
-
-
                                 }
                             }
 
@@ -274,6 +271,7 @@ public class ErikAutoRedCrater extends LinearOpMode {
 
         // above is code without attempting to knock off Gold
         // here we need to decide which position is Gold and then drive respectively
+        /*
         currentTime = Math.round(runtime.milliseconds());
         switch (gold_Found) {
             case 0: // didnt detect gold
@@ -308,16 +306,21 @@ public class ErikAutoRedCrater extends LinearOpMode {
                 Log.i("gold found flag not set", Integer.toString(gold_Found));
         }
 
+*/
         telemetry.update();
 
         drivetrain.StopAll();
 
+        /*
         // get to center
         drivetrain.Strafe(0.3f, 11.5F, Direction.LEFT);
-
+*/
         drivetrain.StopAll();
 
-        drivetrain.TurnToImage(0.25F, Direction.CLOCKWISE, backTarget, imu, this); // at vinay, 0.4, at erik, can 0.4 or 0.5
+        drivetrain.Turn(0.3F, 120, Direction.COUNTERCLOCKWISE,imu, this);
+        sleep(500);
+
+       // drivetrain.TurnToImage(0.25F, Direction.CLOCKWISE, backTarget, imu, this); // at vinay, 0.4, at erik, can 0.4 or 0.5
 
         drivetrain.StopAll();
 

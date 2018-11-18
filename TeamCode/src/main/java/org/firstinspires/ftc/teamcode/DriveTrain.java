@@ -33,7 +33,7 @@ public class DriveTrain {
 
     protected LinearOpMode op;
 
-   private float PPR = 560F;  // 560 for new robot 1120 for old robot
+   private float PPR = 1120F;  // 560 for new robot 1120 for old robot
 
 
     public DriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright) {
@@ -45,19 +45,21 @@ public class DriveTrain {
 
         lastKnownPosition = new PositionToImage(); //instantiate this first
 
+        //for old practice bot
+        fr.setDirection(DcMotorSimple.Direction.REVERSE);
+        br.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        /****** For the actual competition bot *******
+        fl.setDirection(DcMotorSimple.Direction.REVERSE);
+        bl.setDirection(DcMotorSimple.Direction.REVERSE);
+         */
     }
 
     public DriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright, LinearOpMode op) {
 
-        fr = frontright;
-        fl = frontleft;
-        br = backright;
-        bl = backleft;
+        this(frontleft, frontright, backleft, backright);
 
         this.op = op;
-
-        lastKnownPosition = new PositionToImage(); //instantiate this first
-
     }
 
     public void Strafe(float power, float distance, Direction d /*, OpMode op*/) {
