@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
 import java.util.List;
 
-@Autonomous(name="Oxford Blue Crater", group="none") // used to be called Blue Gold, messed up gold and silver
+@Autonomous(name="Oxford Blue Crater", group="none") //used to be called Red Gold, messed up Gold/Silver
 //@TeleOp(name="Erik Auto Subclass", group="none")
 
 public class ErikAutoBlueCrater extends LinearOpMode {
@@ -55,12 +55,12 @@ public class ErikAutoBlueCrater extends LinearOpMode {
         bl = hardwareMap.dcMotor.get("backleft");
         br = hardwareMap.dcMotor.get("backright");
 
-        fr.setDirection(DcMotorSimple.Direction.REVERSE);
-        br.setDirection(DcMotorSimple.Direction.REVERSE);
+        fl.setDirection(DcMotorSimple.Direction.REVERSE);
+        bl.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //*******************************************************/////
         ///Use Erik's Drive Train to experiment Erik's change
-        drivetrain = new ErikDriveTrain(fl, fr, bl, br);
+        drivetrain = new ErikDriveTrain(fl, fr, bl, br, this);
 
         imu = new MyBoschIMU(hardwareMap);
 
@@ -105,100 +105,107 @@ public class ErikAutoBlueCrater extends LinearOpMode {
 
 
 //        if (opModeIsActive()) {
-            /** Activate Tensor Flow Object Detection. */
+        /** Activate Tensor Flow Object Detection. */
+        if (tfod != null) {
+            tfod.activate();
+        }
+
+        runtime.reset(); // need to use time for tracking minerals instead of just  number of objects
+
+        while (gold_Found == 0 && opModeIsActive()) {
+
+            fl.setPower(0.12f);  // first calibrate time on floor..0.12 at dr warners, 0.14 at carpet
+            fr.setPower(0.12f);
+            bl.setPower(0.12f);
+            br.setPower(0.12f);
+
             if (tfod != null) {
-                tfod.activate();
-            }
 
-            runtime.reset(); // need to use time for tracking minerals instead of just  number of objects
+                // getUpdatedRecognitions() will return null if no new information is available since
+                // the last time that call was made.
 
-            while (gold_Found == 0) {
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                if (updatedRecognitions != null) {
+                    telemetry.addData("# Object Detected", updatedRecognitions.size());
+                    if (updatedRecognitions.size() <= 3) {
+                        int goldMineralX = -1;
+                        int silverMineral1X = -1;
+                        int silverMineral2X = -1;
+                        for (Recognition recognition : updatedRecognitions) {
+                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                currentTime = Math.round(runtime.milliseconds());
+                                telemetry.addData("1st Gold time ", currentTime);
+                                Log.i("1st Gold time ", Double.toString(currentTime));
 
-                fl.setPower(0.14f);  // first calibrate time on floor..0.12 at dr warners, 0.14 at carpet
-                fr.setPower(0.14f);
-                bl.setPower(0.14f);
-                br.setPower(0.14f);
+                                //if (currentTime < (1.5*secondHitTime)) {
+                                goldMineralX = (int) recognition.getLeft();
 
-                if (tfod != null) {
-
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        if (updatedRecognitions.size() <= 3) {
-                            int goldMineralX = -1;
-                            int silverMineral1X = -1;
-                            int silverMineral2X = -1;
-                            for (Recognition recognition : updatedRecognitions) {
-                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                // here, need to add code to come up with center of gold and use that as control varialble for moving robot towards it..
+                                center_Gold = (recognition.getLeft() + recognition.getRight()) / 2f;
+                                telemetry.addData("center of gold ", center_Gold);
+                                Log.i("center of gold", Float.toString(center_Gold));
+                                // here decide if gold is left of center or right of center, to tell robot move right/left.
+                                // if center_Gold < 360 or > 360...
+                                // for now, just knock it off..
+                                if (center_Gold < 300f) {   // here 300 can change to other numbers, perhaps 400 ?
+                                    //currentTime = Math.round(runtime.milliseconds()); // use this to control position
                                     currentTime = Math.round(runtime.milliseconds());
-                                    telemetry.addData("1st Gold time ", currentTime);
-                                    Log.i("1st Gold time ", Double.toString(currentTime));
+                                    drivetrain.StopAll();
+                                    if (currentTime < (secondHitTime - 500)) { // this is first time hit
 
-                                    //if (currentTime < (1.5*secondHitTime)) {
-                                    goldMineralX = (int) recognition.getLeft();
-
-                                    // here, need to add code to come up with center of gold and use that as control varialble for moving robot towards it..
-                                    center_Gold = (recognition.getLeft() + recognition.getRight()) / 2f;
-                                    telemetry.addData("center of gold ", center_Gold);
-                                    Log.i("center of gold", Float.toString(center_Gold));
-                                    // here decide if gold is left of center or right of center, to tell robot move right/left.
-                                    // if center_Gold < 360 or > 360...
-                                    // for now, just knock it off..
-                                    if (center_Gold < 300f) {   // here 300 can change to other numbers, perhaps 400 ?
-                                        //currentTime = Math.round(runtime.milliseconds()); // use this to control position
-                                        currentTime = Math.round(runtime.milliseconds());
+                                        drivetrain.Strafe(0.4f, 34, Direction.RIGHT);
                                         drivetrain.StopAll();
-                                        if (currentTime < (secondHitTime - 2000)) { // this is first time hit
-
-                                            drivetrain.Strafe(0.25f, 18, Direction.RIGHT);
-                                            drivetrain.StopAll();
-                                            drivetrain.Strafe(0.3f, 18, Direction.LEFT);
-                                            drivetrain.StopAll();
-                                            //tfod.deactivate();
-                                            //tfod.shutdown();
-                                            gold_Found = 1; // gold is in A position
-                                            telemetry.addData("at end of gold loop", "gold 1");
-                                            Log.i("gold loop", "at end of gold loop");
-                                            telemetry.update();
-                                        } else if (currentTime > (secondHitTime + 3000)) { // third time hit
-                                            //drivetrain.StopAll();
-                                            drivetrain.Strafe(0.25f, 6, Direction.RIGHT);
-                                            drivetrain.StopAll();
-                                            drivetrain.Strafe(0.3f, 6, Direction.LEFT);
-                                            //tfod.deactivate();
-                                            //tfod.shutdown();
-                                            gold_Found = 3;  // gold is in C position
-                                            telemetry.addData("at end of gold loop", "gold 2");
-                                            Log.i("gold loop", "at end of gold loop");
-                                            telemetry.update();
-                                        } else {
-                                            drivetrain.Strafe(0.25f, 12, Direction.RIGHT);
-                                            drivetrain.StopAll();
-                                            drivetrain.Strafe(0.3f, 12, Direction.LEFT);
-                                            //tfod.deactivate();
-                                            //tfod.shutdown();
-                                            gold_Found = 2;  // gold is in B position
-                                            telemetry.addData("at end of gold loop", "gold 3");
-                                            Log.i("gold loop", "at end of gold loop");
-                                            telemetry.update();
-                                        }
+                                        sleep(500);
+                                        drivetrain.Strafe(0.4f, 34, Direction.LEFT);
+                                        drivetrain.StopAll();
+                                        sleep(500);
+                                        //tfod.deactivate();
+                                        //tfod.shutdown();
+                                        gold_Found = 1; // gold is in A position
+                                        telemetry.addData("at end of gold loop", "gold 1");
+                                        Log.i("gold loop", "at end of gold loop");
+                                        telemetry.update();
+                                    } else if (currentTime > (secondHitTime + 4000)) { // third time hit
+                                        //drivetrain.StopAll();
+                                        drivetrain.Strafe(0.4f, 4F, Direction.RIGHT);
+                                        drivetrain.StopAll();
+                                        sleep(500);
+                                        drivetrain.Strafe(0.4f, 4F, Direction.LEFT);
+                                        drivetrain.StopAll();
+                                        sleep(500);
+                                        //tfod.deactivate();
+                                        //tfod.shutdown();
+                                        gold_Found = 3;  // gold is in C position
+                                        telemetry.addData("at end of gold loop", "gold 2");
+                                        Log.i("gold loop", "at end of gold loop");
+                                        telemetry.update();
+                                    } else {
+                                        drivetrain.Strafe(0.4f, 16F, Direction.RIGHT);
+                                        drivetrain.StopAll();
+                                        sleep(500);
+                                        drivetrain.Strafe(0.4f, 16F, Direction.LEFT);
+                                        drivetrain.StopAll();
+                                        sleep(500);                                            //tfod.deactivate();
+                                        //tfod.shutdown();
+                                        gold_Found = 2;  // gold is in B position
+                                        telemetry.addData("at end of gold loop", "gold 3");
+                                        Log.i("gold loop", "at end of gold loop");
+                                        telemetry.update();
                                     }
-
-
                                 }
+
+
                             }
-
-
                         }
 
-                    }
-                    telemetry.update();
-                }
 
+                    }
+
+                }
+                telemetry.update();
             }
+
+        }
 
         telemetry.addData("before setting tfod to null", "..");
         Log.i("scan image", "before setting tfod to null");
@@ -251,8 +258,8 @@ public class ErikAutoBlueCrater extends LinearOpMode {
         telemetry.addData("before rover get image", "..");
         Log.i("scan image", "bbefore rover get image");
 
-        VuforiaTrackable backTarget = rover.get(0); // picture is blue alliance
-        backTarget.setName("blue");
+        VuforiaTrackable backTarget = rover.get(0);  // front was 2(red planet), image should be red alliance
+        backTarget.setName("red"); // was front, should be back
 
 
         telemetry.update();
@@ -276,21 +283,21 @@ public class ErikAutoBlueCrater extends LinearOpMode {
                 Log.i("current time is ", Long.toString(currentTime));
                 break;
             case 1:  // position A
-                drivetrain.Drive(0.3f, 27F, Direction.FORWARD);
+                drivetrain.Drive(0.3f, 32F, Direction.FORWARD);
                 telemetry.addData("position A ", "gold found is 1");
                 Log.i("gold is A ", Integer.toString(gold_Found));
                 telemetry.addData("current time is ", currentTime);
                 Log.i("current time is ", Long.toString(currentTime));
                 break;
             case 2:  // position B
-                drivetrain.Drive(0.3f, 14F, Direction.FORWARD);
+                drivetrain.Drive(0.3f, 21F, Direction.FORWARD);
                 telemetry.addData("position B ", "gold found is 2");
                 Log.i("gold is B ", Integer.toString(gold_Found));
                 telemetry.addData("current time is ", currentTime);
                 Log.i("current time is ", Long.toString(currentTime));
                 break;
             case 3:  // position C
-                drivetrain.Drive(0.3f, 1.5F, Direction.FORWARD);
+                drivetrain.Drive(0.3f, 3.5F, Direction.FORWARD);
                 telemetry.addData("position C ", "gold found is 3");
                 Log.i("gold is C ", Integer.toString(gold_Found));
                 telemetry.addData("current time is ", currentTime);
@@ -306,11 +313,11 @@ public class ErikAutoBlueCrater extends LinearOpMode {
         drivetrain.StopAll();
 
         // get to center
-        drivetrain.Strafe(0.3f, 13F, Direction.LEFT);
+        drivetrain.Strafe(0.3f, 11.5F, Direction.LEFT);
 
         drivetrain.StopAll();
 
-        drivetrain.TurnToImage(0.4F, Direction.CLOCKWISE, backTarget, imu, this); // at vinay, 0.4, at erik, can 0.4 or 0.5
+        drivetrain.TurnToImage(0.25F, Direction.CLOCKWISE, backTarget, imu, this); // at vinay, 0.4, at erik, can 0.4 or 0.5
 
         drivetrain.StopAll();
 
@@ -335,10 +342,11 @@ public class ErikAutoBlueCrater extends LinearOpMode {
         }
 
         // drive backward for certain distance.
-        drivetrain.Drive(0.3f, 58f, Direction.FORWARD);
+        drivetrain.Drive(.4f, 85f, Direction.FORWARD);
+        drivetrain.Drive(1, 10, Direction.BACKWARD);
 
         // can try drive straight..a method defined in subclass and just a skeleton at super class(DriveTrain)
-        drivetrain.Drive(0.3f, 89f, Direction.BACKWARD);
+        // drivetrain.Drive(0.3f, 89f, Direction.BACKWARD);
 
     }
 

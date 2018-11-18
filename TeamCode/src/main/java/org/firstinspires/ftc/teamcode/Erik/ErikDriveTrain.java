@@ -37,7 +37,14 @@ public class ErikDriveTrain extends DriveTrain {
       // is there anything else to be added here ?     
         
     }
-    
+
+    public ErikDriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright, LinearOpMode op)  {
+        super(frontleft, frontright, backleft, backright, op);
+
+        // is there anything else to be added here ?
+
+    }
+
     
     // note for all other functions, which erik didnt change, will not define here, just inherit directly from supoer class, 
     // like Drive(), Strafe(), Turn()[need to add logic to avoid non-stop turning], StopAll() etc.
@@ -106,7 +113,7 @@ public class ErikDriveTrain extends DriveTrain {
             //opMode.telemetry.addData("z Angle:", orientation.thirdAngle);
             opMode.telemetry.update();
 
-            while (Math.abs(d) >= 100) {
+            while (Math.abs(d) >= 100  && op.opModeIsActive()) {
                 //pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
 
                 if (x > 60f) {
@@ -292,7 +299,7 @@ public class ErikDriveTrain extends DriveTrain {
         turningRobotSpeed = - 0.15f; // turningRobotSpeed = 0.15f, at vinay, 0.13 ,at erik, 0.17
 
 
-        while (pos == null) {
+        while (pos == null && op.opModeIsActive()) {
             bl.setPower(turningRobotSpeed);
             fl.setPower(turningRobotSpeed);
             br.setPower(-turningRobotSpeed);
@@ -364,7 +371,7 @@ public class ErikDriveTrain extends DriveTrain {
         opMode.telemetry.update();
 
 
-        while (currentPosition < targetEncoderValue) {
+        while (currentPosition < targetEncoderValue  && op.opModeIsActive()) {
 
             currentPosition = (Math.abs(fl.getCurrentPosition()));
             if (myIMU.getAngularOrientation().firstAngle > 3.0f ) { // heading to left, need to make right adjustment)
@@ -411,7 +418,7 @@ public class ErikDriveTrain extends DriveTrain {
 
             targetAngle = startOrientation.firstAngle - angle;
             currentAngle = startOrientation.firstAngle;
-            while (currentAngle > targetAngle) {
+            while (currentAngle > targetAngle && op.opModeIsActive()) {
 
                 angle_Error =  currentAngle - targetAngle;
                 propower = actualPower * Range.clip(((float)HEADING_GAIN)*angle_Error, -1, 1);
@@ -434,7 +441,7 @@ public class ErikDriveTrain extends DriveTrain {
 
             targetAngle = startOrientation.firstAngle + angle;
             currentAngle = startOrientation.firstAngle;
-            while (currentAngle < targetAngle) {
+            while (currentAngle < targetAngle  && op.opModeIsActive()) {
 
                 angle_Error = targetAngle - currentAngle;
                 propower = actualPower * Range.clip(((float)HEADING_GAIN)*angle_Error, -1, 1);
@@ -476,7 +483,7 @@ public class ErikDriveTrain extends DriveTrain {
             power = -1 * power;
         }
 
-        while (currentPosition < targetEncoderValue) {
+        while (currentPosition < targetEncoderValue && op.opModeIsActive()) {
 
             currentPosition = (Math.abs(fl.getCurrentPosition()));
             distance_Error = 25.4f*(distance - currentPosition*(4F * (float)Math.PI) / 1120f);

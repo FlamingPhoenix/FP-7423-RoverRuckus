@@ -31,6 +31,8 @@ public class DriveTrain {
 
     protected PositionToImage lastKnownPosition;
 
+    protected LinearOpMode op;
+
    private float PPR = 560F;  // 560 for new robot 1120 for old robot
 
 
@@ -40,6 +42,19 @@ public class DriveTrain {
         fl = frontleft;
         br = backright;
         bl = backleft;
+
+        lastKnownPosition = new PositionToImage(); //instantiate this first
+
+    }
+
+    public DriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright, LinearOpMode op) {
+
+        fr = frontright;
+        fl = frontleft;
+        br = backright;
+        bl = backleft;
+
+        this.op = op;
 
         lastKnownPosition = new PositionToImage(); //instantiate this first
 
@@ -55,16 +70,20 @@ public class DriveTrain {
             actualPower = -(power);
 
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         int currentPosition = 0;
 
-        while (currentPosition < targetEncoderValue) {
+        while (currentPosition < targetEncoderValue && op.opModeIsActive()) {
             /*
             op.telemetry.addData("current:", currentPosition);
             op.telemetry.addData("target:", targetEncoderValue);
             op.telemetry.update();
             */
             currentPosition = (Math.abs(fl.getCurrentPosition()));
+
+            //if(currentPosition < 200)
+                //actualPower = .28F;
+
             fl.setPower(actualPower);
             fr.setPower(-(actualPower));
             bl.setPower(-(actualPower));
@@ -80,7 +99,7 @@ public class DriveTrain {
         int targetEncoderValue = Math.round(x);
 
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         int currentPosition = 0;
 
         //added code below to support reverse driving, tested Oct 29, Erik did ofc this
@@ -89,7 +108,7 @@ public class DriveTrain {
             power = -1 * power;
         }
 
-        while (currentPosition < targetEncoderValue) {
+        while (currentPosition < targetEncoderValue && op.opModeIsActive()) {
 
             currentPosition = (Math.abs(fl.getCurrentPosition()));
             fl.setPower(power);
@@ -117,7 +136,7 @@ public class DriveTrain {
             targetAngle = startOrientation.firstAngle - angle;
             currentAngle = startOrientation.firstAngle;
 
-            while ((currentAngle - stoppingAngle) > targetAngle) {
+            while ((currentAngle - stoppingAngle) > targetAngle  && op.opModeIsActive()) {
 
                 opMode.telemetry.addData("start:", startOrientation.firstAngle);
                 opMode.telemetry.addData("current:", currentAngle);
@@ -140,7 +159,7 @@ public class DriveTrain {
 
             targetAngle = startOrientation.firstAngle + angle;
             currentAngle = startOrientation.firstAngle;
-            while ((currentAngle + stoppingAngle) < targetAngle) {
+            while ((currentAngle + stoppingAngle) < targetAngle  && op.opModeIsActive()) {
 
                 opMode.telemetry.addData("start:", startOrientation.firstAngle);
                 opMode.telemetry.addData("current:", currentAngle);
@@ -176,7 +195,7 @@ public class DriveTrain {
             float additionalpower = 0;
 
 
-            while ((Math.abs(d) >= 100) && (imageListener.isVisible())) {
+            while ((Math.abs(d) >= 100) && (imageListener.isVisible()) && op.opModeIsActive()) {
                 pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
 
                 Orientation orientation = Orientation.getOrientation(pos, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
@@ -251,7 +270,7 @@ public class DriveTrain {
         OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
         float turningVelocity = Math.abs(imu.getAngularVelocity().xRotationRate);
 
-        while (pos == null) {
+        while (pos == null  && op.opModeIsActive()) {
 
         }
     }
@@ -301,7 +320,7 @@ public class DriveTrain {
         int targetEncoderValue = Math.round(x);
 
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         int currentPosition = 0;
         opMode.telemetry.addData("init encode value",fl.getCurrentPosition());
         Log.i("init encode value", Integer.toString(fl.getCurrentPosition()));
@@ -312,7 +331,7 @@ public class DriveTrain {
             power = -power;
         }
 
-        while(pos == null && currentPosition < targetEncoderValue){
+        while(pos == null && currentPosition < targetEncoderValue  && op.opModeIsActive()){
             fl.setPower(power);
             fr.setPower(power);
             bl.setPower(power);

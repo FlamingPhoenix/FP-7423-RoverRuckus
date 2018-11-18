@@ -60,7 +60,7 @@ public class ErikAutoRedCrater extends LinearOpMode {
 
         //*******************************************************/////
         ///Use Erik's Drive Train to experiment Erik's change
-        drivetrain = new ErikDriveTrain(fl, fr, bl, br);
+        drivetrain = new ErikDriveTrain(fl, fr, bl, br, this);
 
         imu = new MyBoschIMU(hardwareMap);
 
@@ -112,12 +112,12 @@ public class ErikAutoRedCrater extends LinearOpMode {
 
             runtime.reset(); // need to use time for tracking minerals instead of just  number of objects
 
-            while (gold_Found == 0) {
+            while (gold_Found == 0 && opModeIsActive()) {
 
-                fl.setPower(0.14f);  // first calibrate time on floor..0.12 at dr warners, 0.14 at carpet
-                fr.setPower(0.14f);
-                bl.setPower(0.14f);
-                br.setPower(0.14f);
+                fl.setPower(0.12f);  // first calibrate time on floor..0.12 at dr warners, 0.14 at carpet
+                fr.setPower(0.12f);
+                bl.setPower(0.12f);
+                br.setPower(0.12f);
 
                 if (tfod != null) {
 
@@ -151,23 +151,28 @@ public class ErikAutoRedCrater extends LinearOpMode {
                                         //currentTime = Math.round(runtime.milliseconds()); // use this to control position
                                         currentTime = Math.round(runtime.milliseconds());
                                         drivetrain.StopAll();
-                                        if (currentTime < (secondHitTime - 2000)) { // this is first time hit
+                                        if (currentTime < (secondHitTime - 500)) { // this is first time hit
 
-                                            drivetrain.Strafe(1f, 35, Direction.RIGHT);
+                                            drivetrain.Strafe(0.4f, 34, Direction.RIGHT);
                                             drivetrain.StopAll();
-                                            drivetrain.Strafe(1f, 35, Direction.LEFT);
+                                            sleep(500);
+                                            drivetrain.Strafe(0.4f, 34, Direction.LEFT);
                                             drivetrain.StopAll();
+                                            sleep(500);
                                             //tfod.deactivate();
                                             //tfod.shutdown();
                                             gold_Found = 1; // gold is in A position
                                             telemetry.addData("at end of gold loop", "gold 1");
                                             Log.i("gold loop", "at end of gold loop");
                                             telemetry.update();
-                                        } else if (currentTime > (secondHitTime + 3000)) { // third time hit
+                                        } else if (currentTime > (secondHitTime + 4000)) { // third time hit
                                             //drivetrain.StopAll();
-                                            drivetrain.Strafe(1f, 7.5F, Direction.RIGHT);
+                                            drivetrain.Strafe(0.4f, 4F, Direction.RIGHT);
                                             drivetrain.StopAll();
-                                            drivetrain.Strafe(1f, 7.5F, Direction.LEFT);
+                                            sleep(500);
+                                            drivetrain.Strafe(0.4f, 4F, Direction.LEFT);
+                                            drivetrain.StopAll();
+                                            sleep(500);
                                             //tfod.deactivate();
                                             //tfod.shutdown();
                                             gold_Found = 3;  // gold is in C position
@@ -175,10 +180,12 @@ public class ErikAutoRedCrater extends LinearOpMode {
                                             Log.i("gold loop", "at end of gold loop");
                                             telemetry.update();
                                         } else {
-                                            drivetrain.Strafe(1f, 15.6F, Direction.RIGHT);
+                                            drivetrain.Strafe(0.4f, 16F, Direction.RIGHT);
                                             drivetrain.StopAll();
-                                            drivetrain.Strafe(1f, 15.6F, Direction.LEFT);
-                                            //tfod.deactivate();
+                                            sleep(500);
+                                            drivetrain.Strafe(0.4f, 16F, Direction.LEFT);
+                                            drivetrain.StopAll();
+                                            sleep(500);                                            //tfod.deactivate();
                                             //tfod.shutdown();
                                             gold_Found = 2;  // gold is in B position
                                             telemetry.addData("at end of gold loop", "gold 3");
@@ -276,21 +283,21 @@ public class ErikAutoRedCrater extends LinearOpMode {
                 Log.i("current time is ", Long.toString(currentTime));
                 break;
             case 1:  // position A
-                drivetrain.Drive(0.3f, 27F, Direction.FORWARD);
+                drivetrain.Drive(0.3f, 32F, Direction.FORWARD);
                 telemetry.addData("position A ", "gold found is 1");
                 Log.i("gold is A ", Integer.toString(gold_Found));
                 telemetry.addData("current time is ", currentTime);
                 Log.i("current time is ", Long.toString(currentTime));
                 break;
             case 2:  // position B
-                drivetrain.Drive(0.3f, 14F, Direction.FORWARD);
+                drivetrain.Drive(0.3f, 21F, Direction.FORWARD);
                 telemetry.addData("position B ", "gold found is 2");
                 Log.i("gold is B ", Integer.toString(gold_Found));
                 telemetry.addData("current time is ", currentTime);
                 Log.i("current time is ", Long.toString(currentTime));
                 break;
             case 3:  // position C
-                drivetrain.Drive(0.3f, 1.5F, Direction.FORWARD);
+                drivetrain.Drive(0.3f, 3.5F, Direction.FORWARD);
                 telemetry.addData("position C ", "gold found is 3");
                 Log.i("gold is C ", Integer.toString(gold_Found));
                 telemetry.addData("current time is ", currentTime);
@@ -306,15 +313,15 @@ public class ErikAutoRedCrater extends LinearOpMode {
         drivetrain.StopAll();
 
         // get to center
-        drivetrain.Strafe(0.3f, 13F, Direction.LEFT);
+        drivetrain.Strafe(0.3f, 11.5F, Direction.LEFT);
 
         drivetrain.StopAll();
 
-        drivetrain.TurnToImage(0.4F, Direction.CLOCKWISE, backTarget, imu, this); // at vinay, 0.4, at erik, can 0.4 or 0.5
+        drivetrain.TurnToImage(0.25F, Direction.CLOCKWISE, backTarget, imu, this); // at vinay, 0.4, at erik, can 0.4 or 0.5
 
         drivetrain.StopAll();
 
-        drivetrain.StrafeToImage(0.45F, backTarget, this);  //
+        drivetrain.StrafeToImage(0.3F, backTarget, this);  //
 
         drivetrain.StopAll();
         /* this is reserved for waiting for alliance partner to set marker..
@@ -335,10 +342,11 @@ public class ErikAutoRedCrater extends LinearOpMode {
         }
 
         // drive backward for certain distance.
-        drivetrain.Drive(0.3f, 58f, Direction.FORWARD);
+        drivetrain.Drive(.4f, 85f, Direction.FORWARD);
+        drivetrain.Drive(1, 10, Direction.BACKWARD);
 
         // can try drive straight..a method defined in subclass and just a skeleton at super class(DriveTrain)
-        drivetrain.Drive(0.3f, 89f, Direction.BACKWARD);
+       // drivetrain.Drive(0.3f, 89f, Direction.BACKWARD);
 
     }
 
