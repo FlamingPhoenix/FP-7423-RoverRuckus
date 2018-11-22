@@ -90,6 +90,7 @@ public class ErikAutoRedCrater extends LinearOpMode {
         Float center_Gold;  // center coodinates of gold
         Float current_Gold_Width; // width of gold, to drive towards it..
 
+       // waitForStart();
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
@@ -97,10 +98,45 @@ public class ErikAutoRedCrater extends LinearOpMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
 
+//        if (tfod != null) {   // see if this will avoid using tensor flow to detect red image as gold block
+//            tfod.activate();
+//        }
+
+
+        telemetry.addData("before set hint", "..");
+        Log.i("scan image", "bbefore set hint");
+        com.vuforia.Vuforia.setHint(HINT.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, 4);
+        telemetry.addData("before cam class factory", "..");
+        Log.i("scan image", "bbefore class factory");
+        //vuforia = ClassFactory.getInstance().createVuforia(param2);
+
+        telemetry.addData("before rover", "..");
+        Log.i("scan image", "before rover");
+        VuforiaTrackables rover = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
+        telemetry.addData("before rover activate", "..");
+        Log.i("scan image", "bbefore rover activate");
+        rover.activate();
+        telemetry.addData("before rover get image", "..");
+        Log.i("scan image", "bbefore rover get image");
+
+        VuforiaTrackable backTarget = rover.get(0);  // front was 2(red planet), image should be red alliance
+        backTarget.setName("blue"); // was front, should be back
+
+
+        telemetry.update();
+
+
+        drivetrain.TurnToImage(.18F, Direction.COUNTERCLOCKWISE, backTarget, imu, this);
+        sleep(500);
+        //drivetrain.ProStrafe(0.4f,20f, Direction.LEFT,this);
+        drivetrain.Strafe(0.4f,20f, Direction.LEFT);
+        sleep(500);
+        drivetrain.Turn(0.7f, 120, Direction.COUNTERCLOCKWISE, imu, this);
+        sleep(500);
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start tracking");
         telemetry.update();
-        waitForStart();
+       // waitForStart();
 
 
 //        if (opModeIsActive()) {
@@ -113,10 +149,10 @@ public class ErikAutoRedCrater extends LinearOpMode {
 
             while (gold_Found == 0 && opModeIsActive()) {
 
-                fl.setPower(0.12f);  // first calibrate time on floor..0.12 at dr warners, 0.14 at carpet
-                fr.setPower(0.12f);
-                bl.setPower(0.12f);
-                br.setPower(0.12f);
+                fl.setPower(0.14f);  // first calibrate time on floor..0.12 at dr warners, 0.14 at carpet
+                fr.setPower(0.14f);
+                bl.setPower(0.14f);
+                br.setPower(0.14f);
 
                 if (tfod != null) {
 
@@ -239,7 +275,7 @@ public class ErikAutoRedCrater extends LinearOpMode {
         Log.i("scan image", "bbefore cam direction");
         //param2.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
-        telemetry.addData("before set hint", "..");
+        /*telemetry.addData("before set hint", "..");
         Log.i("scan image", "bbefore set hint");
         com.vuforia.Vuforia.setHint(HINT.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, 4);
         telemetry.addData("before cam class factory", "..");
@@ -258,7 +294,7 @@ public class ErikAutoRedCrater extends LinearOpMode {
         VuforiaTrackable backTarget = rover.get(1);  // front was 2(red planet), image should be red alliance
         backTarget.setName("red"); // was front, should be back
 
-
+        */
         telemetry.update();
         //drivetrain.Drive(0.2F, 17F, Direction.FORWARD);
         //drivetrain.Strafe(0.4F, 17F, Direction.LEFT);
@@ -310,21 +346,30 @@ public class ErikAutoRedCrater extends LinearOpMode {
         telemetry.update();
 
         drivetrain.StopAll();
-
+        telemetry.addData("just before the turn ", 90);
+        telemetry.update();
+        sleep(500);
         /*
         // get to center
         drivetrain.Strafe(0.3f, 11.5F, Direction.LEFT);
 */
-        drivetrain.StopAll();
+        //drivetrain.StopAll();
 
-        drivetrain.Turn(0.3F, 120, Direction.COUNTERCLOCKWISE,imu, this);
+        drivetrain.Turn(0.7F, 120, Direction.COUNTERCLOCKWISE, imu, this);
+        telemetry.addData("just after of turn ", 90);
+        telemetry.update();
+
         sleep(500);
 
-       // drivetrain.TurnToImage(0.25F, Direction.CLOCKWISE, backTarget, imu, this); // at vinay, 0.4, at erik, can 0.4 or 0.5
+        backTarget = rover.get(1);  // front was 2(red planet), image should be red alliance
+        backTarget.setName("red");
+
+        drivetrain.TurnToImage(0.18F, Direction.COUNTERCLOCKWISE, backTarget, imu, this); // at vinay, 0.4, at erik, can 0.4 or 0.5
 
         drivetrain.StopAll();
+        sleep(500);
 
-        drivetrain.StrafeToImage(0.3F, backTarget, this);  //
+        drivetrain.StrafeToImage(0.35F, backTarget, this);  //
 
         drivetrain.StopAll();
         /* this is reserved for waiting for alliance partner to set marker..
@@ -345,8 +390,8 @@ public class ErikAutoRedCrater extends LinearOpMode {
         }
 
         // drive backward for certain distance.
-        drivetrain.Drive(.4f, 85f, Direction.FORWARD);
-        drivetrain.Drive(1, 10, Direction.BACKWARD);
+        drivetrain.Drive(.4f, 20f, Direction.FORWARD);
+        drivetrain.Drive(1, 10f, Direction.BACKWARD);
 
         // can try drive straight..a method defined in subclass and just a skeleton at super class(DriveTrain)
        // drivetrain.Drive(0.3f, 89f, Direction.BACKWARD);
