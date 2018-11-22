@@ -33,7 +33,7 @@ public class DriveTrain {
 
     protected LinearOpMode op;
 
-   private float PPR = 560F;  // 560 for new robot 1120 for old robot
+   private float PPR = 1120F;  // 560 for new robot 1120 for old robot
 
 
     public DriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright) {
@@ -309,6 +309,11 @@ public class DriveTrain {
     }
     // this is skeleton the detail is defined in ERIK DRIVETRAINnnnnn
     public void ProTurn(float power, int angle, Direction d, MyBoschIMU imu, OpMode opMode) {
+
+    }
+
+    // this is skeleton declaration, details is defined in Erik DriveTrain
+    public void ProStrafe(float power, float distance, Direction d , OpMode opMode) {
 
     }
 
