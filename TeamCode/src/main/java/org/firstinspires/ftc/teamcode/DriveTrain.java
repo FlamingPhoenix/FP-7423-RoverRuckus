@@ -121,7 +121,7 @@ public class DriveTrain {
 
     }
 
-    public void Turn(float power, int angle, Direction d, MyBoschIMU imu, OpMode opMode) {
+    public void Turn(float power, int angle, Direction d, MyBoschIMU imu, LinearOpMode opMode) {
 
         Orientation startOrientation = imu.resetAndStart(d);
 
@@ -136,7 +136,7 @@ public class DriveTrain {
             targetAngle = startOrientation.firstAngle - angle;
             currentAngle = startOrientation.firstAngle;
 
-            while ((currentAngle - stoppingAngle) > targetAngle  && op.opModeIsActive()) {
+            while ((currentAngle - stoppingAngle) > targetAngle  && opMode.opModeIsActive()) {
 
                 opMode.telemetry.addData("start:", startOrientation.firstAngle);
                 opMode.telemetry.addData("current:", currentAngle);
@@ -146,7 +146,8 @@ public class DriveTrain {
                 currentAngle = imu.getAngularOrientation().firstAngle;
                 AngularVelocity v =  imu.getAngularVelocity();
                 float speed = Math.abs(v.xRotationRate);
-                stoppingAngle = ( 5/16 * (speed - 120)) + 30;
+                stoppingAngle = (( 5f/16f * (speed - 120f)) + 30f);
+                Log.i("[phoenix:turnTest]", String.format("StartingAngle=%f, CurrentAngle=%f, AngularVelocity=%f, StoppingAngle=%f", startOrientation.firstAngle, currentAngle, speed, stoppingAngle));
 
                 fl.setPower(-(actualPower));
                 fr.setPower(actualPower);
@@ -159,7 +160,7 @@ public class DriveTrain {
 
             targetAngle = startOrientation.firstAngle + angle;
             currentAngle = startOrientation.firstAngle;
-            while ((currentAngle + stoppingAngle) < targetAngle  && op.opModeIsActive()) {
+            while ((currentAngle + stoppingAngle) < targetAngle  && opMode.opModeIsActive()) {
 
                 opMode.telemetry.addData("start:", startOrientation.firstAngle);
                 opMode.telemetry.addData("current:", currentAngle);
@@ -169,7 +170,7 @@ public class DriveTrain {
                 currentAngle = imu.getAngularOrientation().firstAngle;
                 AngularVelocity v =  imu.getAngularVelocity();
                 float speed = Math.abs(v.xRotationRate);
-                stoppingAngle = ( 5/16 * (speed - 120)) + 30;
+                stoppingAngle = ( 5f/16f * (speed - 120f)) + 30f;
 
                 fl.setPower(-(actualPower));
                 fr.setPower(actualPower);

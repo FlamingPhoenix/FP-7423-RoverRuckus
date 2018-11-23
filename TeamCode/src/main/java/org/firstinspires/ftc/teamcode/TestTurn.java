@@ -33,8 +33,8 @@ public class TestTurn extends LinearOpMode {
         bl = hardwareMap.dcMotor.get("backleft");
         br = hardwareMap.dcMotor.get("backright");
 
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
-        bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        fr.setDirection(DcMotorSimple.Direction.REVERSE);
+        br.setDirection(DcMotorSimple.Direction.REVERSE);
 
         drivetrain = new DriveTrain(fl, fr, bl, br);
 
@@ -80,12 +80,12 @@ public class TestTurn extends LinearOpMode {
 
         */
 
-        drivetrain.Turn(0.5F, 90, Direction.CLOCKWISE, imu, this);
-        sleep (3000);
         drivetrain.Turn(0.3F, 90, Direction.CLOCKWISE, imu, this);
-        sleep(3000);
-        drivetrain.Turn(0.5F, 90, Direction.COUNTERCLOCKWISE, imu, this);
-        sleep(3000);
+        sleep (2000);
+        drivetrain.Turn(0.3F, 90, Direction.CLOCKWISE, imu, this);
+        sleep(2000);
+        drivetrain.Turn(0.3F, 90, Direction.COUNTERCLOCKWISE, imu, this);
+        sleep(2000);
         drivetrain.Turn(0.3F, 90, Direction.COUNTERCLOCKWISE, imu, this);
     }
 }

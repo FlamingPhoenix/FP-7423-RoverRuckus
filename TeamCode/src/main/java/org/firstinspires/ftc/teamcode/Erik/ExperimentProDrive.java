@@ -48,13 +48,13 @@ public class ExperimentProDrive extends LinearOpMode {
 
         waitForStart();
 
-        driveTrain.Turn(0.4f, 30, Direction.CLOCKWISE, imu, this);
+        driveTrain.Turn(0.4f, 45, Direction.CLOCKWISE, imu, this);
         sleep(2000);
-        driveTrain.Turn(0.4f, 35, Direction.COUNTERCLOCKWISE, imu, this);
+        driveTrain.Turn(0.4f, 45, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(2000);
         driveTrain.ProTurn(.6F, 45, Direction.CLOCKWISE, imu, this);
         sleep(2000);
-        driveTrain.ProTurn(.6F, 35, Direction.COUNTERCLOCKWISE, imu, this);
+        driveTrain.ProTurn(.6F, 45, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(2000);
         driveTrain.Strafe(.3F, 15, Direction.LEFT);
         sleep(2000);
@@ -72,6 +72,5 @@ public class ExperimentProDrive extends LinearOpMode {
         sleep(2000);
         driveTrain.ProDrive(.3F, 30, Direction.BACKWARD, this);
         sleep(2000);
-
     }
 }
