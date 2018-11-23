@@ -36,8 +36,8 @@ public abstract class AutoBase extends LinearOpMode {
     DcMotor fr;
     DcMotor bl;
     DcMotor br;
-    DriveTrain drivetrain;
-    MyBoschIMU imu;
+    protected DriveTrain drivetrain;
+    protected MyBoschIMU imu;
 
     protected VuforiaTrackable backTarget;
     protected VuforiaTrackable frontTarget;
