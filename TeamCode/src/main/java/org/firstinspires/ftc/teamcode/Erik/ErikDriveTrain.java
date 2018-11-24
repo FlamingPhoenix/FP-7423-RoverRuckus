@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 public class ErikDriveTrain extends DriveTrain {
 
     // these constants can be used to proportionally control DC Motor power in response to error to target(angle, distance etc)
-    public  static final double  HEADING_GAIN       =  0.04;   //0.018, Rate at which we respond to heading error, ie angle error
+    public  static final double  HEADING_GAIN       =  0.018;   //was playing with 0.04, orginal 0.018, Rate at which we respond to heading error, ie angle error
     public  static final double  LATERAL_GAIN   =  0.05; //0.0027,  Rate at which we respond to off-axis error
     public  static final double  AXIAL_GAIN     =  0.05;  // 0.0017, Rate at which we respond to target distance errors
     // above numbers are not necessary for our robot, it is just a starting point..
@@ -417,16 +417,24 @@ public class ErikDriveTrain extends DriveTrain {
         float angle_Error = 0.0f;
         float targetAngle;
         float currentAngle;
-        float actualPower = power;
+        float startAngle;
+        //float actualPower = power;
+
         if (d == Direction.CLOCKWISE) {
-            actualPower = -(power);
+            //actualPower = -(power);
 
             targetAngle = startOrientation.firstAngle - angle;
             currentAngle = startOrientation.firstAngle;
+            startAngle = currentAngle;
             while (currentAngle > targetAngle && op.opModeIsActive()) {
 
-                angle_Error =  currentAngle - targetAngle;
-                propower = actualPower * Range.clip(((float)HEADING_GAIN)*angle_Error, -1, 1);
+                //if ((currentPosition < 400)) {  // first 1/3 turn, slow start up
+                //        actualPower = -.20F; //  min value for caprt = 0.18, value for dr. warner 0.14
+                //    }
+
+
+                angle_Error =  Math.min(Math.abs(currentAngle - startAngle), Math.abs(currentAngle - targetAngle));
+                propower = -(Math.max(0.17f, power * Range.clip(((float)HEADING_GAIN)*(angle_Error), -1, 1)));
                 opMode.telemetry.addData("CW propower", propower);
                 Log.i("CW ProTurn propower is ", Float.toString(propower));
                 opMode.telemetry.addData("start:", startOrientation.firstAngle);
@@ -442,14 +450,17 @@ public class ErikDriveTrain extends DriveTrain {
             }
         }
         else {
-            actualPower = power;
+            //actualPower = power;
 
             targetAngle = startOrientation.firstAngle + angle;
             currentAngle = startOrientation.firstAngle;
+            startAngle = currentAngle;
+
             while (currentAngle < targetAngle  && op.opModeIsActive()) {
 
-                angle_Error = targetAngle - currentAngle;
-                propower = actualPower * Range.clip(((float)HEADING_GAIN)*angle_Error, -1, 1);
+                //angle_Error = targetAngle - currentAngle;
+                angle_Error =  Math.min(Math.abs(currentAngle - startAngle), Math.abs(currentAngle - targetAngle));
+                propower = (Math.max(0.17f, power * Range.clip(((float)HEADING_GAIN)*Math.abs(angle_Error), -1, 1)));
                 opMode.telemetry.addData("CCW propower", propower);
                 Log.i("CCWProTurn propower is ", Float.toString(propower));
                 opMode.telemetry.addData("start:", startOrientation.firstAngle);
