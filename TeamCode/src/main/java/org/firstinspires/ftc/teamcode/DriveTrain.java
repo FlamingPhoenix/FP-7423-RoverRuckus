@@ -33,7 +33,7 @@ public class DriveTrain {
 
     protected LinearOpMode op;
 
-   private float PPR = 560F;  // 560 for new robot 1120 for old robot
+   private float PPR = 1120F;  // 560 for new robot 1120 for old robot
 
 
     public DriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright) {
@@ -121,7 +121,7 @@ public class DriveTrain {
 
     }
 
-    public void Turn(float power, int angle, Direction d, MyBoschIMU imu, OpMode opMode) {
+    public void Turn(float power, int angle, Direction d, MyBoschIMU imu, LinearOpMode opMode) {
 
         Orientation startOrientation = imu.resetAndStart(d);
 
@@ -136,7 +136,7 @@ public class DriveTrain {
             targetAngle = startOrientation.firstAngle - angle;
             currentAngle = startOrientation.firstAngle;
 
-            while ((currentAngle - stoppingAngle) > targetAngle  && op.opModeIsActive()) {
+            while ((currentAngle - stoppingAngle) > targetAngle  && opMode.opModeIsActive()) {
 
                 opMode.telemetry.addData("start:", startOrientation.firstAngle);
                 opMode.telemetry.addData("current:", currentAngle);
@@ -146,7 +146,8 @@ public class DriveTrain {
                 currentAngle = imu.getAngularOrientation().firstAngle;
                 AngularVelocity v =  imu.getAngularVelocity();
                 float speed = Math.abs(v.xRotationRate);
-                stoppingAngle = ( 5/16 * (speed - 120)) + 30;
+                stoppingAngle = (( 5f/16f * (speed - 120f)) + 30f);
+                Log.i("[phoenix:turnTest]", String.format("StartingAngle=%f, CurrentAngle=%f, AngularVelocity=%f, StoppingAngle=%f", startOrientation.firstAngle, currentAngle, speed, stoppingAngle));
 
                 fl.setPower(-(actualPower));
                 fr.setPower(actualPower);
@@ -159,7 +160,7 @@ public class DriveTrain {
 
             targetAngle = startOrientation.firstAngle + angle;
             currentAngle = startOrientation.firstAngle;
-            while ((currentAngle + stoppingAngle) < targetAngle  && op.opModeIsActive()) {
+            while ((currentAngle + stoppingAngle) < targetAngle  && opMode.opModeIsActive()) {
 
                 opMode.telemetry.addData("start:", startOrientation.firstAngle);
                 opMode.telemetry.addData("current:", currentAngle);
@@ -169,7 +170,7 @@ public class DriveTrain {
                 currentAngle = imu.getAngularOrientation().firstAngle;
                 AngularVelocity v =  imu.getAngularVelocity();
                 float speed = Math.abs(v.xRotationRate);
-                stoppingAngle = ( 5/16 * (speed - 120)) + 30;
+                stoppingAngle = ( 5f/16f * (speed - 120f)) + 30f;
 
                 fl.setPower(-(actualPower));
                 fr.setPower(actualPower);
@@ -183,7 +184,8 @@ public class DriveTrain {
 
     }
 
-    public void StrafeToImage(float power, VuforiaTrackable imageTarget, OpMode opMode) {
+
+    public void StrafeToImage(float power, VuforiaTrackable imageTarget, LinearOpMode opMode) {
         VuforiaTrackableDefaultListener imageListener = (VuforiaTrackableDefaultListener) imageTarget.getListener();
 
         float actualPower = power;
@@ -195,7 +197,7 @@ public class DriveTrain {
             float additionalpower = 0;
 
 
-            while ((Math.abs(d) >= 100) && (imageListener.isVisible()) && op.opModeIsActive()) {
+            while ((Math.abs(d) >= 100) && (imageListener.isVisible()) && opMode.opModeIsActive()) {
                 pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
 
                 Orientation orientation = Orientation.getOrientation(pos, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
@@ -226,10 +228,10 @@ public class DriveTrain {
                 float blTurnAdjust = 0;
 
                 if (adjustedOrientation.secondAngle < -3) {
-                    flTurnAdjust = 0.2F * (Math.abs(adjustedOrientation.secondAngle) / 10);
+                    blTurnAdjust = -0.2F * (Math.abs(adjustedOrientation.secondAngle) / 10);
                 }
                 else if (adjustedOrientation.secondAngle > 3) {
-                    blTurnAdjust = -0.2F * (Math.abs(adjustedOrientation.secondAngle) / 10);
+                    flTurnAdjust = 0.2F * (Math.abs(adjustedOrientation.secondAngle) / 10);
                     // Aryan changed this; Copied Math.abs from first if branch into second branch
                 }
 
@@ -262,9 +264,12 @@ public class DriveTrain {
         opMode.telemetry.update();
      }
 
+
+
      public PositionToImage getLastKnownPosition() {
         return lastKnownPosition;
      }
+
 
     public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, MyBoschIMU imu, OpMode opMode) {
         OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
@@ -274,6 +279,204 @@ public class DriveTrain {
 
         }
     }
+
+
+    public void StrafeToImageEric(float power, VuforiaTrackable imageTarget, LinearOpMode opMode)   {
+
+        //super.StrafeToImage(float power, VuforiaTrackable imageTarget, OpMode opMode) // no constructor for method
+
+        // following code is different from super class
+
+        OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
+        OpenGLMatrix pos1 = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getRobotLocation();
+        //pose = ((VuforiaTrackableDefaultListener) redWall.getListener()).getUpdatedRobotLocation();
+        Orientation orientation = Orientation.getOrientation(pos1, AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
+        float actualPower = power;
+        float delta_x_power = 0.075f;  // at vinay, 0.075, at erik, 0.08
+        float x;
+        float d;
+        float y;
+        float camToCenter;
+        float turn_power = 0.1f;  // at vinay, 0.1, at erik 0.05
+        float y_angle; // control varialble for turning, instead of x
+        int turn_flag = 0; // for turning based on y angle.
+
+        String tag = "[phoenix]";
+        long t = System.currentTimeMillis();
+        opMode.telemetry.addData("before checking for pos in drive to image routine", 0);
+        opMode.telemetry.addData("system time = ", t);
+        opMode.telemetry.update();
+
+        if (pos != null & pos1 != null) {
+            //pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
+
+            //pose = ((VuforiaTrackableDefaultListener) redWall.getListener()).getUpdatedRobotLocation();
+            d = pos1.getColumn(3).get(2); //distance to the image in millimeter;
+            //x = pos.getColumn(3).get(0); // distance for x, ie, is robot at the left or right of image
+            x = pos1.getColumn(3).get(0);
+            y = pos1.getColumn(3).get(1); // distance for Y, ie, is robot above or below center point of image
+            y_angle = orientation.secondAngle;
+
+            if (y_angle > -170.0f & y_angle < -130.0f)  // when x is positive, y angle is minus, between -90 and -180
+            { turn_flag = 1;}
+            else if (y_angle < 170.0f & y_angle > 130.0f) // when x is minus, y angle is positive between +90 to  + 180
+            { turn_flag = 1;}  // turn flag has sign, easier to understand visually, keep this line just in case we need to change the sign
+            else
+            {turn_flag = 0;}
+
+            camToCenter = (float) Math.sqrt(x*x+y*y+d*d);
+            opMode.telemetry.addData("z distance: ", d);
+            opMode.telemetry.addData("x distance: ", x);
+            opMode.telemetry.addData("y distance: ", y);
+            opMode.telemetry.addData("y Angle: ", orientation.secondAngle);
+            opMode.telemetry.addData("camera->center dist: ", camToCenter);
+            Log.i(tag, "z distance: " + Float.toString(d));
+            Log.i(tag, "x distance: " + Float.toString(x));
+            Log.i(tag, "y distance: " + Float.toString(y));
+            Log.i(tag, "y Angle: " + Float.toString(y_angle));  //orientation.secondAngle));
+            Log.i(tag, "camera->center dist: " + Float.toString(camToCenter));
+            //opMode.telemetry.addData("y distance:", y);
+            //opMode.telemetry.addData("x Angle:", orientation.firstAngle);
+            //opMode.telemetry.addData("y Angle:", orientation.secondAngle);
+            //opMode.telemetry.addData("z Angle:", orientation.thirdAngle);
+            opMode.telemetry.update();
+
+            while (Math.abs(d) >= 100  && opMode.opModeIsActive()) {
+                //pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
+
+                if (x > 60f) {
+                    if (System.currentTimeMillis() > t + 50) {
+                        tag = "within if; on right: ";
+                        opMode.telemetry.addData("x distance:", x);
+                        opMode.telemetry.addData("y distance", y);
+                        opMode.telemetry.addData("z distance", d);
+                        opMode.telemetry.addData("move to LEFT towards center", x);
+                        camToCenter = (float) Math.sqrt(x * x + y * y + d * d);
+                        Log.i(tag, "z distance: " + Float.toString(d));
+                        Log.i(tag, "x distance(move to left): " + Float.toString(x));
+                        Log.i(tag, "y distance: " + Float.toString(y));
+                        Log.i(tag, "y Angle: " + Float.toString(orientation.secondAngle));
+                        Log.i(tag, "camera->center dist (right): " + Float.toString(camToCenter));
+                        opMode.telemetry.update();
+                        t = t + 50;
+                    }
+                    fl.setPower(actualPower+delta_x_power); // take it off(+turn_power)this is new for experiment, see if it helps with turn
+                    fr.setPower(-(actualPower)+delta_x_power);
+                    bl.setPower(-(actualPower)+delta_x_power+(turn_power*turn_flag)); // to turn CW ie, more parallel to image
+                    br.setPower(actualPower+delta_x_power);
+
+
+
+                }
+                else if (x < - 60f){
+                    if (System.currentTimeMillis() > t + 50) {
+                        tag = "within elif; on left: ";
+                        opMode.telemetry.addData("x distance:", x);
+                        opMode.telemetry.addData("y distance", y);
+                        opMode.telemetry.addData("z distance", d);
+                        opMode.telemetry.addData("move to RIGHT towards center", x);
+                        camToCenter = (float) Math.sqrt(x*x+y*y+d*d);
+                        Log.i(tag, "z distance: " + Float.toString(d));
+                        Log.i(tag, "x distance(move to right): " + Float.toString(x));
+                        Log.i(tag, "y distance: " + Float.toString(y));
+                        Log.i(tag, "y Angle: " + Float.toString(y_angle)); //orientation.secondAngle));
+                        Log.i(tag, "camera->center dist (left): " + Float.toString(camToCenter));
+                        opMode.telemetry.update();
+                        t = t + 50;
+                    }
+
+                    fl.setPower(actualPower-delta_x_power - (turn_power*turn_flag)); //to turn CCW, ie more parallel to the image
+                    fr.setPower(-(actualPower+delta_x_power));
+                    bl.setPower(-(actualPower+delta_x_power));// take if off +turn_power, this is new, see if it helps with turn
+                    br.setPower(actualPower-delta_x_power);
+                }
+                else {
+                    if (System.currentTimeMillis() > t + 50) {
+                        tag = "within else; on center: ";
+                        opMode.telemetry.addData("y distance", y);
+                        opMode.telemetry.addData("z distance", d);
+                        opMode.telemetry.addData("x distance:", x);
+                        opMode.telemetry.addData("move to RIGHT towards center", x);
+                        camToCenter = (float) Math.sqrt(x*x+y*y+d*d);
+                        Log.i(tag, "z distance: " + Float.toString(d));
+                        Log.i(tag, "x distance(within center): " + Float.toString(x));
+                        Log.i(tag, "y distance: " + Float.toString(y));
+                        Log.i(tag, "y Angle: " + Float.toString(orientation.secondAngle));
+                        Log.i(tag, "camera->center dist (center): " + Float.toString(camToCenter));
+                        opMode.telemetry.update();
+                        t = t + 50;}
+
+                    // think about if we need to check angle even if X is within desiable distance
+                    if (y_angle > -170.0f & y_angle < -130.0f) { //y angle is minus when x is positive, should consider add delta_power flag, so formular is consistent
+                        fl.setPower(actualPower); // take it off(+turn_power)this is new for experiment, see if it helps with turn
+                        fr.setPower(-(actualPower));
+                        bl.setPower(-(actualPower)+(turn_power*turn_flag)); // to turn CW ie, more parallel to image
+                        br.setPower(actualPower);
+                    }
+                    else if ( y_angle < 170.0f & y_angle > 130.0f) { // y angle is positive when x is negative should consider add delta_power flag, so formular is consistent
+                        fl.setPower(actualPower- (turn_power*turn_flag)); //to turn CCW, ie more parallel to the image
+                        fr.setPower(-(actualPower));
+                        bl.setPower(-(actualPower));// take if off +turn_power, this is new, see if it helps with turn
+                        br.setPower(actualPower);
+                    }
+                    else {
+                        fl.setPower(actualPower);
+                        fr.setPower(-(actualPower));
+                        bl.setPower(-(actualPower));
+                        br.setPower(actualPower);
+                    }
+                }
+
+                tag = "dist - before update pose and location";
+                Log.i(tag, " :rigth before update");
+                pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
+                pos1 = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getRobotLocation();
+                orientation = Orientation.getOrientation(pos1, AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+                Log.i(tag, ": after update");
+
+                if (pos1 != null & pos != null ) {
+                    if (System.currentTimeMillis() > t + 50) {
+                        tag = "after checking x: ";
+                        d = pos1.getColumn(3).get(2);
+                        x = pos1.getColumn(3).get(0);
+                        y = pos1.getColumn(3).get(1);
+                        opMode.telemetry.addData("new z distance:", d);
+                        opMode.telemetry.addData("new x distance:", x);
+                        opMode.telemetry.addData("new y distance", y);
+                        opMode.telemetry.addData("y Angle:", orientation.secondAngle);
+                        camToCenter = (float) Math.sqrt(x * x + y * y + d * d);
+                        Log.i(tag, "z distance: " + Float.toString(d));
+                        Log.i(tag, "x distance(after checking x): " + Float.toString(x));
+                        Log.i(tag, "y distance: " + Float.toString(y));
+                        Log.i(tag, "y Angle: " + Float.toString(orientation.secondAngle));
+                        Log.i(tag, "camera->center dist: " + Float.toString(camToCenter));
+                        //opMode.telemetry.addData("new x Angle:", orientation.firstAngle);
+                        //opMode.telemetry.addData("new y Angle:", orientation.secondAngle);
+                        //opMode.telemetry.addData("new z Angle:", orientation.thirdAngle);
+                        opMode.telemetry.update();
+                        t = t + 50;}
+
+                    else {
+                        opMode.telemetry.addData("pos or pos1 is null, x is ", x);
+                        opMode.telemetry.addData("pos or pos1 is null, z is", d);
+                        opMode.telemetry.update();
+                        Log.i(tag, "pos or pos1 is null" + " x is: " + Float.toString(x) + " and z is: " + Float.toString(d));
+                    }
+
+                }
+
+
+            }
+
+        }
+
+        opMode.telemetry.update();
+        StopAll();
+    }
+
+
+
 
     public void StopAll(){
         fl.setPower(0);
@@ -309,6 +512,11 @@ public class DriveTrain {
     }
     // this is skeleton the detail is defined in ERIK DRIVETRAINnnnnn
     public void ProTurn(float power, int angle, Direction d, MyBoschIMU imu, OpMode opMode) {
+
+    }
+
+    // this is skeleton declaration, details is defined in Erik DriveTrain
+    public void ProStrafe(float power, float distance, Direction d , OpMode opMode) {
 
     }
 

@@ -33,14 +33,16 @@ public class ErikDriveTrain extends DriveTrain {
 
     public ErikDriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright)  {
         super(frontleft, frontright, backleft, backright);
-        
+        fr.setDirection(DcMotorSimple.Direction.REVERSE);
+        br.setDirection(DcMotorSimple.Direction.REVERSE);
       // is there anything else to be added here ?     
         
     }
 
     public ErikDriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright, LinearOpMode op)  {
         super(frontleft, frontright, backleft, backright, op);
-
+        fr.setDirection(DcMotorSimple.Direction.REVERSE);
+        br.setDirection(DcMotorSimple.Direction.REVERSE);
         // is there anything else to be added here ?
 
     }
@@ -52,7 +54,7 @@ public class ErikDriveTrain extends DriveTrain {
     // add function used to be called DriveToImageErik, now changed name to StrafeToImage and then inherit from super class
 
     @Override
-    public void StrafeToImage(float power, VuforiaTrackable imageTarget, OpMode opMode)   {
+    public void StrafeToImage(float power, VuforiaTrackable imageTarget, LinearOpMode opMode)   {
         
         //super.StrafeToImage(float power, VuforiaTrackable imageTarget, OpMode opMode) // no constructor for method  
             
@@ -267,18 +269,18 @@ public class ErikDriveTrain extends DriveTrain {
         long sleepTime;
 
         turningstep = 0.01F;
-        turningRobotSpeed = - initialPower; // turningRobotSpeed = initialPower, here is reverse turn
+        turningRobotSpeed = initialPower; // turningRobotSpeed = initialPower, here is reverse turn
        // turningRobotSpeed = turningMax;
         // add following code for new robot, testing new robot.
         opMode.telemetry.addData("just entered turning loop, initial turningRobotSpeed = ", turningRobotSpeed);
         opMode.telemetry.update();
        // can increase sleep time, so that the fast turn covers more angle change,and thus reduce slow turn time..
-        sleepTime = 401; // it was 1001, change to 701 still too much, only need 45 degree for redsilver, so try 401
+        sleepTime = 0; // it was 1001, change to 701 still too much, only need 45 degree for redsilver, so try 401
 
-        bl.setPower(turningRobotSpeed);
-        fl.setPower(turningRobotSpeed);
-        br.setPower(-turningRobotSpeed);
-        fr.setPower(-turningRobotSpeed);
+        //bl.setPower(turningRobotSpeed);
+        //fl.setPower(turningRobotSpeed);
+        //br.setPower(-turningRobotSpeed);
+        //fr.setPower(-turningRobotSpeed);
 
         //x_turningVelocity = Math.abs(imu.getAngularVelocity().xRotationRate);
         //y_turningVelocity = Math.abs(imu.getAngularVelocity().yRotationRate);
@@ -296,7 +298,10 @@ public class ErikDriveTrain extends DriveTrain {
             e.printStackTrace();
         }
 
-        turningRobotSpeed = - 0.15f; // turningRobotSpeed = 0.15f, at vinay, 0.13 ,at erik, 0.17
+        if (d == Direction.COUNTERCLOCKWISE) {
+            turningRobotSpeed = - initialPower;
+        }
+        //turningRobotSpeed = - 0.18f; // turningRobotSpeed = 0.15f, at vinay, 0.13 ,at erik, 0.17
 
 
         while (pos == null && op.opModeIsActive()) {
@@ -469,29 +474,40 @@ public class ErikDriveTrain extends DriveTrain {
     @Override
     public void ProDrive(float power, float distance, Direction d, OpMode opMode) {
         float distance_Error = 0.0f;
+        //float end_Ref = 0f; // end_Ref will be the smaller of distance or distance_Error, which controls starting or ending speed
         float pro_power = power;
-        float x = (1120F * distance)/(4F * (float)Math.PI);
+        float x = (1120F * distance) / (4F * (float) Math.PI);
         int targetEncoderValue = Math.round(x);
 
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         int currentPosition = 0;
 
         //added code below to support reverse driving, tested Oct 29, Erik did ofc this
 
-        if (d == Direction.BACKWARD) {
-            power = -1 * power;
-        }
-
         while (currentPosition < targetEncoderValue && op.opModeIsActive()) {
 
             currentPosition = (Math.abs(fl.getCurrentPosition()));
-            distance_Error = 25.4f*(distance - currentPosition*(4F * (float)Math.PI) / 1120f);
-            opMode.telemetry.addData("distance_error", distance_Error);
-            Log.i("distance error", Float.toString(distance_Error));
-            pro_power = power*Range.clip(distance_Error*((float) AXIAL_GAIN), -1, 1);
-            opMode.telemetry.addData("propower, after clip ", pro_power);
-            Log.i("aft-clip-prodrive-pwris", Float.toString(pro_power));
+            if (currentPosition < 200) {  // the goal is to start slow and also stop slow..
+                if (d == Direction.FORWARD) {
+                    pro_power = .18F;
+                }  // was 0.2F
+                else {
+                    pro_power = -.18F;
+                }
+            } else {
+                // using mm as unit for measuring distance error and pairing with axial-gain
+                distance_Error = Math.abs(25.4f * (distance - currentPosition * (4F * (float) Math.PI) / 1120f));
+                opMode.telemetry.addData("distance_error", distance_Error);
+                Log.i("distance error", Float.toString(distance_Error));
+                pro_power = Math.max(0.15f, power * Range.clip(distance_Error * ((float) AXIAL_GAIN), -1, 1));
+                opMode.telemetry.addData("propower, after clip ", pro_power);
+                Log.i("aft-clip-prodrive-pwris", Float.toString(pro_power));
+                if (d == Direction.BACKWARD) {
+                    pro_power = -1 * pro_power;
+                }
+            }
+
             fl.setPower(pro_power);
             fr.setPower(pro_power);
             bl.setPower(pro_power);
@@ -500,5 +516,64 @@ public class ErikDriveTrain extends DriveTrain {
 
         StopAll();
 
+    }
+
+    // will implement slow ramping up in the beginning and gradually slow down at the end
+
+    @Override
+    public void ProStrafe(float power, float distance, Direction d, OpMode opMode) {
+
+        float distance_Error = 0.0f;
+        float pro_power = power;
+        float x = (1120 * 2 * distance) / (4F * (float) Math.PI);
+        int targetEncoderValue = Math.round(x);
+
+        //float actualPower = power;
+        if (d == Direction.LEFT) {
+            pro_power = -(power);
+        }
+
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        int currentPosition = 0;
+
+        while (currentPosition < targetEncoderValue && op.opModeIsActive()) {
+            /*
+            op.telemetry.addData("current:", currentPosition);
+            op.telemetry.addData("target:", targetEncoderValue);
+            op.telemetry.update();
+            */
+
+            currentPosition = (Math.abs(fl.getCurrentPosition()));
+
+
+            if ((currentPosition < 350)|| ((targetEncoderValue - currentPosition) < 350)) {  // the goal is to start slow and also stop slow..
+                if (d == Direction.LEFT) {
+                    pro_power = -.25F; // was 0.20f
+                }  // was 0.28F
+                else {
+                    pro_power = .25F;
+                }
+            }
+            /*} else {
+                //distance_Error = Math.abs(25.4f * (distance - currentPosition * (4F * (float) Math.PI) / 1120f));
+                opMode.telemetry.addData("current power", pro_power);
+                Log.i("current power ", Float.toString(pro_power));
+                //pro_power = Math.max(0.20f, power * Range.clip(distance_Error * ((float) AXIAL_GAIN), -1, 1));
+                //opMode.telemetry.addData("propower, after clip ", pro_power);
+                //Log.i("aft-clip-prodrive-pwris", Float.toString(pro_power));
+            } */
+
+            //if(currentPosition < 200)
+            //actualPower = .28F;
+
+            fl.setPower(pro_power);
+            fr.setPower(-(pro_power));
+            bl.setPower(-(pro_power));
+            br.setPower(pro_power);
+        }
+
+        StopAll();
     }
 }

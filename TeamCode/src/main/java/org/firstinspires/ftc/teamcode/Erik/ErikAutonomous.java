@@ -59,7 +59,7 @@ public class ErikAutonomous extends LinearOpMode {
 
         //*******************************************************/////
         ///Use Erik's Drive Train to experiment Erik's change
-        drivetrain = new ErikDriveTrain(fl, fr, bl, br);
+        drivetrain = new ErikDriveTrain(fl, fr, bl, br, this);
 
         // following code replaced by MyBoschIMU and its class
 

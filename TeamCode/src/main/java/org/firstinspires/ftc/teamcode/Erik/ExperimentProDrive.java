@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Direction;
 import org.firstinspires.ftc.teamcode.DriveTrain;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
-@Disabled
+//@Disabled
 @Autonomous(name = "Erik Test ProDrive", group = "none")
 public class ExperimentProDrive extends LinearOpMode {
 
@@ -33,7 +33,7 @@ public class ExperimentProDrive extends LinearOpMode {
         fr.setDirection(DcMotorSimple.Direction.REVERSE);
         br.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        driveTrain = new ErikDriveTrain(fl, fr, bl, br);
+        driveTrain = new ErikDriveTrain(fl, fr, bl, br, this);
 
 
         imu = new MyBoschIMU(this.hardwareMap);   //Use our new MYBoscheIMU, instead of the original IMU; our MYBoscheIMU should make our code simpler
@@ -48,18 +48,29 @@ public class ExperimentProDrive extends LinearOpMode {
 
         waitForStart();
 
-        driveTrain.Turn(0.4f, 120, Direction.CLOCKWISE, imu, this);
+        driveTrain.Turn(0.4f, 45, Direction.CLOCKWISE, imu, this);
         sleep(2000);
-        driveTrain.Turn(0.4f, 120, Direction.COUNTERCLOCKWISE, imu, this);
+        driveTrain.Turn(0.4f, 45, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(2000);
-        driveTrain.ProTurn(.6F, 130, Direction.CLOCKWISE, imu, this);
+        driveTrain.ProTurn(.6F, 45, Direction.CLOCKWISE, imu, this);
         sleep(2000);
-        driveTrain.ProTurn(.6F, 130, Direction.COUNTERCLOCKWISE, imu, this);
+        driveTrain.ProTurn(.6F, 45, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(2000);
-        driveTrain.ProDrive(.4F, 30, Direction.FORWARD, this);
+        driveTrain.Strafe(.3F, 15, Direction.LEFT);
         sleep(2000);
-        driveTrain.ProDrive(.4F, 30, Direction.BACKWARD, this);
+        driveTrain.Strafe(.3F, 15, Direction.RIGHT);
         sleep(2000);
-
+        driveTrain.ProStrafe(.4F, 15, Direction.LEFT, this);
+        sleep(2000);
+        driveTrain.ProStrafe(.4F, 15, Direction.RIGHT, this);
+        sleep(2000);
+        driveTrain.Drive(.3F, 30, Direction.FORWARD);
+        sleep(2000);
+        driveTrain.Drive(.3F, 30, Direction.BACKWARD);
+        sleep(2000);
+        driveTrain.ProDrive(.3F, 30, Direction.FORWARD, this);
+        sleep(2000);
+        driveTrain.ProDrive(.3F, 30, Direction.BACKWARD, this);
+        sleep(2000);
     }
 }

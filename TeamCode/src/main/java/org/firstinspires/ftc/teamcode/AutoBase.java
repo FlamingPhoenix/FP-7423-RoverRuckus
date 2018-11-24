@@ -36,8 +36,8 @@ public abstract class AutoBase extends LinearOpMode {
     DcMotor fr;
     DcMotor bl;
     DcMotor br;
-    DriveTrain drivetrain;
-    MyBoschIMU imu;
+    protected DriveTrain drivetrain;
+    protected MyBoschIMU imu;
 
     protected VuforiaTrackable backTarget;
     protected VuforiaTrackable frontTarget;
@@ -52,8 +52,8 @@ public abstract class AutoBase extends LinearOpMode {
         fr = hardwareMap.dcMotor.get("frontright");
         bl = hardwareMap.dcMotor.get("backleft");
         br = hardwareMap.dcMotor.get("backright");
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
-        bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        fr.setDirection(DcMotorSimple.Direction.REVERSE);
+        br.setDirection(DcMotorSimple.Direction.REVERSE);
 
         drivetrain = new DriveTrain(fl, fr, bl, br);
         // boolean drivetrain.robotWork = true;
