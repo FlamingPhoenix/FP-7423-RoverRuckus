@@ -48,29 +48,29 @@ public class ExperimentProDrive extends LinearOpMode {
 
         waitForStart();
 
-        driveTrain.Turn(0.4f, 45, Direction.CLOCKWISE, imu, this);
+        driveTrain.Turn(0.6f, 35, Direction.CLOCKWISE, imu, this);
         sleep(2000);
-        driveTrain.Turn(0.4f, 45, Direction.COUNTERCLOCKWISE, imu, this);
+        driveTrain.Turn(0.6f, 35, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(2000);
-        driveTrain.ProTurn(.6F, 45, Direction.CLOCKWISE, imu, this);
+        driveTrain.ProTurn(.6F, 35, Direction.CLOCKWISE, imu, this);
         sleep(2000);
-        driveTrain.ProTurn(.6F, 45, Direction.COUNTERCLOCKWISE, imu, this);
+        driveTrain.ProTurn(.6F, 35, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(2000);
-        driveTrain.Strafe(.3F, 15, Direction.LEFT);
+        driveTrain.Strafe(.7F, 15, Direction.LEFT);
         sleep(2000);
-        driveTrain.Strafe(.3F, 15, Direction.RIGHT);
+        driveTrain.Strafe(.7F, 15, Direction.RIGHT);
         sleep(2000);
-        driveTrain.ProStrafe(.4F, 15, Direction.LEFT, this);
+        driveTrain.ProStrafe(.7F, 15, Direction.LEFT, this);
         sleep(2000);
-        driveTrain.ProStrafe(.4F, 15, Direction.RIGHT, this);
+        driveTrain.ProStrafe(.7F, 15, Direction.RIGHT, this);
         sleep(2000);
-        driveTrain.Drive(.3F, 30, Direction.FORWARD);
+        driveTrain.Drive(.7F, 30, Direction.FORWARD);
         sleep(2000);
-        driveTrain.Drive(.3F, 30, Direction.BACKWARD);
+        driveTrain.Drive(.7F, 30, Direction.BACKWARD);
         sleep(2000);
-        driveTrain.ProDrive(.3F, 30, Direction.FORWARD, this);
+        driveTrain.ProDrive(.7F, 30, Direction.FORWARD, this);
         sleep(2000);
-        driveTrain.ProDrive(.3F, 30, Direction.BACKWARD, this);
+        driveTrain.ProDrive(.7F, 30, Direction.BACKWARD, this);
         sleep(2000);
     }
 }
