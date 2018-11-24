@@ -529,9 +529,6 @@ public class ErikDriveTrain extends DriveTrain {
         int targetEncoderValue = Math.round(x);
 
         //float actualPower = power;
-        if (d == Direction.LEFT) {
-            pro_power = -(power);
-        }
 
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -564,10 +561,16 @@ public class ErikDriveTrain extends DriveTrain {
                 //opMode.telemetry.addData("propower, after clip ", pro_power);
                 //Log.i("aft-clip-prodrive-pwris", Float.toString(pro_power));
             } */
+            else {
+                if (d == Direction.LEFT) {
+                    pro_power = -(power);}
+                else {
+                    pro_power = power;
+                }
 
+            }
             //if(currentPosition < 200)
             //actualPower = .28F;
-
             fl.setPower(pro_power);
             fr.setPower(-(pro_power));
             bl.setPower(-(pro_power));
