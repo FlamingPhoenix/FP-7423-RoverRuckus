@@ -126,12 +126,12 @@ public class ErikAutoRedCrater extends LinearOpMode {
         telemetry.update();
 
 
-        drivetrain.TurnToImage(.18F, Direction.COUNTERCLOCKWISE, backTarget, imu, this);
+        drivetrain.TurnToImage(.13F, Direction.COUNTERCLOCKWISE, backTarget, imu, this);
         sleep(500);
         //drivetrain.ProStrafe(0.4f,20f, Direction.LEFT,this);
-        drivetrain.Strafe(0.4f,20f, Direction.LEFT);
+        drivetrain.Strafe(0.4f,10f, Direction.LEFT);
         sleep(500);
-        drivetrain.Turn(0.7f, 120, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.25f, 25, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(500);
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start tracking");
@@ -355,7 +355,7 @@ public class ErikAutoRedCrater extends LinearOpMode {
 */
         //drivetrain.StopAll();
 
-        drivetrain.Turn(0.7F, 120, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.4F, 60, Direction.COUNTERCLOCKWISE, imu, this);
         telemetry.addData("just after of turn ", 90);
         telemetry.update();
 
@@ -364,12 +364,12 @@ public class ErikAutoRedCrater extends LinearOpMode {
         backTarget = rover.get(1);  // front was 2(red planet), image should be red alliance
         backTarget.setName("red");
 
-        drivetrain.TurnToImage(0.18F, Direction.COUNTERCLOCKWISE, backTarget, imu, this); // at vinay, 0.4, at erik, can 0.4 or 0.5
+        drivetrain.TurnToImage(0.13F, Direction.COUNTERCLOCKWISE, backTarget, imu, this); // at vinay, 0.4, at erik, can 0.4 or 0.5
 
         drivetrain.StopAll();
         sleep(500);
 
-        drivetrain.StrafeToImage(0.35F, backTarget, this);  //
+        drivetrain.StrafeToImage(0.25F, backTarget, this);  //
 
         drivetrain.StopAll();
         /* this is reserved for waiting for alliance partner to set marker..
