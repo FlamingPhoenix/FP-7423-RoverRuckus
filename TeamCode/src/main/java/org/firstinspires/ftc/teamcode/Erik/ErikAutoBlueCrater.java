@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
 import java.util.List;
 
-//@Disabled
+@Disabled
 @Autonomous(name="Oxford Blue Crater", group="none") //used to be called Red Gold, messed up Gold/Silver
 //@TeleOp(name="Erik Auto Subclass", group="none")
 
