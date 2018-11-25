@@ -117,6 +117,8 @@ public class ErikAutonomous extends LinearOpMode {
         VuforiaTrackable backTarget = rover.get(2);
         backTarget.setName("front");
 
+        // the code here can be used to adjust orientation after it is released from lander
+        // these code are not in RedCrater Routine.
 
         telemetry.addData("you have 15 sec to reset the robot. ", "try set to right, then push start");
         Log.i("XZ 15 sec to reset robo", "try set to right");
