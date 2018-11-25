@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -22,8 +23,11 @@ import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
 import java.util.List;
 
+@Disabled
 @Autonomous(name="Oxford Blue Depot", group="none") //used to be called Red Gold, messed up Gold/Silver
 //@TeleOp(name="Erik Auto Subclass", group="none")
+
+// this could be used as a backup copy, as red crater has been heavily modified since Oxford
 
 public class ErikAutoBlueDepot extends LinearOpMode {
 
