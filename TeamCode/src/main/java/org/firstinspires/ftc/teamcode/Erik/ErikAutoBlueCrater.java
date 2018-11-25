@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -22,6 +23,7 @@ import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
 import java.util.List;
 
+//@Disabled
 @Autonomous(name="Oxford Blue Crater", group="none") //used to be called Red Gold, messed up Gold/Silver
 //@TeleOp(name="Erik Auto Subclass", group="none")
 
@@ -55,8 +57,8 @@ public class ErikAutoBlueCrater extends LinearOpMode {
         bl = hardwareMap.dcMotor.get("backleft");
         br = hardwareMap.dcMotor.get("backright");
 
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
-        bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        fr.setDirection(DcMotorSimple.Direction.REVERSE);
+        br.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //*******************************************************/////
         ///Use Erik's Drive Train to experiment Erik's change
@@ -123,6 +125,8 @@ public class ErikAutoBlueCrater extends LinearOpMode {
 
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
+
+                // can convert time to encode number, as distance is fairly fixed..
 
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
