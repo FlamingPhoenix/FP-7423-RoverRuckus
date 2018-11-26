@@ -20,9 +20,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  * Created by Steve on 7/22/2018.
  */
 
-@Disabled
-@Autonomous(name="Auto Blue Gold", group="none")
-public class AutoBlueGold extends AutoBase {
+//@Disabled
+@Autonomous(name="DE BlueDepot", group="none")
+public class AutoBlueDepot extends AutoBase {
 
     @Override
     public void runOpMode() throws InterruptedException {
