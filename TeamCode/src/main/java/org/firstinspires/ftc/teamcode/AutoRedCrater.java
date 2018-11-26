@@ -31,8 +31,8 @@ import java.util.List;
  * Created by Steve on 7/22/2018.
  */
 
-@Autonomous(name="Auto Red Silver", group="none")
-public class AutoRedSilver extends AutoBase {
+@Autonomous(name="DE RedCrater", group="none")
+public class AutoRedCrater extends AutoBase {
     private ElapsedTime runtime = new ElapsedTime();
     private static final long  firstHitTime = 1250; // this is from calibration, it is time to detect first object
     private static final long secondHitTime = 5300; // this is time to hit 2nd object..need to calibrate
@@ -41,15 +41,30 @@ public class AutoRedSilver extends AutoBase {
 
     @Override
     public void runOpMode() throws InterruptedException {
+
         initialize();
 
         waitForStart();
 
         scanGold();
 
+        // first turn 30 degree,
+        //drivetrain.Turn()// test proturn
+        drivetrain.ProTurn(0.4f, 90, Direction.COUNTERCLOCKWISE, imu, this);
+        // then turn to image
+        drivetrain.TurnToImage(0.2f, Direction.COUNTERCLOCKWISE, redTarget, imu, this);
+        //strafe to image
+        drivetrain.StrafeToImage(0.3f, redTarget, this);
 
+        if (tfod != null) { // now it is ok to shutdown tfod/vuforia
+            tfod.deactivate();
+            tfod.shutdown();
+        }
 
-
+        // drive backward for certain distance. here can also test prodrive
+        drivetrain.Drive(.4f, 67f, Direction.FORWARD);
+        drivetrain.Drive(1.0f, 10, Direction.BACKWARD);//  drop marker
+        drivetrain.Drive(.5f, 79, Direction.BACKWARD); // continue to drive
 
 
 
@@ -76,9 +91,6 @@ public class AutoRedSilver extends AutoBase {
 
             if (tfod != null) {
 
-                // getUpdatedRecognitions() will return null if no new information is available since
-                // the last time that call was made.
-
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
@@ -99,23 +111,18 @@ public class AutoRedSilver extends AutoBase {
                                 center_Gold = (recognition.getLeft() + recognition.getRight()) / 2f;
                                 telemetry.addData("center of gold ", center_Gold);
                                 Log.i("center of gold", Float.toString(center_Gold));
-                                // here decide if gold is left of center or right of center, to tell robot move right/left.
-                                // if center_Gold < 360 or > 360...
-                                // for now, just knock it off..
                                 if (center_Gold < 300f) {   // here 300 can change to other numbers, perhaps 400 ?
                                     //currentTime = Math.round(runtime.milliseconds()); // use this to control position
                                     currentTime = Math.round(runtime.milliseconds());
                                     drivetrain.StopAll();
                                     if (currentTime < (secondHitTime - 500)) { // this is first time hit
-
+                                        // should try prostrafe instead of regular strafe, to test navigation control
                                         drivetrain.Strafe(0.4f, 34, Direction.RIGHT);
                                         drivetrain.StopAll();
                                         sleep(500);
                                         drivetrain.Strafe(0.4f, 34, Direction.LEFT);
                                         drivetrain.StopAll();
                                         sleep(500);
-                                        //tfod.deactivate();
-                                        //tfod.shutdown();
                                         gold_Found = 1; // gold is in A position
                                         telemetry.addData("at end of gold loop", "gold 1");
                                         Log.i("gold loop", "at end of gold loop");
@@ -128,8 +135,6 @@ public class AutoRedSilver extends AutoBase {
                                         drivetrain.Strafe(0.4f, 4F, Direction.LEFT);
                                         drivetrain.StopAll();
                                         sleep(500);
-                                        //tfod.deactivate();
-                                        //tfod.shutdown();
                                         gold_Found = 3;  // gold is in C position
                                         telemetry.addData("at end of gold loop", "gold 2");
                                         Log.i("gold loop", "at end of gold loop");
@@ -141,7 +146,6 @@ public class AutoRedSilver extends AutoBase {
                                         drivetrain.Strafe(0.4f, 15F, Direction.LEFT);
                                         drivetrain.StopAll();
                                         sleep(1500);                                            //tfod.deactivate();
-                                        //tfod.shutdown();
                                         gold_Found = 2;  // gold is in B position
                                         telemetry.addData("at end of gold loop", "gold 3");
                                         Log.i("gold loop", "at end of gold loop");
@@ -152,6 +156,7 @@ public class AutoRedSilver extends AutoBase {
                         }
                     }
                 }
+
                 telemetry.update();
             }
         }
