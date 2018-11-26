@@ -55,7 +55,7 @@ public abstract class AutoBase extends LinearOpMode {
         fr.setDirection(DcMotorSimple.Direction.REVERSE);
         br.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        drivetrain = new DriveTrain(fl, fr, bl, br);
+        drivetrain = new DriveTrain(fl, fr, bl, br, this);
         // boolean drivetrain.robotWork = true;
 
         imu = new MyBoschIMU(hardwareMap);
@@ -83,6 +83,9 @@ public abstract class AutoBase extends LinearOpMode {
         backTarget.setName("backTarget");
 
         initTfod();
+        if (tfod != null)
+            tfod.activate();+
+
     }
 
     private void initTfod() {

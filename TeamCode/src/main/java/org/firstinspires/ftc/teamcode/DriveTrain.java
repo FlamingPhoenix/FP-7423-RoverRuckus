@@ -215,31 +215,37 @@ public class DriveTrain {
                 x = lastKnownPosition.translation.get(0) * -1;
 
                 opMode.telemetry.addData("x: ", "x = %f", x);
+
+                float distanceAdjustment = Math.abs(d);
+                if (distanceAdjustment > 1200F)
+                    distanceAdjustment = 1200F;
+                else if (distanceAdjustment < 700F)
+                    distanceAdjustment = 0;
+
                 if(x > 15)
                 {
-                    additionalpower = -0.05F;
+                    additionalpower = actualPower * 0.5F * (Math.abs(x) / 150F) * ((1200F-distanceAdjustment) / 1200F);
                 }
                 else if(x < -15)
                 {
-                    additionalpower = 0.05F;
+                    additionalpower = actualPower * -0.5F * (Math.abs(x) / 150F) * ((1200F-distanceAdjustment) / 1200F);
                 }
 
                 float flTurnAdjust = 0;
                 float blTurnAdjust = 0;
 
                 if (adjustedOrientation.secondAngle < -3) {
-                    blTurnAdjust = -0.2F * (Math.abs(adjustedOrientation.secondAngle) / 10);
+                    flTurnAdjust = actualPower * 1.5F * (Math.abs(adjustedOrientation.secondAngle) / 40F);
                 }
                 else if (adjustedOrientation.secondAngle > 3) {
-                    flTurnAdjust = 0.2F * (Math.abs(adjustedOrientation.secondAngle) / 10);
-                    // Aryan changed this; Copied Math.abs from first if branch into second branch
+                    blTurnAdjust = actualPower * -1.5F * (Math.abs(adjustedOrientation.secondAngle) / 40F);
                 }
 
                 float flPower, frPower, blPower, brPower;
 
                 flPower = actualPower + additionalpower + flTurnAdjust;
-                frPower = -actualPower - additionalpower;
-                blPower = -actualPower - additionalpower + blTurnAdjust;
+                frPower = -actualPower + additionalpower;
+                blPower = -actualPower + additionalpower + blTurnAdjust;
                 brPower = actualPower + additionalpower;
 
                 float max = Max(flPower, frPower, blPower, brPower);
@@ -249,9 +255,9 @@ public class DriveTrain {
                 bl.setPower(blPower/max);
                 br.setPower(brPower/max);
 
-                Log.i("[phoenix:StrafeToImage]", String.format("x = %f, additionalpower = %f", x, additionalpower));
-                Log.i("[phoenix:StrafeToImage]", String.format("raw x=%f, y=%f, z=%f", orientation.firstAngle, orientation.secondAngle, orientation.thirdAngle));
-                Log.i("[phoenix:StrafeToImage]", String.format("adj x=%f, y=%f, z=%f", adjustedOrientation.firstAngle, adjustedOrientation.secondAngle, adjustedOrientation.thirdAngle));
+                Log.i("[phoenix:StrafeToImage]", String.format("x = %f, d = %f, addpower = %f, actpower = %f, distadj = %f", x, d, additionalpower, actualPower, distanceAdjustment));
+                // Log.i("[phoenix:StrafeToImage]", String.format("raw x=%f, y=%f, z=%f", orientation.firstAngle, orientation.secondAngle, orientation.thirdAngle));
+                Log.i("[phoenix:StrafeToImage]", String.format("adj x=%f, y=%f, z=%f, flTurnAdjust=%f, blTurnAdjust=%f", adjustedOrientation.firstAngle, adjustedOrientation.secondAngle, adjustedOrientation.thirdAngle, flTurnAdjust, blTurnAdjust));
                 opMode.telemetry.update();
             }
         }
