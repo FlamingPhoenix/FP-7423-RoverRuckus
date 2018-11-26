@@ -33,6 +33,11 @@ public class DriveTrain {
 
     protected LinearOpMode op;
 
+    // these constants can be used to proportionally control DC Motor power in response to error to target(angle, distance etc)
+    public  static final double  HEADING_GAIN       =  0.018;   //was playing with 0.04, orginal 0.018, Rate at which we respond to heading error, ie angle error
+    public  static final double  LATERAL_GAIN   =  0.05; //0.0027,  Rate at which we respond to off-axis error
+    public  static final double  AXIAL_GAIN     =  0.05;  // 0.0017, Rate at which we respond to target distance errors
+
    private float PPR = 1120F;  // 560 for new robot 1120 for old robot
 
 
@@ -272,12 +277,12 @@ public class DriveTrain {
 
 
 
-     public PositionToImage getLastKnownPosition() {
+    public PositionToImage getLastKnownPosition() {
         return lastKnownPosition;
      }
 
-
-    public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, MyBoschIMU imu, OpMode opMode) {
+    // put an O there to designate old version of uncompleted method
+    public void TurnToImageO(float initialPower, Direction d, VuforiaTrackable imageTarget, MyBoschIMU imu, OpMode opMode) {
         OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
         float turningVelocity = Math.abs(imu.getAngularVelocity().xRotationRate);
 
@@ -286,6 +291,66 @@ public class DriveTrain {
         }
     }
 
+    // added in for DE match, since existing TurnToImage not working yet,
+
+    public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, MyBoschIMU imu, LinearOpMode opMode) {
+
+        OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
+
+        float x_turningVelocity; // = Math.abs(imu.getAngularVelocity().xRotationRate);
+        float y_turningVelocity; // = Math.abs(imu.getAngularVelocity().yRotationRate);
+        float z_turningVelocity; // = Math.abs(imu.getAngularVelocity().zRotationRate);
+
+        float turningMax;
+        float turningstep;
+        float turningRobotSpeed;
+        long sleepTime;
+
+        turningstep = 0.01F;
+        turningRobotSpeed = initialPower; // turningRobotSpeed = initialPower, here is reverse turn
+        // turningRobotSpeed = turningMax;
+        // add following code for new robot, testing new robot.
+        opMode.telemetry.addData("just entered turning loop, initial turningRobotSpeed = ", turningRobotSpeed);
+        opMode.telemetry.update();
+
+
+        if (d == Direction.COUNTERCLOCKWISE) {
+            turningRobotSpeed = - initialPower;
+        }
+        //turningRobotSpeed = - 0.18f; // turningRobotSpeed = 0.15f, at vinay, 0.13 ,at erik, 0.17
+
+
+        while (pos == null && opMode.opModeIsActive()) {
+            bl.setPower(turningRobotSpeed);
+            fl.setPower(turningRobotSpeed);
+            br.setPower(-turningRobotSpeed);
+            fr.setPower(-turningRobotSpeed);
+
+            opMode.telemetry.addData("in slow turning phase, before IMU call. turning power", turningRobotSpeed);
+
+            x_turningVelocity = Math.abs(imu.getAngularVelocity().xRotationRate);
+            y_turningVelocity = Math.abs(imu.getAngularVelocity().yRotationRate);
+            z_turningVelocity = Math.abs(imu.getAngularVelocity().zRotationRate);
+            opMode.telemetry.addData("XRotationRate", x_turningVelocity);
+            opMode.telemetry.addData("yRotationRate", y_turningVelocity);
+            opMode.telemetry.addData("zRotationRate", z_turningVelocity);
+            opMode.telemetry.addData("in slow turning phase, after IMU call. turning power", turningRobotSpeed);
+
+            opMode.telemetry.update();
+
+            pos = ((VuforiaTrackableDefaultListener) imageTarget.getListener()).getPose();
+        }
+
+        opMode.telemetry.addData("in turn to image routine, find target, before stop", 0);
+        opMode.telemetry.update();
+        bl.setPower(0);
+        fl.setPower(0);
+        br.setPower(0);
+        fr.setPower(0);
+        opMode.telemetry.addData("in turn to image routine, RIGHT after stop", 0);
+        opMode.telemetry.update();
+
+    }
 
     public void StrafeToImageEric(float power, VuforiaTrackable imageTarget, LinearOpMode opMode)   {
 
@@ -508,23 +573,6 @@ public class DriveTrain {
         return m;
     }
 
-    // is it ok to have a method and it is further defined in subclass, but not here, do I need virtual key word ?
-    public void DriveStraight(float power, float distance, Direction d, MyBoschIMU myIMU, OpMode opMode){
-
-    }
-    // this is skeleton the detail is defined in ERIK DRIVETRAINNNNNN
-    public void ProDrive(float power, float distance, Direction d, OpMode opMode ) {
-    //
-    }
-    // this is skeleton the detail is defined in ERIK DRIVETRAINnnnnn
-    public void ProTurn(float power, int angle, Direction d, MyBoschIMU imu, OpMode opMode) {
-
-    }
-
-    // this is skeleton declaration, details is defined in Erik DriveTrain
-    public void ProStrafe(float power, float distance, Direction d , OpMode opMode) {
-
-    }
 
     public boolean DriveUntilImageVisible (float power, Direction direction, float distanceLimit, VuforiaTrackable imageTarget, OpMode opMode) {
      //The function will move robot forward or backward until it sees the image, then stop
@@ -561,5 +609,150 @@ public class DriveTrain {
         }
         StopAll();
         return false;
+    }
+
+    // is it ok to have a method and it is further defined in subclass, but not here, do I need virtual key word ?
+    public void DriveStraight(float power, float distance, Direction d, MyBoschIMU myIMU, OpMode opMode){
+
+    }
+
+    // this is skeleton the detail is defined in ERIK DRIVETRAINNNNNN
+    public void ProDrive(float power, float distance, Direction d, OpMode opMode ) {
+        //
+    }
+
+    // this is skeleton the detail is defined in ERIK DRIVETRAINnnnnn
+    public void ProTurn(float power, int angle, Direction d, MyBoschIMU imu, LinearOpMode opMode) {
+
+            Orientation startOrientation = imu.resetAndStart(d);
+
+            float propower = power;
+            float angle_Error = 0.0f;
+            float targetAngle;
+            float currentAngle;
+            float startAngle;
+            //float actualPower = power;
+
+            if (d == Direction.CLOCKWISE) {
+                //actualPower = -(power);
+
+                targetAngle = startOrientation.firstAngle - angle;
+                currentAngle = startOrientation.firstAngle;
+                startAngle = currentAngle;
+                while (currentAngle > targetAngle && op.opModeIsActive()) {
+
+                    //if ((currentPosition < 400)) {  // first 1/3 turn, slow start up
+                    //        actualPower = -.20F; //  min value for caprt = 0.18, value for dr. warner 0.14
+                    //    }
+
+
+                    angle_Error =  Math.min(Math.abs(currentAngle - startAngle), Math.abs(currentAngle - targetAngle));
+                    propower = -(Math.max(0.17f, power * Range.clip(((float)HEADING_GAIN)*(angle_Error), -1, 1)));
+                    opMode.telemetry.addData("CW propower", propower);
+                    Log.i("CW ProTurn propower is ", Float.toString(propower));
+                    opMode.telemetry.addData("start:", startOrientation.firstAngle);
+                    opMode.telemetry.addData("current:", currentAngle);
+                    opMode.telemetry.addData("target:", targetAngle);
+                    opMode.telemetry.update();
+
+                    currentAngle = imu.getAngularOrientation().firstAngle;
+                    fl.setPower(-(propower));
+                    fr.setPower(propower);
+                    bl.setPower(-(propower));
+                    br.setPower(propower);
+                }
+            }
+            else {
+                //actualPower = power;
+
+                targetAngle = startOrientation.firstAngle + angle;
+                currentAngle = startOrientation.firstAngle;
+                startAngle = currentAngle;
+
+                while (currentAngle < targetAngle  && op.opModeIsActive()) {
+
+                    //angle_Error = targetAngle - currentAngle;
+                    angle_Error =  Math.min(Math.abs(currentAngle - startAngle), Math.abs(currentAngle - targetAngle));
+                    propower = (Math.max(0.17f, power * Range.clip(((float)HEADING_GAIN)*Math.abs(angle_Error), -1, 1)));
+                    opMode.telemetry.addData("CCW propower", propower);
+                    Log.i("CCWProTurn propower is ", Float.toString(propower));
+                    opMode.telemetry.addData("start:", startOrientation.firstAngle);
+                    opMode.telemetry.addData("current:", currentAngle);
+                    opMode.telemetry.addData("target:", targetAngle);
+                    opMode.telemetry.update();
+
+                    currentAngle = imu.getAngularOrientation().firstAngle;
+                    fl.setPower(-(propower));
+                    fr.setPower(propower);
+                    bl.setPower(-(propower));
+                    br.setPower(propower);
+                }
+            }
+
+
+            StopAll();
+
+        }
+
+
+
+    // this is skeleton declaration, details is defined in Erik DriveTrain
+    //  added here for test in DE event
+    public void ProStrafe(float power, float distance, Direction d , OpMode opMode) {
+        float distance_Error = 0.0f;
+        float pro_power = power;
+        float x = (1120 * 2 * distance) / (4F * (float) Math.PI);
+        int targetEncoderValue = Math.round(x);
+
+        //float actualPower = power;
+
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        int currentPosition = 0;
+
+        while (currentPosition < targetEncoderValue && op.opModeIsActive()) {
+            /*
+            op.telemetry.addData("current:", currentPosition);
+            op.telemetry.addData("target:", targetEncoderValue);
+            op.telemetry.update();
+            */
+
+            currentPosition = (Math.abs(fl.getCurrentPosition()));
+
+
+            if ((currentPosition < 350)|| ((targetEncoderValue - currentPosition) < 350)) {  // the goal is to start slow and also stop slow..
+                if (d == Direction.LEFT) {
+                    pro_power = -.25F; // was 0.20f
+                }  // was 0.28F
+                else {
+                    pro_power = .25F;
+                }
+            }
+            /*} else {
+                //distance_Error = Math.abs(25.4f * (distance - currentPosition * (4F * (float) Math.PI) / 1120f));
+                opMode.telemetry.addData("current power", pro_power);
+                Log.i("current power ", Float.toString(pro_power));
+                //pro_power = Math.max(0.20f, power * Range.clip(distance_Error * ((float) AXIAL_GAIN), -1, 1));
+                //opMode.telemetry.addData("propower, after clip ", pro_power);
+                //Log.i("aft-clip-prodrive-pwris", Float.toString(pro_power));
+            } */
+            else {
+                if (d == Direction.LEFT) {
+                    pro_power = -(power);}
+                else {
+                    pro_power = power;
+                }
+
+            }
+            //if(currentPosition < 200)
+            //actualPower = .28F;
+            fl.setPower(pro_power);
+            fr.setPower(-(pro_power));
+            bl.setPower(-(pro_power));
+            br.setPower(pro_power);
+        }
+
+        StopAll();
     }
 }
