@@ -248,7 +248,9 @@ public class ErikDriveTrain extends DriveTrain {
         StopAll();
     }
     
-    @Override
+    /*@Override
+    // move the method to regular drive train
+
     public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, MyBoschIMU imu, OpMode opMode) {
         //super.TurnToImage(initialPower, d, imageTarget, imu); // no contructor for method
 
@@ -346,7 +348,7 @@ public class ErikDriveTrain extends DriveTrain {
         opMode.telemetry.update();
  
         
-    }
+    }*/
 
     @Override
     public void DriveStraight(float power, float distance, Direction d, MyBoschIMU myIMU, OpMode opMode) {
@@ -408,8 +410,8 @@ public class ErikDriveTrain extends DriveTrain {
 
     // below is proportional drive, ie, turn at normal speed and then slow down towards the end as we get closer to the target angle
     // consider using cliprange function, Range.clip(calculated Motor Power, -1, 1)
-    @Override
-    public void ProTurn(float power, int angle, Direction d, MyBoschIMU imu, OpMode opMode) {
+    //@Override
+    public void ProTurnN(float power, int angle, Direction d, MyBoschIMU imu, OpMode opMode) {
 
         Orientation startOrientation = imu.resetAndStart(d);
 
@@ -531,8 +533,11 @@ public class ErikDriveTrain extends DriveTrain {
 
     // will implement slow ramping up in the beginning and gradually slow down at the end
 
-    @Override
-    public void ProStrafe(float power, float distance, Direction d, OpMode opMode) {
+
+    //add N at end of Method, since added to regular drivetrain
+
+    //@Override
+    public void ProStrafeN(float power, float distance, Direction d, OpMode opMode) {
 
         float distance_Error = 0.0f;
         float pro_power = power;
@@ -547,11 +552,7 @@ public class ErikDriveTrain extends DriveTrain {
         int currentPosition = 0;
 
         while (currentPosition < targetEncoderValue && op.opModeIsActive()) {
-            /*
-            op.telemetry.addData("current:", currentPosition);
-            op.telemetry.addData("target:", targetEncoderValue);
-            op.telemetry.update();
-            */
+
 
             currentPosition = (Math.abs(fl.getCurrentPosition()));
 
@@ -564,14 +565,7 @@ public class ErikDriveTrain extends DriveTrain {
                     pro_power = .25F;
                 }
             }
-            /*} else {
-                //distance_Error = Math.abs(25.4f * (distance - currentPosition * (4F * (float) Math.PI) / 1120f));
-                opMode.telemetry.addData("current power", pro_power);
-                Log.i("current power ", Float.toString(pro_power));
-                //pro_power = Math.max(0.20f, power * Range.clip(distance_Error * ((float) AXIAL_GAIN), -1, 1));
-                //opMode.telemetry.addData("propower, after clip ", pro_power);
-                //Log.i("aft-clip-prodrive-pwris", Float.toString(pro_power));
-            } */
+
             else {
                 if (d == Direction.LEFT) {
                     pro_power = -(power);}
