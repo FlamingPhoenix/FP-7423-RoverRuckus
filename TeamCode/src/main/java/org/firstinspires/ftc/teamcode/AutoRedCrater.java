@@ -48,10 +48,10 @@ public class AutoRedCrater extends AutoBase {
 
         scanGold();
 
-        // first turn 30 degree,
-        //drivetrain.Turn()// test proturn
+        //drivetrain.Turn(), first turn 100 - 120 degree, can test proturn
         drivetrain.ProTurn(0.4f, 90, Direction.COUNTERCLOCKWISE, imu, this);
         // then turn to image
+        sleep(1000);
         drivetrain.TurnToImage(0.2f, Direction.COUNTERCLOCKWISE, redTarget, imu, this);
         //strafe to image
         drivetrain.StrafeToImage(0.3f, redTarget, this);
