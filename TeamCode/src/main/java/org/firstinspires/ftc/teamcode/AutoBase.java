@@ -48,6 +48,7 @@ public abstract class AutoBase extends LinearOpMode {
     protected TFObjectDetector tfod;
 
     public void initialize() {
+
         fl = hardwareMap.dcMotor.get("frontleft");
         fr = hardwareMap.dcMotor.get("frontright");
         bl = hardwareMap.dcMotor.get("backleft");
@@ -84,7 +85,7 @@ public abstract class AutoBase extends LinearOpMode {
 
         initTfod();
         if (tfod != null)
-            tfod.activate();+
+            tfod.activate();
 
     }
 
