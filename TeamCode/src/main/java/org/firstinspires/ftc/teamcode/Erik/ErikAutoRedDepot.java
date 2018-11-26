@@ -326,6 +326,7 @@ public class ErikAutoRedDepot extends LinearOpMode {
         drivetrain.StrafeToImage(0.3F, backTarget, this);  //
 
         drivetrain.StopAll();
+
         /* this is reserved for waiting for alliance partner to set marker..
         telemetry.addData("will wait, 5 sec sleep ", "for alliance partner to set marker");
         Log.i("XZ after 5 sec wait", "for alliance partner to set marker");
