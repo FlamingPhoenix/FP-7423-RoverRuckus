@@ -33,16 +33,38 @@ import java.util.List;
 
 public class TestStrafeToImage extends AutoBase {
 
+    protected TFObjectDetector tfod;
 
     @Override
     public void runOpMode() throws InterruptedException {
         initialize();
         waitForStart();
 
+        if (tfod != null) {
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                if (updatedRecognitions.size() <= 3) {
+                    for (Recognition recognition : updatedRecognitions) {
+                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                            int goldleft = (int) recognition.getLeft();
+                            int goldright = (int) recognition.getRight();
+                            float goldcenter = (goldleft + goldright) / 2f;
 
+                            telemetry.addData("[phoenix]", "gl: %f, gr: %f, gc: %f", goldleft, goldright, goldcenter);
+                            telemetry.update();
+                        }
+                    }
+                }
+            }
+            else {
+                telemetry.addData("[phoenix]", "updatedRecognitions is null");
+            }
+        } else {
+            telemetry.addData("[phoenix]", "TFOD is null");
+        }
 
-
-        drivetrain.StrafeToImage(.3F, redTarget, this);
+        //drivetrain.StrafeToImage(.3F, redTarget, this);
 
     }
 

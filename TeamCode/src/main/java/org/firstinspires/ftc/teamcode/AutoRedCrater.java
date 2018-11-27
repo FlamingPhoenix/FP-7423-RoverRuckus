@@ -49,12 +49,12 @@ public class AutoRedCrater extends AutoBase {
         scanGold();
 
         //drivetrain.Turn(), first turn 100 - 120 degree, can test proturn
-        drivetrain.ProTurn(0.4f, 90, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.ProTurn(0.35f, 80, Direction.COUNTERCLOCKWISE, imu, this);
         // then turn to image
         sleep(1000);
         drivetrain.TurnToImage(0.2f, Direction.COUNTERCLOCKWISE, redTarget, imu, this);
         //strafe to image
-        drivetrain.StrafeToImage(0.3f, redTarget, this);
+        drivetrain.StrafeToImage(0.25f, redTarget, this);
 
         if (tfod != null) { // now it is ok to shutdown tfod/vuforia
             tfod.deactivate();
@@ -62,9 +62,9 @@ public class AutoRedCrater extends AutoBase {
         }
 
         // drive backward for certain distance. here can also test prodrive
-        drivetrain.Drive(.4f, 67f, Direction.FORWARD);
-        drivetrain.Drive(1.0f, 10, Direction.BACKWARD);//  drop marker
-        drivetrain.Drive(.5f, 79, Direction.BACKWARD); // continue to drive
+        drivetrain.Drive(.4f, 58f, Direction.FORWARD);
+        drivetrain.Drive(1.0f, 5, Direction.BACKWARD);//  drop marker
+        drivetrain.Drive(.5f, 65, Direction.BACKWARD); // continue to drive
 
 
 
@@ -84,10 +84,12 @@ public class AutoRedCrater extends AutoBase {
 
         while (gold_Found == 0 && opModeIsActive()) {
 
-            fl.setPower(0.14f);  // first calibrate time on floor..0.12 at dr warners, 0.14 at carpet
-            fr.setPower(0.14f);
-            bl.setPower(0.14f);
-            br.setPower(0.14f);
+            float power = 0.11f;
+
+            fl.setPower(power);  // first calibrate time on floor..0.12 at dr warners, 0.14 at carpet
+            fr.setPower(power);
+            bl.setPower(power);
+            br.setPower(power);
 
             if (tfod != null) {
 
@@ -102,7 +104,7 @@ public class AutoRedCrater extends AutoBase {
                             if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                                 currentTime = Math.round(runtime.milliseconds());
                                 telemetry.addData("1st Gold time ", currentTime);
-                                Log.i("1st Gold time ", Double.toString(currentTime));
+                                Log.i("[phoenix]:goldtime", Double.toString(currentTime));
 
                                 //if (currentTime < (1.5*secondHitTime)) {
                                 goldMineralX = (int) recognition.getLeft();
@@ -110,45 +112,47 @@ public class AutoRedCrater extends AutoBase {
                                 // here, need to add code to come up with center of gold and use that as control varialble for moving robot towards it..
                                 center_Gold = (recognition.getLeft() + recognition.getRight()) / 2f;
                                 telemetry.addData("center of gold ", center_Gold);
-                                Log.i("center of gold", Float.toString(center_Gold));
-                                if (center_Gold < 300f) {   // here 300 can change to other numbers, perhaps 400 ?
+                                Log.i("[phoenix]:goldcenter", Float.toString(center_Gold));
+                                // 2018-11-26 Ended the evening not sure what to put for the if statement below.  May need to do hand testing to test left, right and center values
+                                if (center_Gold < 450f) {   // here 300 can change to other numbers, perhaps 400 ?
                                     //currentTime = Math.round(runtime.milliseconds()); // use this to control position
                                     currentTime = Math.round(runtime.milliseconds());
+                                    Log.i("[phoenix]:goldtime ", Double.toString(currentTime));
                                     drivetrain.StopAll();
                                     if (currentTime < (secondHitTime - 500)) { // this is first time hit
                                         // should try prostrafe instead of regular strafe, to test navigation control
-                                        drivetrain.Strafe(0.4f, 34, Direction.RIGHT);
+                                        drivetrain.ProStrafe(0.3f, 20, Direction.RIGHT, this);
                                         drivetrain.StopAll();
                                         sleep(500);
-                                        drivetrain.Strafe(0.4f, 34, Direction.LEFT);
+                                        drivetrain.ProStrafe(0.3f, 20, Direction.LEFT, this);
                                         drivetrain.StopAll();
                                         sleep(500);
                                         gold_Found = 1; // gold is in A position
                                         telemetry.addData("at end of gold loop", "gold 1");
-                                        Log.i("gold loop", "at end of gold loop");
+                                        Log.i("[phoenix]:goldloop", "at end of gold loop 1");
                                         telemetry.update();
                                     } else if (currentTime > (secondHitTime + 4000)) { // third time hit
                                         //drivetrain.StopAll();
-                                        drivetrain.Strafe(0.4f, 4F, Direction.RIGHT);
+                                        drivetrain.ProStrafe(0.3f, 2.5F, Direction.RIGHT, this);
                                         drivetrain.StopAll();
                                         sleep(500);
-                                        drivetrain.Strafe(0.4f, 4F, Direction.LEFT);
+                                        drivetrain.ProStrafe(0.3f, 2.5F, Direction.LEFT, this);
                                         drivetrain.StopAll();
                                         sleep(500);
                                         gold_Found = 3;  // gold is in C position
-                                        telemetry.addData("at end of gold loop", "gold 2");
-                                        Log.i("gold loop", "at end of gold loop");
+                                        telemetry.addData("at end of gold loop", "gold 3");
+                                        Log.i("[phoenix]:goldloop", "at end of gold loop 3");
                                         telemetry.update();
                                     } else {
-                                        drivetrain.Strafe(0.4f, 16F, Direction.RIGHT);
+                                        drivetrain.Strafe(0.3f, 12F, Direction.RIGHT);
                                         drivetrain.StopAll();
                                         sleep(1500);
-                                        drivetrain.Strafe(0.4f, 15F, Direction.LEFT);
+                                        drivetrain.Strafe(0.3f, 12F, Direction.LEFT);
                                         drivetrain.StopAll();
                                         sleep(1500);                                            //tfod.deactivate();
                                         gold_Found = 2;  // gold is in B position
-                                        telemetry.addData("at end of gold loop", "gold 3");
-                                        Log.i("gold loop", "at end of gold loop");
+                                        telemetry.addData("at end of gold loop", "gold 2");
+                                        Log.i("[phoenix]:goldloop", "at end of gold loop 2");
                                         telemetry.update();
                                     }
                                 }

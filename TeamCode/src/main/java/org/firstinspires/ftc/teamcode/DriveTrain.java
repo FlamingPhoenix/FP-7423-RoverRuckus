@@ -202,7 +202,7 @@ public class DriveTrain {
             float additionalpower = 0;
 
 
-            while ((Math.abs(d) >= 100) && (imageListener.isVisible()) && opMode.opModeIsActive()) {
+            while ((Math.abs(d) >= 200) && (imageListener.isVisible()) && opMode.opModeIsActive()) {
                 pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
 
                 Orientation orientation = Orientation.getOrientation(pos, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
@@ -618,7 +618,7 @@ public class DriveTrain {
 
     // this is skeleton the detail is defined in ERIK DRIVETRAINNNNNN
     public void ProDrive(float power, float distance, Direction d, OpMode opMode ) {
-        //
+        //        //
     }
 
     // this is skeleton the detail is defined in ERIK DRIVETRAINnnnnn
