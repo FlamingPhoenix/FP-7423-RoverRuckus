@@ -48,29 +48,38 @@ public class ExperimentProDrive extends LinearOpMode {
 
         waitForStart();
 
-        driveTrain.Turn(0.7f, 150, Direction.CLOCKWISE, imu, this);
+        /*driveTrain.Turn(0.7f, 150, Direction.CLOCKWISE, imu, this);
         sleep(2000);
         driveTrain.Turn(0.7f, 150, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(2000);
         driveTrain.ProTurn(.7F, 150, Direction.CLOCKWISE, imu, this);
         sleep(2000);
         driveTrain.ProTurn(.7F, 150, Direction.COUNTERCLOCKWISE, imu, this);
+        sleep(2000); */
+        driveTrain.Strafe(.4F, 25, Direction.LEFT);
         sleep(2000);
-        driveTrain.Strafe(.7F, 15, Direction.LEFT);
+        driveTrain.Strafe(.4F, 25, Direction.RIGHT);
         sleep(2000);
-        driveTrain.Strafe(.7F, 15, Direction.RIGHT);
+        driveTrain.ProStrafe(.4F, 25, Direction.LEFT, this);
         sleep(2000);
-        driveTrain.ProStrafe(.7F, 15, Direction.LEFT, this);
+        driveTrain.ProStrafe(.4F, 25, Direction.RIGHT, this);
         sleep(2000);
-        driveTrain.ProStrafe(.7F, 15, Direction.RIGHT, this);
         sleep(2000);
-        driveTrain.Drive(.7F, 30, Direction.FORWARD);
+        driveTrain.ProStrafe(.4F, 25, Direction.LEFT, this);
         sleep(2000);
-        driveTrain.Drive(.7F, 30, Direction.BACKWARD);
+        driveTrain.ProStrafe(.4F, 25, Direction.RIGHT, this);
         sleep(2000);
-        driveTrain.ProDrive(.7F, 30, Direction.FORWARD, this);
+        driveTrain.Drive(.4F, 25, Direction.FORWARD);
         sleep(2000);
-        driveTrain.ProDrive(.7F, 30, Direction.BACKWARD, this);
+        driveTrain.Drive(.4F, 25, Direction.BACKWARD);
+        sleep(2000);
+        driveTrain.ProDrive(.4F, 25, Direction.FORWARD, this);
+        sleep(2000);
+        driveTrain.ProDrive(.4F, 25, Direction.BACKWARD, this);
+        sleep(2000);
+        driveTrain.ProDrive(.4F, 25, Direction.FORWARD, this);
+        sleep(2000);
+        driveTrain.ProDrive(.4F, 25, Direction.BACKWARD, this);
         sleep(2000);
     }
 }

@@ -410,8 +410,9 @@ public class ErikDriveTrain extends DriveTrain {
 
     // below is proportional drive, ie, turn at normal speed and then slow down towards the end as we get closer to the target angle
     // consider using cliprange function, Range.clip(calculated Motor Power, -1, 1)
-    //@Override
-    public void ProTurnN(float power, int angle, Direction d, MyBoschIMU imu, OpMode opMode) {
+
+    @Override
+    public void ProTurn(float power, int angle, Direction d, MyBoschIMU imu, LinearOpMode opMode) {
 
         Orientation startOrientation = imu.resetAndStart(d);
 
@@ -485,7 +486,7 @@ public class ErikDriveTrain extends DriveTrain {
 
     // below is proportional drive, ie, drive normal speed and then slow down towards the end as we get closer to the target distance
     @Override
-    public void ProDrive(float power, float distance, Direction d, OpMode opMode) {
+    public void ProDrive(float power, float distance, Direction d, LinearOpMode opMode) {
         float distance_Error = 0.0f;
         //float end_Ref = 0f; // end_Ref will be the smaller of distance or distance_Error, which controls starting or ending speed
         float pro_power = power;
@@ -498,7 +499,7 @@ public class ErikDriveTrain extends DriveTrain {
 
         //added code below to support reverse driving, tested Oct 29, Erik did ofc this
 
-        while (currentPosition < targetEncoderValue && op.opModeIsActive()) {
+        while (currentPosition < targetEncoderValue && opMode.opModeIsActive()) {
 
             currentPosition = (Math.abs(fl.getCurrentPosition()));
             if (currentPosition < 200) {  // the goal is to start slow and also stop slow..
@@ -537,7 +538,7 @@ public class ErikDriveTrain extends DriveTrain {
     //add N at end of Method, since added to regular drivetrain
 
     //@Override
-    public void ProStrafeN(float power, float distance, Direction d, OpMode opMode) {
+    public void ProStrafe(float power, float distance, Direction d, LinearOpMode opMode) {
 
         float distance_Error = 0.0f;
         float pro_power = power;

@@ -39,8 +39,8 @@ public class MyFirstMechanumDrive extends OpMode {
         br = hardwareMap.dcMotor.get("backright");
         bl = hardwareMap.dcMotor.get("backleft");
 
-        bl.setDirection(DcMotorSimple.Direction.REVERSE);
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
+        br.setDirection(DcMotorSimple.Direction.REVERSE);
+        fr.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     @Override
