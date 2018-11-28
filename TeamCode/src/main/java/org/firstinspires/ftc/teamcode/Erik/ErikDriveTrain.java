@@ -248,9 +248,9 @@ public class ErikDriveTrain extends DriveTrain {
         StopAll();
     }
     
-    /*@Override
-    // move the method to regular drive train
 
+    // move the method to regular drive train for DE event Nov 27, then put back here
+    @Override
     public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, MyBoschIMU imu, OpMode opMode) {
         //super.TurnToImage(initialPower, d, imageTarget, imu); // no contructor for method
 
@@ -348,7 +348,7 @@ public class ErikDriveTrain extends DriveTrain {
         opMode.telemetry.update();
  
         
-    }*/
+    }
 
     @Override
     public void DriveStraight(float power, float distance, Direction d, MyBoschIMU myIMU, OpMode opMode) {
