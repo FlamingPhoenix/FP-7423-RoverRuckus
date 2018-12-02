@@ -23,8 +23,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.MyClass.MineralPositionViewModel;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.List;
 
 /**
@@ -47,36 +48,69 @@ public class AutoRedCrater extends AutoBase {
     public void runOpMode() throws InterruptedException {
 
         initialize();
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         waitForStart();
 
-        scanGold(0.12f);
-        sleep(300);
+        // Lower the robot
+
+        // Detach from the lander
+
+        // Move forward 3 inches
+
+        drivetrain.Drive(0.25F, 3F, Direction.FORWARD);
+
+        // Turn counter clockwise to image
+
+        drivetrain.Turn(0.35F, 15, Direction.COUNTERCLOCKWISE, imu, this);
+
+        // Calculate angle and distance to first two
+
+        MineralPositionViewModel mpvm = GetMineralPositions();
+
+        // Turn coutner clockwise x amount of degree to view first two minerals
+
+        //  Determine if gold is in A, B or C
+
+        //  Turn angle to mineral and drive forward certain amount to hit the mineral
+
+        //  Drive backward a certain amount
+
+        //  Turn counter clockwise to find next image
+
+        //  Strafe to image
+
+        //  Drive forward to depot
+
+        //  Drop to market
+
+        //  Park in crater
+
+
+
+
+
+
+
+        //scanGold(0.12f);
+        //sleep(300);
         //drivetrain.Turn(), first turn 100 - 120 degree, can test proturn
-        drivetrain.Turn(0.35f, 95, Direction.COUNTERCLOCKWISE, imu, this);
+        //drivetrain.Turn(0.35f, 95, Direction.COUNTERCLOCKWISE, imu, this);
         // then turn to image
-        sleep(1000);
+        //sleep(1000);
         //drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, redTarget, imu, this);
         //strafe to image
-        drivetrain.StrafeToImage(0.25f, redTarget, this);
-        sleep(3000);
+        //drivetrain.StrafeToImage(0.25f, redTarget, this);
+        //sleep(3000);
 
-        if (tfod != null) { // now it is ok to shutdown tfod/vuforia
-            tfod.deactivate();
-            tfod.shutdown();
-        }
+        //if (tfod != null) { // now it is ok to shutdown tfod/vuforia
+        //    tfod.deactivate();
+        //    tfod.shutdown();
+        //}
 
         // drive backward for certain distance. here can also test prodrive
-        drivetrain.Drive(.4f, 58f, Direction.FORWARD);
-        sleep(300);
-        drivetrain.Drive(1.0f, 5, Direction.BACKWARD);//  drop marker
-        drivetrain.Drive(.65f, 70, Direction.BACKWARD); // continue to drive
-
-
-
-
-
+        //drivetrain.Drive(.4f, 58f, Direction.FORWARD);
+        //sleep(300);
+        //drivetrain.Drive(1.0f, 5, Direction.BACKWARD);//  drop marker
+        //drivetrain.Drive(.65f, 70, Direction.BACKWARD); // continue to drive
     }
 
     public void scanGold(float power){

@@ -16,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
+import org.firstinspires.ftc.teamcode.MyClass.MineralPositionViewModel;
 
 import java.util.List;
 
@@ -87,6 +88,14 @@ public abstract class AutoBase extends LinearOpMode {
         if (tfod != null)
             tfod.activate();
 
+    }
+
+    protected MineralPositionViewModel GetMineralPositions()
+    {
+        MineralPositionViewModel mpvm = new MineralPositionViewModel();
+
+
+        return mpvm;
     }
 
     private void initTfod() {

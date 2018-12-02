@@ -8,6 +8,7 @@ import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -24,7 +25,6 @@ import android.util.Log;
 
 import java.util.List;
 
-@Disabled
 @TeleOp(name = "TestVuforia", group = "none")
 public class ExperimentVuforia extends OpMode {
 
@@ -83,13 +83,15 @@ public class ExperimentVuforia extends OpMode {
         if (redWallListener.isVisible()) {
 
             OpenGLMatrix pose = redWallListener.getPose();
+            VectorF v = pose.getTranslation();
             Orientation orientation = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
             OpenGLMatrix rotationMatrix = OpenGLMatrix.rotation(AxesReference.EXTRINSIC, AxesOrder.ZXZ, AngleUnit.DEGREES, orientation.thirdAngle * -1, orientation.firstAngle * -1, 0);
             OpenGLMatrix adjustedPose = pose.multiplied(rotationMatrix);
             Orientation adjustedOrientation = Orientation.getOrientation(adjustedPose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
-            telemetry.addData("Raw :", "x=%f, y=%f, z=%f", orientation.firstAngle, orientation.secondAngle, orientation.thirdAngle);
+            telemetry.addData("Vector:", "x=%f, y=%f, z=%f", v.get(0), v.get(1), v.get(2));
+            //telemetry.addData("Raw :", "x=%f, y=%f, z=%f", orientation.firstAngle, orientation.secondAngle, orientation.thirdAngle);
             telemetry.addData("Adj :", "x=%f, y=%f, z=%f", adjustedOrientation.firstAngle, adjustedOrientation.secondAngle, adjustedOrientation.thirdAngle);
 
 
