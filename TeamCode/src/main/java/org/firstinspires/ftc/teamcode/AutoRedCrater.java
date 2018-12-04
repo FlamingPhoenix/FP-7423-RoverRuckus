@@ -57,10 +57,13 @@ public class AutoRedCrater extends AutoBase {
         // Move forward 3 inches
 
         drivetrain.Drive(0.25F, 3F, Direction.FORWARD);
+        sleep(8000);
 
         // Turn counter clockwise to image
 
         drivetrain.Turn(0.35F, 15, Direction.COUNTERCLOCKWISE, imu, this);
+        sleep(15000);
+
 
         // Calculate angle and distance to first two
 

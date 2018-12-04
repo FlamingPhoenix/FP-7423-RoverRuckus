@@ -45,8 +45,8 @@ public class ScanGoldTest extends AutoBase {
 
         initialize();
         int detectionOutcome = 0;
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // Wait for the start button
         telemetry.addData(">", "Press Start to test ScanGold.");
         telemetry.update();
@@ -58,7 +58,7 @@ public class ScanGoldTest extends AutoBase {
         //drivetrain.Turn(0.3f, 45, Direction.COUNTERCLOCKWISE, imu, this);
         //sleep(1000);
         //drivetrain.Turn(0.40f, 70, Direction.COUNTERCLOCKWISE, imu, this);
-        detectionOutcome = DriveToScanFirstMineral(0.25f, Direction.FORWARD, this);
+        detectionOutcome = DriveToScanFirstMineral(0.11f, Direction.FORWARD, this);
         sleep(500);
         if (detectionOutcome == 1) { //ScanFirstMineral() == 1
             telemetry.addData("Gold found", "during first scan");
@@ -75,11 +75,13 @@ public class ScanGoldTest extends AutoBase {
             telemetry.addData("Silver found", "during first scan");
             Log.i("[phoenix]:Silv detected", "found silver");
             sleep(1000);
-            drivetrain.Turn(0.4f, 40, Direction.COUNTERCLOCKWISE, imu, this);
+           // drivetrain.Strafe(.3F, 6.5f, Direction.LEFT);
+            sleep(1000);
+            drivetrain.Turn(0.2f, 40, Direction.COUNTERCLOCKWISE, imu, this);
             telemetry.addData("Silver aft turn", "after turn");
             Log.i("[phoenix]:Silv aft turn", "aft turn");
             sleep(1000);
-            scanGold_Diagonal(0.14f);
+            scanGold_Diagonal(0.11f);
             drivetrain.Drive(0.3f, 3f, Direction.FORWARD);}
 
          else {
@@ -142,10 +144,10 @@ public class ScanGoldTest extends AutoBase {
             telemetry.addData("before moving time", currentTime);
             Log.i("[phoenix]:pretime", Double.toString(currentTime));
 
-            fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            //fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
             while (gold_Found == 0 && opModeIsActive() && (currentTime < (thirdHitTime - 2000))) { // 12000-2000 = 10000
 
@@ -298,10 +300,10 @@ public class ScanGoldTest extends AutoBase {
             //     Log.i("[phoenix]:Gold Fflag ", Integer.toString(gold_Found));
             telemetry.update();
 
-            fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            //fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
             stop_encoder_count = Math.round(1120 * (stop_distance / (4f * 3.1416f)));
@@ -408,10 +410,10 @@ public class ScanGoldTest extends AutoBase {
         telemetry.addData("before moving time", currentTime);
         Log.i("[phoenix]:pretime", Double.toString(currentTime));
 
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         while (gold_Found == 0 && opModeIsActive() && (currentTime < (thirdHitTime - 2000))) { // 12000-2000 = 10000
 
@@ -576,10 +578,10 @@ public class ScanGoldTest extends AutoBase {
             telemetry.addData("before moving time", currentTime);
             Log.i("[phoenix]:pretime", Double.toString(currentTime));
 
-            fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            //fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
             if (d == Direction.COUNTERCLOCKWISE) {
 
