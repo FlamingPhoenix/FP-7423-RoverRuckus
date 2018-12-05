@@ -53,12 +53,16 @@ public class ScanGoldTest extends AutoBase {
 
         waitForStart();
 
-        //drivetrain.Drive(0.40f, 3.5f, Direction.FORWARD); //3.5
-        // sleep(1000);
-        //drivetrain.Turn(0.3f, 45, Direction.COUNTERCLOCKWISE, imu, this);
-        //sleep(1000);
+        drivetrain.Drive(0.20f, 4.5f, Direction.FORWARD); //3.5
+        sleep(1000);
+        drivetrain.Strafe(0.25f, 10.0f, Direction.RIGHT );
+        sleep(1000);
+        drivetrain.Turn(0.25f, 55, Direction.COUNTERCLOCKWISE, imu, this);
+        sleep(1000);
         //drivetrain.Turn(0.40f, 70, Direction.COUNTERCLOCKWISE, imu, this);
-        detectionOutcome = DriveToScanFirstMineral(0.11f, Direction.FORWARD, this);
+
+
+        detectionOutcome = DriveToScanFirstMineral(0.11f, Direction.FORWARD, this); // 0.11 at Dr Warner, 0.15 at carpets
         sleep(500);
         if (detectionOutcome == 1) { //ScanFirstMineral() == 1
             telemetry.addData("Gold found", "during first scan");
@@ -69,7 +73,7 @@ public class ScanGoldTest extends AutoBase {
             Log.i("[phoenix]:gold aft str", "after strafe");
             sleep(1000);
             drivetrain.Strafe(0.3f, 6.5f, Direction.LEFT);
-            drivetrain.Turn(0.4f, 40, Direction.COUNTERCLOCKWISE, imu, this);
+            drivetrain.Turn(0.4f, 35, Direction.COUNTERCLOCKWISE, imu, this); // shouid be 45, compensate for wheel issue
             drivetrain.Drive(0.3f, 10f, Direction.FORWARD); }
         else if (detectionOutcome == 2) { //ScanFirstMineral() == 2
             telemetry.addData("Silver found", "during first scan");
@@ -77,9 +81,11 @@ public class ScanGoldTest extends AutoBase {
             sleep(1000);
            // drivetrain.Strafe(.3F, 6.5f, Direction.LEFT);
             sleep(1000);
-            drivetrain.Turn(0.2f, 40, Direction.COUNTERCLOCKWISE, imu, this);
+            drivetrain.Turn(0.2f, 35, Direction.COUNTERCLOCKWISE, imu, this); // should be 45, compensate for wheels issue
             telemetry.addData("Silver aft turn", "after turn");
             Log.i("[phoenix]:Silv aft turn", "aft turn");
+            sleep(1000);
+            drivetrain.Drive(0.2f, 6.0f, Direction.BACKWARD);
             sleep(1000);
             scanGold_Diagonal(0.11f);
             drivetrain.Drive(0.3f, 3f, Direction.FORWARD);}
@@ -300,9 +306,9 @@ public class ScanGoldTest extends AutoBase {
             //     Log.i("[phoenix]:Gold Fflag ", Integer.toString(gold_Found));
             telemetry.update();
 
-            //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            //fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             //fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
@@ -410,9 +416,9 @@ public class ScanGoldTest extends AutoBase {
         telemetry.addData("before moving time", currentTime);
         Log.i("[phoenix]:pretime", Double.toString(currentTime));
 
-        //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         while (gold_Found == 0 && opModeIsActive() && (currentTime < (thirdHitTime - 2000))) { // 12000-2000 = 10000
@@ -474,7 +480,7 @@ public class ScanGoldTest extends AutoBase {
 // drivetrain.StopAll();
                                               drivetrain.Strafe(0.4f, 6.5f, Direction.RIGHT);
                                               sleep(500);
-                                              drivetrain.Strafe(0.4f, 6.5f, Direction.LEFT);
+                                              drivetrain.Strafe(0.4f, 4.5f, Direction.LEFT);
                                               drivetrain.StopAll();
                                               sleep(500);
                                         gold_Found = 2; // gold is in B position
@@ -490,7 +496,7 @@ public class ScanGoldTest extends AutoBase {
                                             drivetrain.Strafe(0.4f, 6.5F, Direction.RIGHT);
                                             drivetrain.StopAll();
                                             sleep(500);
-                                            drivetrain.Strafe(0.4f, 6.5F, Direction.LEFT);
+                                            drivetrain.Strafe(0.4f, 4.5F, Direction.LEFT);
                                             drivetrain.StopAll();
                                             sleep(500);
                                         gold_Found = 3;  // gold is in C position
