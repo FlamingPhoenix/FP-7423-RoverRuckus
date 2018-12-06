@@ -9,6 +9,10 @@ import com.vuforia.HINT;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
@@ -134,5 +138,37 @@ public abstract class AutoBase extends LinearOpMode {
         }
 
         return MineralPosition.UNKNOWN;
+    }
+
+    public MineralPositionViewModel getMineralPositions(VuforiaTrackable image)
+    {
+        VuforiaTrackableDefaultListener imageListener = (VuforiaTrackableDefaultListener) image.getListener();
+
+        OpenGLMatrix pose = imageListener.getPose();
+        double distance = (pose.getTranslation().get(2)) * 0.0393701;
+
+        Orientation orientation = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
+        OpenGLMatrix rotationMatrix = OpenGLMatrix.rotation(AxesReference.EXTRINSIC, AxesOrder.ZXZ, AngleUnit.DEGREES, orientation.thirdAngle * -1, orientation.firstAngle * -1, 0);
+        OpenGLMatrix adjustedPose = pose.multiplied(rotationMatrix);
+        Orientation adjustedOrientation = Orientation.getOrientation(adjustedPose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
+        float imageAngle = Math.abs(adjustedOrientation.secondAngle);
+        double actualDistance = ((distance) / (Math.cos(Math.toRadians(imageAngle))));
+        double innerHeight = (24 * Math.sqrt(2) * Math.sin(Math.toRadians(45 - imageAngle)));
+        double d1 = (24 * Math.sqrt(2) * Math.cos(Math.toRadians(45 - imageAngle)));
+        double d2 = (actualDistance - d1);
+        double mineralAngle = Math.toDegrees(Math.atan((innerHeight) / (d2)));
+
+        MineralPositionViewModel positions = new MineralPositionViewModel();
+        positions.right.angle = (float) mineralAngle;
+        positions.center.angle = (float) mineralAngle + 45;
+        positions.left.angle = (float) mineralAngle + 90;
+
+        positions.right.distance = 450;
+        positions.center.distance = 450;
+        positions.left.distance = 450;
+
+        return positions;
     }
 }

@@ -53,6 +53,7 @@ public class ScanGoldTest extends AutoBase {
 
         waitForStart();
 
+        /*
         drivetrain.Drive(0.20f, 4.5f, Direction.FORWARD); //3.5
         sleep(1000);
         drivetrain.Strafe(0.25f, 10.0f, Direction.RIGHT );
@@ -60,6 +61,7 @@ public class ScanGoldTest extends AutoBase {
         drivetrain.Turn(0.25f, 55, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(1000);
         //drivetrain.Turn(0.40f, 70, Direction.COUNTERCLOCKWISE, imu, this);
+        */
 
 
         detectionOutcome = DriveToScanFirstMineral(0.11f, Direction.FORWARD, this); // 0.11 at Dr Warner, 0.15 at carpets

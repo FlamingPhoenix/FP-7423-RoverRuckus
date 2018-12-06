@@ -67,11 +67,24 @@ public class AutoRedCrater extends AutoBase {
 
         // Calculate angle and distance to first two
 
-        MineralPositionViewModel mpvm = GetMineralPositions();
+        MineralPositionViewModel mpvm = getMineralPositions(this.frontTarget);
 
-        // Turn coutner clockwise x amount of degree to view first two minerals
+        // Turn counter clockwise x amount of degree to view first two minerals
+
+        drivetrain.Turn(.3F, (int) (90F - mpvm.right.angle), Direction.COUNTERCLOCKWISE, this.imu, this );
 
         //  Determine if gold is in A, B or C
+
+        List<Recognition> minerals = tfod.getRecognitions();
+        if (minerals.size() == 1)
+        {
+            if (minerals.get(0).getLabel().equals(LABEL_GOLD_MINERAL))
+            {
+                telemetry.addData("Gold", "Got it");
+                telemetry.update();
+                sleep(5000);
+            }
+        }
 
         //  Turn angle to mineral and drive forward certain amount to hit the mineral
 
