@@ -12,15 +12,19 @@ import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 import org.firstinspires.ftc.teamcode.MyClass.PositionToImage;
+
+import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 
 public class DriveTrain {
 
@@ -376,4 +380,22 @@ public class DriveTrain {
     //  added here for test in DE event
     public void ProStrafe(float power, float distance, Direction d , LinearOpMode opMode) {
     }
+
+    // skeleton declaration
+    /*public OpenGLMatrix ObtainRobotCenterLocation(float initialPower, VuforiaTrackable imageTarget, MyBoschIMU imu, OpMode opMode) {
+        OpenGLMatrix robotLocationTransform = null;
+        return robotLocationTransform;
+    }*/
+
+    public OpenGLMatrix ObtainRobotCenterLocation(float initialPower, VuforiaTrackable imageTarget, MyBoschIMU imu, LinearOpMode opMode) {
+
+        OpenGLMatrix lastLocation = null;
+
+        return lastLocation;
+    }
+
+    String format(OpenGLMatrix transformationMatrix) {
+        return transformationMatrix.formatAsTransform();
+    }
+
 }
