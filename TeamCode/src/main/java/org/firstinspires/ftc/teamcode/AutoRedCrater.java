@@ -55,7 +55,7 @@ public class AutoRedCrater extends AutoBase {
         // Detach from the lander
 
         // Move forward 3 inches
-
+/*
         drivetrain.Drive(0.25F, 3F, Direction.FORWARD);
         sleep(8000);
 
@@ -102,31 +102,33 @@ public class AutoRedCrater extends AutoBase {
 
 
 
+*/
 
 
 
-
-        //scanGold(0.12f);
-        //sleep(300);
+        scanGold(0.12f);
+        sleep(300);
         //drivetrain.Turn(), first turn 100 - 120 degree, can test proturn
-        //drivetrain.Turn(0.35f, 95, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.35f, 95, Direction.COUNTERCLOCKWISE, imu, this);
         // then turn to image
-        //sleep(1000);
-        //drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, redTarget, imu, this);
-        //strafe to image
-        //drivetrain.StrafeToImage(0.25f, redTarget, this);
-        //sleep(3000);
+        sleep(1000);
 
-        //if (tfod != null) { // now it is ok to shutdown tfod/vuforia
-        //    tfod.deactivate();
-        //    tfod.shutdown();
-        //}
+        drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, redTarget, imu, this);
+        //strafe to image
+        drivetrain.StrafeToImage(0.25f, redTarget, this);
+        sleep(3000);
+
+        if (tfod != null) { // now it is ok to shutdown tfod/vuforia
+            tfod.deactivate();
+            tfod.shutdown();
+        }
 
         // drive backward for certain distance. here can also test prodrive
-        //drivetrain.Drive(.4f, 58f, Direction.FORWARD);
-        //sleep(300);
+        drivetrain.Drive(.4f, 58f, Direction.FORWARD);
+        sleep(300);
+        markerHook.setPosition(0);
         //drivetrain.Drive(1.0f, 5, Direction.BACKWARD);//  drop marker
-        //drivetrain.Drive(.65f, 70, Direction.BACKWARD); // continue to drive
+        drivetrain.Drive(.65f, 70, Direction.BACKWARD); // continue to drive
     }
 
     public void scanGold(float power){

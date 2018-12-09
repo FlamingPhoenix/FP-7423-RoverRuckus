@@ -5,7 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoControllerEx;
 import com.vuforia.HINT;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -67,9 +69,15 @@ public abstract class AutoBase extends LinearOpMode {
         drivetrain = new DriveTrain(fl, fr, bl, br, this);
         // boolean drivetrain.robotWork = true;
 
-        //setting up variable "markerHook" to the hardware of the robot
         markerHook = hardwareMap.servo.get("markerhook");
-        markerHook.setPosition(0.6);
+        ServoControllerEx primaryController = (ServoControllerEx) markerHook.getController();
+        int grabberServoPort = markerHook.getPortNumber();
+        PwmControl.PwmRange grabberPwmRange = new PwmControl.PwmRange(750, 2250);
+        primaryController.setServoPwmRange(grabberServoPort, grabberPwmRange);
+
+        //setting up variable "markerHook" to the hardware of the robot
+
+        markerHook.setPosition(1.0);
 
         imu = new MyBoschIMU(hardwareMap);
 

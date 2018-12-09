@@ -82,7 +82,7 @@ public class ScanGoldTestNew extends AutoBase {
             telemetry.addData("Silver found", "during first scan");
             Log.i("[phoenix]:Silv detected", "found silver");
             sleep(1000);
-           // drivetrain.Strafe(.3F, 6.5f, Direction.LEFT);
+            // drivetrain.Strafe(.3F, 6.5f, Direction.LEFT);
             //sleep(1000);
             drivetrain.Turn(0.2f, 35, Direction.COUNTERCLOCKWISE, imu, this); // should be 45, compensate for wheels issue
             telemetry.addData("Silver aft turn", "after turn");
@@ -92,14 +92,15 @@ public class ScanGoldTestNew extends AutoBase {
             sleep(1000);
             if (detectionOutcome == 1) {
                 drivetrain.Turn(.2F, originalAngle, Direction.CLOCKWISE, imu, this);
-                drivetrain.Drive(0.2f, 5.0f, Direction.BACKWARD);
-            }
-            else {
+                drivetrain.Drive(0.2f, 5.0f, Direction.FORWARD);
+            } else {
                 drivetrain.Turn(0.2f, 35, Direction.COUNTERCLOCKWISE, imu, this);
+                drivetrain.Drive(0.2f, 10.0f, Direction.FORWARD);
             }
             sleep(1000);
-            scanGold_Diagonal(0.11f);
-            drivetrain.Drive(0.3f, 3f, Direction.FORWARD);}
+            //scanGold_Diagonal(0.11f);
+            //drivetrain.Drive(0.3f, 3f, Direction.FORWARD);}
+           }
 
          else {
             telemetry.addData("no mineral found", "during first scan");
