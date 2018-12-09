@@ -33,6 +33,7 @@ public class ScanGoldTestNew extends AutoBase {
 
     private static final float firstStopAngle = 50f;  // 20 by rough measure
     private static final float secondStopAngle = 90f; // 90 by rough measure.
+    private static final int originalAngle = 90;
     //List<Recognition> updatedRecognitions;
     //Recognition recognition;
 
@@ -82,12 +83,20 @@ public class ScanGoldTestNew extends AutoBase {
             Log.i("[phoenix]:Silv detected", "found silver");
             sleep(1000);
            // drivetrain.Strafe(.3F, 6.5f, Direction.LEFT);
-            sleep(1000);
+            //sleep(1000);
             drivetrain.Turn(0.2f, 35, Direction.COUNTERCLOCKWISE, imu, this); // should be 45, compensate for wheels issue
             telemetry.addData("Silver aft turn", "after turn");
             Log.i("[phoenix]:Silv aft turn", "aft turn");
             sleep(1000);
-            drivetrain.Drive(0.2f, 5.0f, Direction.BACKWARD);
+            detectionOutcome = ScanFirstMineral();
+            sleep(1000);
+            if (detectionOutcome == 1) {
+                drivetrain.Turn(.2F, originalAngle, Direction.CLOCKWISE, imu, this);
+                drivetrain.Drive(0.2f, 5.0f, Direction.BACKWARD);
+            }
+            else {
+                drivetrain.Turn(0.2f, 35, Direction.COUNTERCLOCKWISE, imu, this);
+            }
             sleep(1000);
             scanGold_Diagonal(0.11f);
             drivetrain.Drive(0.3f, 3f, Direction.FORWARD);}
@@ -773,15 +782,19 @@ public class ScanGoldTestNew extends AutoBase {
                                         telemetry.addData("Gold Mineral Position", goldMineralX);
                                         Log.i("[phoenix]:Gold:", Integer.toString(goldMineralX));
                                         scanResult = 1;
-                                    } else if (recognition.getLabel().equals(LABEL_SILVER_MINERAL)) {
+                                    /*} else if (recognition.getLabel().equals(LABEL_SILVER_MINERAL)) {
                                         silverMineral1X = (int) recognition.getLeft();
                                         telemetry.addData("Silver Mineral Position", goldMineralX);
                                         Log.i("[phoenix]:Silver ", Integer.toString(goldMineralX));
-                                        scanResult = 2;
+                                        scanResult = 2;*/
                                     } else {
-                                        telemetry.addData("no mineral found", 0);
-                                        Log.i("[phoenix]:No Mineral:", Integer.toString(0));
-                                        scanResult = 0;
+                                        silverMineral1X = (int) recognition.getLeft();
+                                        telemetry.addData("assume Silver Mineral Position", silverMineral1X);
+                                        Log.i("[phoenix]:assume Sil", Integer.toString(silverMineral1X));
+                                        scanResult = 2;
+                                        //telemetry.addData("no mineral found", 0);
+                                        //Log.i("[phoenix]:No Mineral:", Integer.toString(0));
+                                        //scanResult = 0;
                                     }
                                 }
 

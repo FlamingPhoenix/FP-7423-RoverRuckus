@@ -69,7 +69,7 @@ public abstract class AutoBase extends LinearOpMode {
 
         //setting up variable "markerHook" to the hardware of the robot
         markerHook = hardwareMap.servo.get("markerhook");
-        markerHook.setPosition(0.1);
+        markerHook.setPosition(0.6);
 
         imu = new MyBoschIMU(hardwareMap);
 
