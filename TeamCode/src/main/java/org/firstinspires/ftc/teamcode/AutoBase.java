@@ -72,7 +72,7 @@ public abstract class AutoBase extends LinearOpMode {
         markerHook = hardwareMap.servo.get("markerhook");
         ServoControllerEx primaryController = (ServoControllerEx) markerHook.getController();
         int grabberServoPort = markerHook.getPortNumber();
-        PwmControl.PwmRange grabberPwmRange = new PwmControl.PwmRange(750, 2250);
+        PwmControl.PwmRange grabberPwmRange = new PwmControl.PwmRange(899, 2150);
         primaryController.setServoPwmRange(grabberServoPort, grabberPwmRange);
 
         //setting up variable "markerHook" to the hardware of the robot

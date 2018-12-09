@@ -126,7 +126,8 @@ public class AutoRedCrater extends AutoBase {
         // drive backward for certain distance. here can also test prodrive
         drivetrain.Drive(.4f, 58f, Direction.FORWARD);
         sleep(300);
-        markerHook.setPosition(0);
+        markerHook.setPosition(0.1);
+        sleep(300);
         //drivetrain.Drive(1.0f, 5, Direction.BACKWARD);//  drop marker
         drivetrain.Drive(.65f, 70, Direction.BACKWARD); // continue to drive
     }
