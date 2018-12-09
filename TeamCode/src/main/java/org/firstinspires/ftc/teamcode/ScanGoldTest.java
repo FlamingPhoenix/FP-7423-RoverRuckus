@@ -53,15 +53,15 @@ public class ScanGoldTest extends AutoBase {
 
         waitForStart();
 
-        /*
-        drivetrain.Drive(0.20f, 4.5f, Direction.FORWARD); //3.5
+
+        drivetrain.Drive(0.20f, 6.0f, Direction.FORWARD); //3.5
         sleep(1000);
-        drivetrain.Strafe(0.25f, 10.0f, Direction.RIGHT );
+        drivetrain.Strafe(0.25f, 7.0f, Direction.RIGHT );
         sleep(1000);
-        drivetrain.Turn(0.25f, 55, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.25f, 51, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(1000);
         //drivetrain.Turn(0.40f, 70, Direction.COUNTERCLOCKWISE, imu, this);
-        */
+
 
 
         detectionOutcome = DriveToScanFirstMineral(0.11f, Direction.FORWARD, this); // 0.11 at Dr Warner, 0.15 at carpets
@@ -87,7 +87,7 @@ public class ScanGoldTest extends AutoBase {
             telemetry.addData("Silver aft turn", "after turn");
             Log.i("[phoenix]:Silv aft turn", "aft turn");
             sleep(1000);
-            drivetrain.Drive(0.2f, 6.0f, Direction.BACKWARD);
+            drivetrain.Drive(0.2f, 5.0f, Direction.BACKWARD);
             sleep(1000);
             scanGold_Diagonal(0.11f);
             drivetrain.Drive(0.3f, 3f, Direction.FORWARD);}
