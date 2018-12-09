@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.vuforia.HINT;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -52,6 +53,8 @@ public abstract class AutoBase extends LinearOpMode {
     protected VuforiaLocalizer vuforia;
     protected TFObjectDetector tfod;
 
+    Servo markerHook;
+
     public void initialize() {
 
         fl = hardwareMap.dcMotor.get("frontleft");
@@ -63,6 +66,10 @@ public abstract class AutoBase extends LinearOpMode {
 
         drivetrain = new DriveTrain(fl, fr, bl, br, this);
         // boolean drivetrain.robotWork = true;
+
+        //setting up variable "markerHook" to the hardware of the robot
+        markerHook = hardwareMap.servo.get("markerhook");
+        markerHook.setPosition(0.1);
 
         imu = new MyBoschIMU(hardwareMap);
 
