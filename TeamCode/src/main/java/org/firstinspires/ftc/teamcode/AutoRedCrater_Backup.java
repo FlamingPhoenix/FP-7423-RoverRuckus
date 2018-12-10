@@ -6,6 +6,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -32,8 +33,9 @@ import java.util.List;
  * Created by Steve on 7/22/2018.
  */
 
-@Autonomous(name="DE RedCrater", group="none")
-public class AutoRedCrater extends AutoBase {
+@Disabled
+@Autonomous(name="DE RedCrater Backup", group="none") // keep a copy of Nov 27, red crater code
+public class AutoRedCrater_Backup extends AutoBase {
     private ElapsedTime runtime = new ElapsedTime();
     private static final long  firstHitTime = 1250; // this is from calibration, it is time to detect first object
     private static final long secondHitTime = 5300; // this is time to hit 2nd object..need to calibrate

@@ -43,8 +43,8 @@ public class AutoBlueDepot extends AutoBase {
     public void runOpMode() throws InterruptedException {
 
         initialize();
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         waitForStart();
 
         scanGold(0.12f);

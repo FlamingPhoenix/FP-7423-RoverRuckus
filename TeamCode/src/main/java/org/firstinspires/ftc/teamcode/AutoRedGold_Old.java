@@ -13,8 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  */
 
 @Disabled
-@Autonomous(name="Auto Red Gold-Backup", group="none")
-public class AutoRedGold_Backup extends AutoBase {
+@Autonomous(name="Auto Red Gold-Old", group="none")
+public class AutoRedGold_Old extends AutoBase {
     // just in case for future reference
     @Override
     public void runOpMode() throws InterruptedException {
