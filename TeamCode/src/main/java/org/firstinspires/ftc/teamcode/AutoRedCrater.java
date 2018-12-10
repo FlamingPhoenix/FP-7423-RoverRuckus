@@ -50,41 +50,25 @@ public class AutoRedCrater extends AutoBase {
         initialize();
         waitForStart();
 
+        /*
         // Lower the robot
 
         // Detach from the lander
 
         // Move forward 3 inches
-/*
+
         drivetrain.Drive(0.25F, 3F, Direction.FORWARD);
         sleep(8000);
 
-        // Turn counter clockwise to image
+        // Turn counter clockwise to first mineral
 
         drivetrain.Turn(0.35F, 15, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(15000);
 
+        boolean canseegold = false;
+        while(!canseegold)
+            canseegold = CanSeeGold();
 
-        // Calculate angle and distance to first two
-
-        MineralPositionViewModel mpvm = getMineralPositions(this.frontTarget);
-
-        // Turn counter clockwise x amount of degree to view first two minerals
-
-        drivetrain.Turn(.3F, (int) (90F - mpvm.right.angle), Direction.COUNTERCLOCKWISE, this.imu, this );
-
-        //  Determine if gold is in A, B or C
-
-        List<Recognition> minerals = tfod.getRecognitions();
-        if (minerals.size() == 1)
-        {
-            if (minerals.get(0).getLabel().equals(LABEL_GOLD_MINERAL))
-            {
-                telemetry.addData("Gold", "Got it");
-                telemetry.update();
-                sleep(5000);
-            }
-        }
 
         //  Turn angle to mineral and drive forward certain amount to hit the mineral
 
@@ -100,9 +84,8 @@ public class AutoRedCrater extends AutoBase {
 
         //  Park in crater
 
-
-
 */
+
 
 
 
@@ -130,6 +113,7 @@ public class AutoRedCrater extends AutoBase {
         sleep(300);
         //drivetrain.Drive(1.0f, 5, Direction.BACKWARD);//  drop marker
         drivetrain.Drive(.65f, 70, Direction.BACKWARD); // continue to drive
+
     }
 
     public void scanGold(float power){
