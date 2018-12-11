@@ -112,7 +112,7 @@ public class AutoRedCraterNew extends AutoBase {
 
 
         sleep(300);
-        drivetrain.Turn(0.35f, 95, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.35f, 48, Direction.COUNTERCLOCKWISE, imu, this);
         // then turn to image
         sleep(300);
         // this is optional, as most likely the robot will see image after above 95 degree turn.
