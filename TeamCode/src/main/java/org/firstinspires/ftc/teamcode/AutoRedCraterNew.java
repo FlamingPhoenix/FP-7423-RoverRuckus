@@ -55,12 +55,12 @@ public class AutoRedCraterNew extends AutoBase {
         // Prep steps a) Move forward 3 inches, b) strafe, c) turn about 45 degree, ready to scan mineral
 
 /////////////////  ////////////////////////////////////////////////////////////////////////////////////////////////
-        drivetrain.Drive(0.20f, 6.0f, Direction.FORWARD); //3.5
-        sleep(300);
-        drivetrain.Strafe(0.25f, 7.0f, Direction.RIGHT );
-        sleep(300);
-        drivetrain.Turn(0.25f, 51, Direction.COUNTERCLOCKWISE, imu, this);
-        sleep(300);
+        //drivetrain.Drive(0.20f, 6.0f, Direction.FORWARD); //3.5
+        //sleep(300);
+        //drivetrain.Strafe(0.25f, 7.0f, Direction.RIGHT );
+        //sleep(300);
+        //drivetrain.Turn(0.25f, 51, Direction.COUNTERCLOCKWISE, imu, this);
+        //sleep(300);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // scan first mineral
@@ -96,12 +96,13 @@ public class AutoRedCraterNew extends AutoBase {
             telemetry.addData("Silver aft turn", "after turn");
             Log.i("[phoenix]:Silv aft turn", "aft turn");
             sleep(300);
-            drivetrain.Drive(0.2f, 5.0f, Direction.BACKWARD);
+            drivetrain.Drive(0.2f, 3.0f, Direction.BACKWARD);
             sleep(300);
             // scan the next two minerals for GOLD
             scanGold_Diagonal(0.11f, 240, 380, this);
             sleep(100);
-            drivetrain.Drive(0.3f, 1f, Direction.FORWARD);}
+            //drivetrain.Drive(0.3f, 1f, Direction.FORWARD);
+            }
 
          else {
             telemetry.addData("no mineral found", "during first scan");
@@ -112,13 +113,13 @@ public class AutoRedCraterNew extends AutoBase {
 
 
         sleep(300);
-        drivetrain.Turn(0.35f, 48, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.35f, 45, Direction.COUNTERCLOCKWISE, imu, this);
         // then turn to image
         sleep(300);
         // this is optional, as most likely the robot will see image after above 95 degree turn.
         drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, redTarget, imu, this);
         //strafe to image
-        drivetrain.StrafeToImage(0.25f, redTarget, this);
+        drivetrain.StrafeToImage(0.40f, redTarget, this);
 
         // this sleep could be tuned to accommodate alliance partner, depending on when they coming to depot and drop their maker
         sleep(300);
@@ -500,8 +501,9 @@ public class AutoRedCraterNew extends AutoBase {
                                               drivetrain.Strafe(0.4f, 4.5f, Direction.LEFT);
                                               drivetrain.StopAll();
                                               sleep(500);
-                                              // here drive 1.414*12 inch
-                                              drivetrain.Drive(0.3f, 16f, Direction.FORWARD);
+                                              // here drive 1.414*12 inch = 17.0
+                                        // ACTIVE TESTING:  Original value 34f for distance
+                                              drivetrain.Drive(0.3f, 28f, Direction.FORWARD);  //
                                         gold_Found = 2; // gold is in B position
                                         currentPosition = 0;
                                         //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -518,6 +520,7 @@ public class AutoRedCraterNew extends AutoBase {
                                             drivetrain.Strafe(0.4f, 4.5F, Direction.LEFT);
                                             drivetrain.StopAll();
                                             sleep(500);
+                                            drivetrain.Drive(0.3f, 17f, Direction.FORWARD);
                                         gold_Found = 3;  // gold is in C position
                                         currentPosition = 0;
                                         //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

@@ -77,7 +77,9 @@ public abstract class AutoBase extends LinearOpMode {
 
         //setting up variable "markerHook" to the hardware of the robot
 
-        markerHook.setPosition(1.0);
+        // WARNING!!!  Do not enable this line unless you are specifically testing the marker hook because when it is in position 1,
+        // It is using power the entire time and the servo will overheat.
+        //markerHook.setPosition(0.9);
 
         imu = new MyBoschIMU(hardwareMap);
 
