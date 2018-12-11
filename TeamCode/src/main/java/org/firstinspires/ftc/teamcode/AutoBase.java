@@ -186,4 +186,19 @@ public abstract class AutoBase extends LinearOpMode {
 
         return positions;
     }
+
+    public boolean CanSeeGold() {
+
+        boolean canseegold = false;
+
+        if (tfod != null) {
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                telemetry.update();
+            }
+        }
+
+        return canseegold;
+    }
 }
