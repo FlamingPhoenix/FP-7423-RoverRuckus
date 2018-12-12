@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.MyClass.PositionToImage;
 /**
  * Created by Steve on 7/22/2018.
  */
-
+@Disabled
 @Autonomous(name="My First Auto", group="none")
 public class MyFirstAuto extends AutoBase {
 

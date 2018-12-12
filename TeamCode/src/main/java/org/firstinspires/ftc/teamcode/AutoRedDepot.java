@@ -27,7 +27,7 @@ import java.util.List;
  */
 
 //@Disabled
-@Autonomous(name="DE RedDepot", group="none")
+@Autonomous(name="Archmere RedDepot", group="none")
 public class AutoRedDepot extends AutoBase {
 
         private ElapsedTime runtime = new ElapsedTime();

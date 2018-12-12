@@ -69,7 +69,7 @@ import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
  */
 
 @TeleOp(name = "TF Object Detection - Erik", group = "Concept")
-//@Disabled
+@Disabled
 public class TensorFlowObjID extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";

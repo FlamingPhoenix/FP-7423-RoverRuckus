@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Direction;
 import org.firstinspires.ftc.teamcode.DriveTrain;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
-//@Disabled
+@Disabled
 @Autonomous(name = "Erik Test ProDrive", group = "none")
 public class ExperimentProDrive extends LinearOpMode {
 

@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 //@Disabled
-@Autonomous(name="Test RedCrater", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
+@Autonomous(name="Archmere RedCrater", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
 
 public class AutoRedCraterNew extends AutoBase {
 
@@ -79,11 +79,11 @@ public class AutoRedCraterNew extends AutoBase {
             telemetry.addData("Gold found", "during first scan");
             Log.i("[phoenix]:gold detected", "found gold");
             sleep(300);
-            StrafeWhileVisible(0.4f, 10.0f, 460f, 10, this);
+            StrafeWhileVisible(0.4f, 14.0f, 520f, 10, this); // was 10, goldwidth was 460
             telemetry.addData("Gold aft straf", "after strafe");
             Log.i("[phoenix]:gold aft str", "after strafe");
             sleep(300);
-            drivetrain.Strafe(0.3f, 6.5f, Direction.LEFT);
+            drivetrain.Strafe(0.3f, 8.5f, Direction.LEFT); // was 6.5
             sleep(100);
             drivetrain.Turn(0.4f, 35, Direction.COUNTERCLOCKWISE, imu, this); // shouid be 45, compensate for wheel issue
             sleep(100);
@@ -99,7 +99,7 @@ public class AutoRedCraterNew extends AutoBase {
             drivetrain.Drive(0.2f, 3.0f, Direction.BACKWARD);
             sleep(300);
             // scan the next two minerals for GOLD
-            scanGold_Diagonal(0.11f, 240, 380, this);
+            scanGold_Diagonal(0.11f, 200, 420, this); // was 240 and 380
             sleep(100);
             //drivetrain.Drive(0.3f, 1f, Direction.FORWARD);
             }
@@ -112,15 +112,18 @@ public class AutoRedCraterNew extends AutoBase {
 
 
 
-        sleep(300);
-        drivetrain.Turn(0.35f, 45, Direction.COUNTERCLOCKWISE, imu, this);
+        sleep(200);
+        drivetrain.Turn(0.35f, 52, Direction.COUNTERCLOCKWISE, imu, this);
         // then turn to image
         sleep(300);
-        // this is optional, as most likely the robot will see image after above 95 degree turn.
+        telemetry.addData(" after the turn, before strafe to image", "before strafe to image");
+        Log.i("[phoenix]:after turn", "before strafe to image");
+        // this is optional, as most likely the robot will see image after above 52 degree turn.
         drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, redTarget, imu, this);
         //strafe to image
-        drivetrain.StrafeToImage(0.40f, redTarget, this);
-
+        drivetrain.StrafeToImage(0.25f, redTarget, this); // was 0.4
+        telemetry.addData(" after the strafe to image", "after strafe to image");
+        Log.i("[phoenix]:after strafe", "after strafe to image");
         // this sleep could be tuned to accommodate alliance partner, depending on when they coming to depot and drop their maker
         sleep(300);
 
@@ -130,13 +133,13 @@ public class AutoRedCraterNew extends AutoBase {
         }
 
         // drive backward for to depot
-        drivetrain.Drive(.4f, 58f, Direction.FORWARD);
+   //     drivetrain.Drive(.4f, 58f, Direction.FORWARD);
         sleep(300);
         // drop marker
-        markerHook.setPosition(0.1);
+   //     markerHook.setPosition(0.1);
         sleep(300);
         //drivetrain.Drive(1.0f, 5, Direction.BACKWARD);//  drop marker, need to add back 5 ?
-        drivetrain.Drive(.65f, 75, Direction.BACKWARD); // continue to drive to crater
+   //     drivetrain.Drive(.65f, 75, Direction.BACKWARD); // continue to drive to crater
 
         // end of auto routine.
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -496,14 +499,16 @@ public class AutoRedCraterNew extends AutoBase {
                                         //StrafeWhileVisible(0.30f, 29f, 5);
 
 // drivetrain.StopAll();
-                                              drivetrain.Strafe(0.4f, 6.5f, Direction.RIGHT);
-                                              sleep(500);
-                                              drivetrain.Strafe(0.4f, 4.5f, Direction.LEFT);
+                                              drivetrain.Drive(0.2f, 3.0f, Direction.FORWARD);
+                                              sleep(200);
+                                              drivetrain.Strafe(0.4f, 7.5f, Direction.RIGHT);// was 6.5
+                                              sleep(200);
+                                              drivetrain.Strafe(0.4f, 5.5f, Direction.LEFT); // was 4.5
                                               drivetrain.StopAll();
-                                              sleep(500);
+                                              sleep(200);
                                               // here drive 1.414*12 inch = 17.0
                                         // ACTIVE TESTING:  Original value 34f for distance
-                                              drivetrain.Drive(0.3f, 28f, Direction.FORWARD);  //
+                                              drivetrain.Drive(0.3f, 25f, Direction.FORWARD);  //
                                         gold_Found = 2; // gold is in B position
                                         currentPosition = 0;
                                         //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -514,13 +519,14 @@ public class AutoRedCraterNew extends AutoBase {
                                         opMode.telemetry.update();
                                     } else if ((gold_Found == 0)) { //1380 + 700 = 2180, 1380+600= 1980, 7 inches more, currentTime > (secondHitTime + 4000)) { // third time hit
                                         //StrafeWhileVisible(0.30f, 5.5f, 5);
-                                            drivetrain.Strafe(0.4f, 6.5F, Direction.RIGHT);
+                                            drivetrain.Drive(0.2f, 3.0f, Direction.FORWARD);
+                                            drivetrain.Strafe(0.4f, 7.5F, Direction.RIGHT); //// was 6.5
                                             drivetrain.StopAll();
                                             sleep(500);
-                                            drivetrain.Strafe(0.4f, 4.5F, Direction.LEFT);
+                                            drivetrain.Strafe(0.4f, 5.5F, Direction.LEFT); //// was 4.5
                                             drivetrain.StopAll();
                                             sleep(500);
-                                            drivetrain.Drive(0.3f, 17f, Direction.FORWARD);
+                                            drivetrain.Drive(0.3f, 14f, Direction.FORWARD);
                                         gold_Found = 3;  // gold is in C position
                                         currentPosition = 0;
                                         //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

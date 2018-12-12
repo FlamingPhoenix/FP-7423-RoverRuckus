@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -21,10 +22,10 @@ import java.util.List;
  * Created by Steve on 7/22/2018.
  */
 
-//@Disabled
+@Disabled
 @Autonomous(name="Test Scan Gold", group="none")
 
-public class ScanGoldTest extends AutoBase {
+public class ScanGoldTest extends AutoBase { // this is original scan gold test in prep for DE event on Nov 27
 
     private ElapsedTime runtime = new ElapsedTime();
     private static final long firstHitTime = 1250; // this is from calibration, it is time to detect first object

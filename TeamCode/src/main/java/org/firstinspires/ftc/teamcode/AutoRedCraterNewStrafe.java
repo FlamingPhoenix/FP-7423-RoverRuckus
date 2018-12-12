@@ -3,13 +3,14 @@ package org.firstinspires.ftc.teamcode;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.AutoBase;
+import org.firstinspires.ftc.teamcode.Direction;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
 import java.util.List;
@@ -18,10 +19,10 @@ import java.util.List;
  * Created by Steve on 7/22/2018.
  */
 
-@Disabled
-@Autonomous(name="Test Scan Gold New", group="none")// this approach do not scan while drive, will just stop and scan.
+//@Disabled
+@Autonomous(name="RedCrater StrafeVersion", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
 
-public class ScanGoldTestNew extends AutoBase {
+public class AutoRedCraterNewStrafe extends AutoBase {
 
     private ElapsedTime runtime = new ElapsedTime();
     private static final long firstHitTime = 1250; // this is from calibration, it is time to detect first object
@@ -34,74 +35,78 @@ public class ScanGoldTestNew extends AutoBase {
 
     private static final float firstStopAngle = 50f;  // 20 by rough measure
     private static final float secondStopAngle = 90f; // 90 by rough measure.
-    private static final int originalAngle = 90;
-    //List<Recognition> updatedRecognitions;
-    //Recognition recognition;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         initialize();
-        int detectionOutcome = 0;
-        //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        // Wait for the start button
+
         telemetry.addData(">", "Press Start to test ScanGold.");
         telemetry.update();
 
+        // need to set up Marker first.
+        // Wait for the start button
         waitForStart();
 
 
-        drivetrain.Drive(0.20f, 3.0f, Direction.FORWARD); //3.5
-        sleep(1000);
+        // Lower the robot
+
+        // Detach from the lander
+
+        // Prep steps a) Move forward 3 inches, b) strafe, c) turn about 45 degree, ready to scan mineral
+
+/////////////////  ////////////////////////////////////////////////////////////////////////////////////////////////
+        //drivetrain.Drive(0.20f, 6.0f, Direction.FORWARD); //3.5
+        //sleep(300);
         //drivetrain.Strafe(0.25f, 7.0f, Direction.RIGHT );
-        //sleep(1000);
-        drivetrain.Turn(0.25f, 51, Direction.COUNTERCLOCKWISE, imu, this);
-        sleep(1000);
-        //drivetrain.Turn(0.40f, 70, Direction.COUNTERCLOCKWISE, imu, this);
+        //sleep(300);
+        //drivetrain.Turn(0.25f, 51, Direction.COUNTERCLOCKWISE, imu, this);
+        //sleep(300);
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // scan first mineral
 
+        int detectionOutcome = 0;
 
-        //detectionOutcome = DriveToScanFirstMineral(0.11f, Direction.FORWARD, this); // 0.11 at Dr Warner, 0.15 at carpets
-        detectionOutcome = ScanFirstMineralSimple();
-        telemetry.addData("mineral scan outcome", detectionOutcome);
-        Log.i("[phoenix]:min outcome", Integer.toString(detectionOutcome));
+        // could have another variable, stop_distance, so that even no GOLD is found, will stop and pause.
+        detectionOutcome = DriveToScanFirstMineral(0.11f, Direction.FORWARD, this); // 0.11 at Dr Warner, 0.15 at carpets
+        sleep(300);
 
-        sleep(500);
+        // Explanation: decide next step based on outcome of first mineral,
+        // if A is gold, hit it anc come back, turn 45 dgree CCW
+        // if A is not Gold, turn 45 degrees CCW, scan Gold Diagonally, once find the gold, hit and come back.
+
         if (detectionOutcome == 1) { //ScanFirstMineral() == 1
             telemetry.addData("Gold found", "during first scan");
             Log.i("[phoenix]:gold detected", "found gold");
-            sleep(1000);
-            StrafeWhileVisible(0.4f, 10.0f, 10);
+            sleep(300);
+            StrafeWhileVisible(0.3f, 14.0f, 520f, 10, this); // was 10, goldwidth was 460
             telemetry.addData("Gold aft straf", "after strafe");
             Log.i("[phoenix]:gold aft str", "after strafe");
-            sleep(1000);
-            drivetrain.Strafe(0.3f, 6.5f, Direction.LEFT);
+            sleep(300);
+            drivetrain.Strafe(0.30f, 8.5f, Direction.LEFT); // was 6.5
+            sleep(100);
             drivetrain.Turn(0.4f, 35, Direction.COUNTERCLOCKWISE, imu, this); // shouid be 45, compensate for wheel issue
-            drivetrain.Drive(0.3f, 10f, Direction.FORWARD); }
-        else if (detectionOutcome == 2) { //ScanFirstMineral() == 2
+            //this is to test strafe directly to image w/o driving forward
+            //sleep(100);
+            //drivetrain.Drive(0.3f, 32f, Direction.FORWARD);
+            }
+        else if (detectionOutcome == 2) { //ScanFirstMineral() == 2, in this scenario, either B or C is GOLD
             telemetry.addData("Silver found", "during first scan");
             Log.i("[phoenix]:Silv detected", "found silver");
-            sleep(1000);
-            // drivetrain.Strafe(.3F, 6.5f, Direction.LEFT);
-            //sleep(1000);
+            sleep(300);
             drivetrain.Turn(0.2f, 35, Direction.COUNTERCLOCKWISE, imu, this); // should be 45, compensate for wheels issue
             telemetry.addData("Silver aft turn", "after turn");
             Log.i("[phoenix]:Silv aft turn", "aft turn");
-            sleep(1000);
-            detectionOutcome = ScanFirstMineralSimple();
-            sleep(1000);
-            if (detectionOutcome == 1) {
-                drivetrain.Turn(.2F, originalAngle, Direction.CLOCKWISE, imu, this);
-                drivetrain.Drive(0.2f, 5.0f, Direction.FORWARD);
-            } else {
-                drivetrain.Turn(0.2f, 35, Direction.COUNTERCLOCKWISE, imu, this);
-                drivetrain.Drive(0.2f, 10.0f, Direction.FORWARD);
+            sleep(300);
+            drivetrain.Drive(0.2f, 3.0f, Direction.BACKWARD);
+            sleep(300);
+            // scan the next two minerals for GOLD
+            scanGold_Diagonal(0.11f, 200, 420, this); // was 240 and 380
+            sleep(100);
+            //drivetrain.Drive(0.3f, 1f, Direction.FORWARD);
             }
-            sleep(1000);
-            //scanGold_Diagonal(0.11f);
-            //drivetrain.Drive(0.3f, 3f, Direction.FORWARD);}
-           }
 
          else {
             telemetry.addData("no mineral found", "during first scan");
@@ -109,32 +114,40 @@ public class ScanGoldTestNew extends AutoBase {
             Log.i("[phoenix]: scan result", "no gold");
         }
 
-    //StrafeWhileVisible(0.30f, 34, 5);
-    //TurnToGold(0.14f, 175, Direction.COUNTERCLOCKWISE, imu, this, 10 );
-    //scanGold(0.125f); // used 0.105 for calibartion, in FTC field, power = 0.12f, on carpet, 0.14f
-    sleep(1000);
-    //scanGold_Diagonal(0.16f);
-
-    //drivetrain.Turn(), first turn 100 - 120 degree, can test proturn
-            /*drivetrain.Turn(0.45f, 95, Direction.COUNTERCLOCKWISE, imu, this);
-            // then turn to image
-            sleep(1000);
-            //drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, blueTarget, imu, this);
-            //strafe to image
-            drivetrain.StrafeToImage(0.25f, blueTarget, this);
-            sleep(3000);
-
-            if (tfod != null) { // now it is ok to shutdown tfod/vuforia
-                tfod.deactivate();
-                tfod.shutdown();
 
 
-            // drive backward for certain distance. here can also test prodrive
-            drivetrain.Drive(.4f, 58f, Direction.FORWARD);
-            sleep(300);
-            drivetrain.Drive(1.0f, 5, Direction.BACKWARD);//  drop marker
-            drivetrain.Drive(.65f, 70, Direction.BACKWARD); // continue to drive
-            */
+        sleep(200);
+        // check angle, 80 is ok, a bit over, try 70 or 72
+        drivetrain.Turn(0.35f, 70, Direction.COUNTERCLOCKWISE, imu, this); // was 52 for drive forward. 95 for no drving
+        // then turn to image
+        sleep(300);
+        telemetry.addData(" after the turn, before strafe to image", "before strafe to image");
+        Log.i("[phoenix]:after turn", "before strafe to image");
+        // this is optional, as most likely the robot will see image after above 52 degree turn.
+        drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, redTarget, imu, this);
+        //strafe to image
+        drivetrain.StrafeToImage(0.25f, redTarget, this); // was 0.4
+        telemetry.addData(" after the strafe to image", "after strafe to image");
+        Log.i("[phoenix]:after strafe", "after strafe to image");
+        // this sleep could be tuned to accommodate alliance partner, depending on when they coming to depot and drop their maker
+        sleep(300);
+
+        if (tfod != null) { // now it is ok to shutdown tfod/vuforia
+            tfod.deactivate();
+            tfod.shutdown();
+        }
+
+        // drive backward for to depot
+   //     drivetrain.Drive(.4f, 58f, Direction.FORWARD);
+        sleep(300);
+        // drop marker
+   //     markerHook.setPosition(0.1);
+        sleep(300);
+        //drivetrain.Drive(1.0f, 5, Direction.BACKWARD);//  drop marker, need to add back 5 ?
+   //     drivetrain.Drive(.65f, 75, Direction.BACKWARD); // continue to drive to crater
+
+        // end of auto routine.
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
 
@@ -222,7 +235,7 @@ public class ScanGoldTestNew extends AutoBase {
                                         if (currentPosition < (firstHitEncoderCount + 900) && (gold_Found == 0)) {//900+312 = 1112 //300+firsthit = 612,about 3.5 inches extra(currentTime < (secondHitTime - 500)) { // this is first time hit
                                             // should try pro-strafe instead of regular strafe, to test navigation control
 
-                                            StrafeWhileVisible(0.30f, 29f, 5);
+                                            StrafeWhileVisible(0.30f, 29f, 460f, 5, this);
 
 // drivetrain.StopAll();
 //                                              drivetrain.Strafe(0.4f, 25f, Direction.RIGHT);
@@ -239,7 +252,7 @@ public class ScanGoldTestNew extends AutoBase {
                                             Log.i("[phoenix]:gold freq", Integer.toString(gold_loop_No));
                                             telemetry.update();
                                         } else if (currentPosition > (secondHitEncoderCount + 700) && (gold_Found == 0)) { //1380 + 700 = 2180, 1380+600= 1980, 7 inches more, currentTime > (secondHitTime + 4000)) { // third time hit
-                                            StrafeWhileVisible(0.30f, 5.5f, 5);
+                                            StrafeWhileVisible(0.30f, 5.5f, 460f, 5, this);
 //                                            drivetrain.Strafe(0.4f, 5.5F, Direction.RIGHT);
 //                                            drivetrain.StopAll();
 //                                            sleep(500);
@@ -256,7 +269,7 @@ public class ScanGoldTestNew extends AutoBase {
                                             telemetry.update();
                                         } else if (gold_Found == 0) {
 
-                                            StrafeWhileVisible(0.30f, 14f, 5);
+                                            StrafeWhileVisible(0.30f, 14f, 460f, 5, this);
 //                                            drivetrain.Strafe(0.4f, 14F, Direction.RIGHT);
 //                                            drivetrain.StopAll();
 //                                            sleep(1500);
@@ -298,7 +311,7 @@ public class ScanGoldTestNew extends AutoBase {
 
         }
 
-        public void StrafeWhileVisible ( float power, float stop_distance, long report_time){
+        public void StrafeWhileVisible ( float power, float stop_distance, float maxGoldWidth, long report_time, LinearOpMode opMode){
 
             double cur_Angle; // angle provided by TF method
             float cur_left_Gold;
@@ -312,12 +325,12 @@ public class ScanGoldTestNew extends AutoBase {
             int stop_encoder_count;
             int base_encoder_count;
             int local_encoder_count = 0; // encoder count after method is called.
-            telemetry.addData("in strafe test ", "strafe test");
+            opMode.telemetry.addData("in strafe test ", "strafe test");
 
             Log.i("[phoenix]:str-tst dist", Float.toString(stop_distance));
             //     Log.i("[phoenix]:NoGold, eCnt ", Integer.toString(currentPosition));
             //     Log.i("[phoenix]:Gold Fflag ", Integer.toString(gold_Found));
-            telemetry.update();
+            opMode.telemetry.update();
 
             fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -333,7 +346,7 @@ public class ScanGoldTestNew extends AutoBase {
             Log.i("[phoenix]:base time", Long.toString(base_Time));
             // stafe to right..
 
-            while (opModeIsActive() && (cur_Gold_Width < 460.0f) && (local_encoder_count<= stop_encoder_count)) { //600 is too much, 500 not engouth(local_encoder_count < stop_encoder_count)) {
+            while (opModeIsActive() && (cur_Gold_Width < maxGoldWidth) && (local_encoder_count<= stop_encoder_count)) { //600 is too much, 500 not engouth(local_encoder_count < stop_encoder_count)) {
                 // report every 50 m
 
                 //base_Time = Math.round(runtime.milliseconds());
@@ -368,7 +381,7 @@ public class ScanGoldTestNew extends AutoBase {
 
                                     if ((Math.round(runtime.milliseconds()) - base_Time) > report_time) {
 
-                                        telemetry.addData("center of gold ", cur_center_Gold);
+                                        opMode.telemetry.addData("center of gold ", cur_center_Gold);
                                         Log.i("[phoenix]:s_goldcenter", Float.toString(cur_center_Gold));
                                         //Log.i("[phoenix]:s_goldleft", Float.toString(cur_left_Gold));
                                         //Log.i("[phoenix]:s_goldright", Float.toString(cur_right_Gold));
@@ -404,7 +417,7 @@ public class ScanGoldTestNew extends AutoBase {
             drivetrain.StopAll();
         }
 
-    public void scanGold_Diagonal ( float power){
+    public void scanGold_Diagonal ( float power, float leftScreenPosition, float rightScreenPosition,LinearOpMode opMode){
         long currentTime;
         int turnAngle;
         int gold_Found = 0;
@@ -448,7 +461,7 @@ public class ScanGoldTestNew extends AutoBase {
 
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
-                    telemetry.addData("# Object Detected", updatedRecognitions.size());
+                    opMode.telemetry.addData("# Object Detected", updatedRecognitions.size());
                     if (updatedRecognitions.size() <= 3) {
                         int goldMineralX = -1;
                         int silverMineral1X = -1;
@@ -457,7 +470,7 @@ public class ScanGoldTestNew extends AutoBase {
                             if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                                 gold_loop_No = gold_loop_No + 1;
                                 currentTime = Math.round(runtime.milliseconds());
-                                telemetry.addData("1st Gold time ", currentTime);
+                                opMode.telemetry.addData("1st Gold time ", currentTime);
                                 Log.i("[phoenix]:goldtime", Double.toString(currentTime));
 
                                 //if (currentTime < (1.5*secondHitTime)) {
@@ -468,7 +481,7 @@ public class ScanGoldTestNew extends AutoBase {
                                 center_Gold = (left_Gold + right_Gold) / 2f;
                                 current_Gold_Width = right_Gold - left_Gold;
 
-                                telemetry.addData("center of gold ", center_Gold);
+                                opMode.telemetry.addData("center of gold ", center_Gold);
                                 Log.i("[phoenix]:i_goldcenter", Float.toString(center_Gold));
                                 Log.i("[phoenix]:i_goldleft", Float.toString(left_Gold));
                                 Log.i("[phoenix]:i_goldright", Float.toString(right_Gold));
@@ -476,50 +489,58 @@ public class ScanGoldTestNew extends AutoBase {
                                 Log.i("[phoenix]:i_Pre Cnt ", Integer.toString(fr.getCurrentPosition()));
 
                                 // 2018-11-26 Ended the evening not sure what to put for the if statement below.  May need to do hand testing to test left, right and center values
-                                if ((center_Gold > 270f) && (center_Gold < 340f)) {   // here 300 can change to other numbers, perhaps 400 ?
+                                if ((center_Gold > leftScreenPosition) && (center_Gold < rightScreenPosition)) {   //270f, 340f here 300 can change to other numbers, perhaps 400 ?
                                     //currentTime = Math.round(runtime.milliseconds()); // use this to control position
                                     currentTime = Math.round(runtime.milliseconds());
                                     Log.i("[phoenix]:goldtime ", Double.toString(currentTime));
                                     drivetrain.StopAll();
                                     currentPosition = Math.abs(fr.getCurrentPosition());
-                                    telemetry.addData("aft encoder ", currentPosition);
+                                    opMode.telemetry.addData("aft encoder ", currentPosition);
                                     Log.i("[phoenix]:aft encoder ", Integer.toString(currentPosition));
-                                    telemetry.update();
+                                    opMode.telemetry.update();
                                     if (currentPosition < (firstHitEncoderCount + 900) && (gold_Found == 0)) {//900+312 = 1112 //300+firsthit = 612,about 3.5 inches extra(currentTime < (secondHitTime - 500)) { // this is first time hit
                                         // should try pro-strafe instead of regular strafe, to test navigation control
 
                                         //StrafeWhileVisible(0.30f, 29f, 5);
 
 // drivetrain.StopAll();
-                                              drivetrain.Strafe(0.4f, 6.5f, Direction.RIGHT);
-                                              sleep(500);
-                                              drivetrain.Strafe(0.4f, 4.5f, Direction.LEFT);
+                                              drivetrain.Drive(0.2f, 3.0f, Direction.FORWARD);
+                                              sleep(200);
+                                              drivetrain.Strafe(0.30f, 7.5f, Direction.RIGHT);// was 6.5
+                                              sleep(200);
+                                              drivetrain.Strafe(0.30f, 5.5f, Direction.LEFT); // was 4.5
                                               drivetrain.StopAll();
-                                              sleep(500);
+                                              //sleep(200);
+                                              // here drive 1.414*12 inch = 17.0
+                                        // ACTIVE TESTING:  Original value 34f for distance
+                                              //drivetrain.Drive(0.3f, 25f, Direction.FORWARD);  //skip if strafe directly
                                         gold_Found = 2; // gold is in B position
                                         currentPosition = 0;
                                         //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                        telemetry.addData("at end of gold loop", "gold 2");
+                                        opMode.telemetry.addData("at end of gold loop", "gold 2");
                                         Log.i("[phoenix]:goldloop", "at end of gold loop 2");
-                                        telemetry.addData("gold frequency", gold_loop_No);
+                                        opMode.telemetry.addData("gold frequency", gold_loop_No);
                                         Log.i("[phoenix]:gold freq", Integer.toString(gold_loop_No));
-                                        telemetry.update();
+                                        opMode.telemetry.update();
                                     } else if ((gold_Found == 0)) { //1380 + 700 = 2180, 1380+600= 1980, 7 inches more, currentTime > (secondHitTime + 4000)) { // third time hit
                                         //StrafeWhileVisible(0.30f, 5.5f, 5);
-                                            drivetrain.Strafe(0.4f, 6.5F, Direction.RIGHT);
+                                            drivetrain.Drive(0.2f, 3.0f, Direction.FORWARD);
+                                            drivetrain.Strafe(0.30f, 7.5F, Direction.RIGHT); //// was 6.5
                                             drivetrain.StopAll();
                                             sleep(500);
-                                            drivetrain.Strafe(0.4f, 4.5F, Direction.LEFT);
+                                            drivetrain.Strafe(0.30f, 5.5F, Direction.LEFT); //// was 4.5
                                             drivetrain.StopAll();
-                                            sleep(500);
+                                            //sleep(200);
+                                            //drivetrain.Drive(0.3f, 14f, Direction.FORWARD);// skip if strafe directly
+
                                         gold_Found = 3;  // gold is in C position
                                         currentPosition = 0;
                                         //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                        telemetry.addData("at end of gold loop", "gold 3");
+                                        opMode.telemetry.addData("at end of gold loop", "gold 3");
                                         Log.i("[phoenix]:goldloop", "at end of gold loop 3");
-                                        telemetry.addData("gold frequency", gold_loop_No);
+                                        opMode.telemetry.addData("gold frequency", gold_loop_No);
                                         Log.i("[phoenix]:gold freq", Integer.toString(gold_loop_No));
-                                        telemetry.update();
+                                        opMode.telemetry.update();
                                     } /*else if (gold_Found == 0) {
 
                                         StrafeWhileVisible(0.30f, 14f, 5);
@@ -544,21 +565,21 @@ public class ScanGoldTestNew extends AutoBase {
                     }
                 }
 
-                telemetry.update();
+                opMode.telemetry.update();
             }
         }
 
         if (gold_Found == 0) {
             currentTime = Math.round(runtime.milliseconds());
             currentPosition = fr.getCurrentPosition();
-            telemetry.addData("no gold found, current time ", currentTime);
-            telemetry.addData("no gold found, current counter ", currentPosition);
-            telemetry.addData("gold found flag ", gold_Found);
+            opMode.telemetry.addData("no gold found, current time ", currentTime);
+            opMode.telemetry.addData("no gold found, current counter ", currentPosition);
+            opMode.telemetry.addData("gold found flag ", gold_Found);
 
             Log.i("[phoenix]:NoGold, time ", Double.toString(currentTime));
             Log.i("[phoenix]:NoGold, eCnt ", Integer.toString(currentPosition));
             Log.i("[phoenix]:Gold Fflag ", Integer.toString(gold_Found));
-            telemetry.update();
+            opMode.telemetry.update();
             drivetrain.StopAll();
         }
 
@@ -674,7 +695,7 @@ public class ScanGoldTestNew extends AutoBase {
                                             if (currentAngle < (startAngle + firstStopAngle + 20) && (gold_Found == 0)) {
                                                 // should try pro-strafe instead of regular strafe, to test navigation control
 
-                                                StrafeWhileVisible(0.30f, 19f, 5);
+                                                StrafeWhileVisible(0.30f, 19f,  460f, 5, this);
 
 // drivetrain.StopAll();
 //                                              drivetrain.Strafe(0.4f, 25f, Direction.RIGHT);
@@ -691,7 +712,7 @@ public class ScanGoldTestNew extends AutoBase {
                                                 Log.i("[phoenix]:gold freq", Integer.toString(gold_loop_No));
                                                 telemetry.update();
                                             } else if (currentAngle < (startAngle + secondStopAngle + 20) && (gold_Found == 0)) {
-                                                StrafeWhileVisible(0.30f, 5.5f, 5);
+                                                StrafeWhileVisible(0.30f, 5.5f, 460f, 5, this);
 //                                            drivetrain.Strafe(0.4f, 5.5F, Direction.RIGHT);
 //                                            drivetrain.StopAll();
 //                                            sleep(500);
@@ -708,7 +729,7 @@ public class ScanGoldTestNew extends AutoBase {
                                                 telemetry.update();
                                             } else if (gold_Found == 0) {   // gold is at third position..
 
-                                                StrafeWhileVisible(0.30f, 19f, 5);
+                                                StrafeWhileVisible(0.30f, 19,  460f, 5, this);
 //
 //                                             drivetrain.Strafe(0.4f, 14F, Direction.RIGHT);
 //                                            drivetrain.StopAll();
@@ -756,8 +777,8 @@ public class ScanGoldTestNew extends AutoBase {
 
 
 
-        public Integer ScanFirstMineralSimple() {
-            // this version of scan first mineral, will return Gold, OR if not GOLD, will not confirm but just assume Silver
+        public Integer ScanFirstMineral(LinearOpMode opMode) {
+
             int scanResult = 0;
 
             if (opModeIsActive()) {
@@ -773,7 +794,7 @@ public class ScanGoldTestNew extends AutoBase {
                         // the last time that call was made.
                         List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                         if (updatedRecognitions != null) {
-                            telemetry.addData("# Object Detected", updatedRecognitions.size());
+                            opMode.telemetry.addData("# Object Detected", updatedRecognitions.size());
                             if (updatedRecognitions.size() <= 3) {
                                 int goldMineralX = -1;
                                 int silverMineral1X = -1;
@@ -781,27 +802,23 @@ public class ScanGoldTestNew extends AutoBase {
                                 for (Recognition recognition : updatedRecognitions) {
                                     if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                                         goldMineralX = (int) recognition.getLeft();
-                                        telemetry.addData("Gold Mineral Position", goldMineralX);
+                                        opMode.telemetry.addData("Gold Mineral Position", goldMineralX);
                                         Log.i("[phoenix]:Gold:", Integer.toString(goldMineralX));
                                         scanResult = 1;
-                                    /*} else if (recognition.getLabel().equals(LABEL_SILVER_MINERAL)) {
+                                    } else if (recognition.getLabel().equals(LABEL_SILVER_MINERAL)) {
                                         silverMineral1X = (int) recognition.getLeft();
-                                        telemetry.addData("Silver Mineral Position", goldMineralX);
+                                        opMode.telemetry.addData("Silver Mineral Position", goldMineralX);
                                         Log.i("[phoenix]:Silver ", Integer.toString(goldMineralX));
-                                        scanResult = 2;*/
-                                    } else {
-                                        silverMineral1X = (int) recognition.getLeft();
-                                        telemetry.addData("assume Silver Mineral Position", silverMineral1X);
-                                        Log.i("[phoenix]:assume Sil", Integer.toString(silverMineral1X));
                                         scanResult = 2;
-                                        //telemetry.addData("no mineral found", 0);
-                                        //Log.i("[phoenix]:No Mineral:", Integer.toString(0));
-                                        //scanResult = 0;
+                                    } else {
+                                        opMode.telemetry.addData("no mineral found", 0);
+                                        Log.i("[phoenix]:No Mineral:", Integer.toString(0));
+                                        scanResult = 0;
                                     }
                                 }
 
                             }
-                            telemetry.update();
+                            opMode.telemetry.update();
                         }
                     }
                 }
@@ -837,7 +854,7 @@ public class ScanGoldTestNew extends AutoBase {
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
+                        opMode.telemetry.addData("# Object Detected", updatedRecognitions.size());
                         if (updatedRecognitions.size() <= 3) {
                             int goldMineralX = -1;
                             int silverMineral1X = -1;
@@ -845,25 +862,25 @@ public class ScanGoldTestNew extends AutoBase {
                             for (Recognition recognition : updatedRecognitions) {
                                 if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                                     goldMineralX = (int) recognition.getLeft();
-                                    telemetry.addData("Gold Mineral Position", goldMineralX);
+                                    opMode.telemetry.addData("Gold Mineral Position", goldMineralX);
                                     Log.i("[phoenix]:Gold:", Integer.toString(goldMineralX));
                                     scanResult = 1;
                                     drivetrain.StopAll();
                                 } else if (recognition.getLabel().equals(LABEL_SILVER_MINERAL)) {
                                     silverMineral1X = (int) recognition.getLeft();
-                                    telemetry.addData("Silver Mineral Position", goldMineralX);
+                                    opMode.telemetry.addData("Silver Mineral Position", goldMineralX);
                                     Log.i("[phoenix]:Silver ", Integer.toString(goldMineralX));
                                     scanResult = 2;
                                     drivetrain.StopAll();
                                 } else {
-                                    telemetry.addData("no mineral found", 0);
+                                    opMode.telemetry.addData("no mineral found", 0);
                                     Log.i("[phoenix]:No Mineral:", Integer.toString(0));
                                     scanResult = 0;
                                 }
                             }
 
                         }
-                        telemetry.update();
+                        opMode.telemetry.update();
                     }
                 }
             }

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -17,7 +18,7 @@ import java.util.List;
  * Created by Steve on 7/22/2018.
  */
 
-//@Disabled
+@Disabled
 @Autonomous(name="Test Strafe To Gold", group="none")  // this is code to test "StrafeWhileVisible"
 
 public class TestStrafeToGold extends AutoBase {

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Erik;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -16,7 +17,7 @@ import java.util.List;
 /**
  * Created by Steve on 7/22/2018.
  */
-
+@Disabled
 @Autonomous(name="Erik Where is Robot", group="none")
 public class TestGetRobotLocation extends ErikAutoBase {
     private ElapsedTime runtime = new ElapsedTime();

@@ -25,6 +25,7 @@ import android.util.Log;
 
 import java.util.List;
 
+@Disabled
 @TeleOp(name = "TestVuforia", group = "none")
 public class ExperimentVuforia extends OpMode {
 

@@ -291,11 +291,15 @@ public class DriveTrain {
     // put an O there to designate old version of uncompleted method
     public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, MyBoschIMU imu, OpMode opMode) {
         OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
-        float turningVelocity = Math.abs(imu.getAngularVelocity().xRotationRate);
+        //float turningVelocity = Math.abs(imu.getAngularVelocity().xRotationRate);
 
         while (pos == null  && op.opModeIsActive()) {
-
+            pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
+            opMode.telemetry.addData("in turn to image", "while loop");
+            Log.i("[phoenix]:in turn2image", "while loop");
         }
+        opMode.telemetry.addData("in turn to image", "out of while loop");
+        Log.i("[phoenix]:in turn2image", "out of while loop");
     }
 
     // copied from ErikDriveTrain.TurnToImage in for DE match, since existing TurnToImage not working yet,

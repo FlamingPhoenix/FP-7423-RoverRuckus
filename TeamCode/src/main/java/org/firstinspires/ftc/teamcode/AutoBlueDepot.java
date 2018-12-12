@@ -27,7 +27,7 @@ import java.util.List;
  */
 
 //@Disabled
-@Autonomous(name="DE BlueDepot", group="none")
+@Autonomous(name="Archmere BlueDepot", group="none")
 public class AutoBlueDepot extends AutoBase {
     private ElapsedTime runtime = new ElapsedTime();
     private static final long  firstHitTime = 1250; // this is from calibration, it is time to detect first object
