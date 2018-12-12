@@ -103,7 +103,7 @@ public class AutoRedCraterNewStrafe extends AutoBase {
             drivetrain.Drive(0.2f, 3.0f, Direction.BACKWARD);
             sleep(300);
             // scan the next two minerals for GOLD
-            scanGold_Diagonal(0.11f, 200, 420, this); // was 240 and 380
+            scanGold_Diagonal2(0.11f, 200, 420, this); // was 240 and 380
             sleep(100);
             //drivetrain.Drive(0.3f, 1f, Direction.FORWARD);
             }
@@ -150,7 +150,8 @@ public class AutoRedCraterNewStrafe extends AutoBase {
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
-    public void scanGold_Diagonal ( float power, float leftScreenPosition, float rightScreenPosition,LinearOpMode opMode){
+        // this method below, is different from what's ddefined in auto base
+    public void scanGold_Diagonal2 ( float power, float leftScreenPosition, float rightScreenPosition,LinearOpMode opMode){
         long currentTime;
         int turnAngle;
         int gold_Found = 0;
