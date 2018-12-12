@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Erik;
 
 import android.util.Log;
 
@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.AutoBase;
+import org.firstinspires.ftc.teamcode.Direction;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
 import java.util.List;
@@ -128,7 +130,7 @@ public class TestStrafeToGold extends AutoBase {
         drivetrain.Drive(.4f, 58f, Direction.FORWARD);
         sleep(300);
         // drop marker
-        markerHook.setPosition(0.1);
+        //markerHook.setPosition(0.1);
         sleep(300);
         //drivetrain.Drive(1.0f, 5, Direction.BACKWARD);//  drop marker, need to add back 5 ?
         drivetrain.Drive(.65f, 70, Direction.BACKWARD); // continue to drive to crater
