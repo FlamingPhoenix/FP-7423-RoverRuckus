@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.MyClass;
 
 import android.util.Log;
 
@@ -23,6 +23,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.AutoBase;
+import org.firstinspires.ftc.teamcode.Direction;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 import org.firstinspires.ftc.teamcode.MyClass.MineralPositionViewModel;
 
@@ -35,7 +37,7 @@ import java.util.List;
 
 @Disabled
 @Autonomous(name="DE RedCrater Backup", group="none") // keep a copy of Nov 27, red crater code
-public class AutoRedCrater_Backup extends AutoBase {
+public class AutoRedCrater_Backup_Nov27 extends AutoBase {
     private ElapsedTime runtime = new ElapsedTime();
     private static final long  firstHitTime = 1250; // this is from calibration, it is time to detect first object
     private static final long secondHitTime = 5300; // this is time to hit 2nd object..need to calibrate
@@ -111,7 +113,7 @@ public class AutoRedCrater_Backup extends AutoBase {
         // drive backward for certain distance. here can also test prodrive
         drivetrain.Drive(.4f, 58f, Direction.FORWARD);
         sleep(300);
-        markerHook.setPosition(0.1);
+        //markerHook.setPosition(0.1);
         sleep(300);
         //drivetrain.Drive(1.0f, 5, Direction.BACKWARD);//  drop marker
         drivetrain.Drive(.65f, 70, Direction.BACKWARD); // continue to drive
