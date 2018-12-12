@@ -748,7 +748,7 @@ public abstract class AutoBase extends LinearOpMode {
         return scanResult;
     }
 
-
+        // details is defined in subclass erikautobase, this one doesnt work out well since not enough stability while turning
     public void TurnToGold (float power, int angle, Direction d, MyBoschIMU imu, LinearOpMode opMode, long report_time) { // turn to A, B mineral
 
     }
