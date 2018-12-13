@@ -20,7 +20,7 @@ import java.util.List;
  * Created by Steve on 7/22/2018.
  */
 
-@Disabled
+//@Disabled
 @Autonomous(name="Test Scan Gold New", group="none")// this approach do not scan while drive, will just stop and scan.
 
 public class ScanGoldTestNew extends AutoBase {
@@ -55,11 +55,11 @@ public class ScanGoldTestNew extends AutoBase {
 
 
         drivetrain.Drive(0.20f, 3.0f, Direction.FORWARD); //3.5
-        sleep(1000);
+        sleep(200);
         //drivetrain.Strafe(0.25f, 7.0f, Direction.RIGHT );
         //sleep(1000);
-        drivetrain.Turn(0.25f, 51, Direction.COUNTERCLOCKWISE, imu, this);
-        sleep(1000);
+        drivetrain.Turn(0.25f, 46, Direction.COUNTERCLOCKWISE, imu, this);
+        sleep(200);
         //drivetrain.Turn(0.40f, 70, Direction.COUNTERCLOCKWISE, imu, this);
 
 
@@ -69,38 +69,42 @@ public class ScanGoldTestNew extends AutoBase {
         telemetry.addData("mineral scan outcome", detectionOutcome);
         Log.i("[phoenix]:min outcome", Integer.toString(detectionOutcome));
 
-        sleep(500);
+        sleep(200);
         if (detectionOutcome == 1) { //ScanFirstMineral() == 1
             telemetry.addData("Gold found", "during first scan");
             Log.i("[phoenix]:gold detected", "found gold");
-            sleep(1000);
-            StrafeWhileVisible(0.4f, 10.0f, 10);
+            sleep(200);
+            StrafeWhileVisible(0.4f, 23f, 10);
             telemetry.addData("Gold aft straf", "after strafe");
             Log.i("[phoenix]:gold aft str", "after strafe");
-            sleep(1000);
-            drivetrain.Strafe(0.3f, 6.5f, Direction.LEFT);
-            drivetrain.Turn(0.4f, 35, Direction.COUNTERCLOCKWISE, imu, this); // shouid be 45, compensate for wheel issue
+            sleep(200);
+            drivetrain.Strafe(0.3f, 15f, Direction.LEFT);
+            drivetrain.Turn(0.4f, 32, Direction.COUNTERCLOCKWISE, imu, this); // shouid be 45, compensate for wheel issue
             drivetrain.Drive(0.3f, 10f, Direction.FORWARD); }
         else if (detectionOutcome == 2) { //ScanFirstMineral() == 2
             telemetry.addData("Silver found", "during first scan");
             Log.i("[phoenix]:Silv detected", "found silver");
-            sleep(1000);
+            sleep(200);
             // drivetrain.Strafe(.3F, 6.5f, Direction.LEFT);
             //sleep(1000);
             drivetrain.Turn(0.2f, 35, Direction.COUNTERCLOCKWISE, imu, this); // should be 45, compensate for wheels issue
             telemetry.addData("Silver aft turn", "after turn");
             Log.i("[phoenix]:Silv aft turn", "aft turn");
-            sleep(1000);
+            sleep(200);
+            Log.i("[phoenix]:b 2nd scan", "true");
             detectionOutcome = ScanFirstMineralSimple();
-            sleep(1000);
+            Log.i("[phoenix]:a 2nd scan", "true");
+            sleep(200);
             if (detectionOutcome == 1) {
                 drivetrain.Turn(.2F, originalAngle, Direction.CLOCKWISE, imu, this);
-                drivetrain.Drive(0.2f, 5.0f, Direction.FORWARD);
+                drivetrain.Drive(0.2f, 20f, Direction.FORWARD);
+                Log.i("[phoenix]:second gold", "true");
             } else {
-                drivetrain.Turn(0.2f, 35, Direction.COUNTERCLOCKWISE, imu, this);
-                drivetrain.Drive(0.2f, 10.0f, Direction.FORWARD);
+                drivetrain.Turn(0.2f, 43, Direction.CLOCKWISE, imu, this);
+                drivetrain.Drive(0.2f, 20f, Direction.FORWARD);
+                Log.i("[phoenix]:third gold", "true");
             }
-            sleep(1000);
+            sleep(200);
             //scanGold_Diagonal(0.11f);
             //drivetrain.Drive(0.3f, 3f, Direction.FORWARD);}
            }
