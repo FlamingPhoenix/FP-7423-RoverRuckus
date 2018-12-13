@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.MyClass;
+package org.firstinspires.ftc.teamcode.Erik;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
