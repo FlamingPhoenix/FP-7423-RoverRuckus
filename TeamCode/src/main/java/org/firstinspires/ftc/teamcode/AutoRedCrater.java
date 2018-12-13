@@ -20,7 +20,7 @@ import java.util.List;
 //@Disabled
 @Autonomous(name="Archmere RedCrater", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
 
-public class AutoRedCraterNew extends AutoBase {
+public class AutoRedCrater extends AutoBase {
 
     //private ElapsedTime runtime = new ElapsedTime();
     //private static final long firstHitTime = 1250; // this is from calibration, it is time to detect first object

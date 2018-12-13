@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Erik;
 
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -19,7 +20,7 @@ import java.util.List;
  * Created by Steve on 7/22/2018.
  */
 
-//@Disabled
+@Disabled
 @Autonomous(name="RedCrater StrafeVersion", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
 
 public class AutoRedCraterStrafe extends AutoBase {

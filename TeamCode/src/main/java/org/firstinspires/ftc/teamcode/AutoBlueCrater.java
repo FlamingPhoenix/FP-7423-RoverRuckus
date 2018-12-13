@@ -31,15 +31,6 @@ import java.util.List;
 
 public class AutoBlueCrater extends AutoBase {
 
-        //private ElapsedTime runtime = new ElapsedTime();
-        //private static final long firstHitTime = 1250; // this is from calibration, it is time to detect first object
-        //private static final long secondHitTime = 5300; // this is time to hit 2nd object..need to calibrate
-        //private static final long thirdHitTime = 12000;
-
-        //private static final float firstHitDistance = 3.5f; // this is from calibration, it is time to detect first object
-        //private static final float secondHitDistance = 15.5f; // this is time to hit 2nd object..need to calibrate
-        //private static final float thirdHitDistance = 27.5f;
-
 
         @Override
         public void runOpMode() throws InterruptedException {
