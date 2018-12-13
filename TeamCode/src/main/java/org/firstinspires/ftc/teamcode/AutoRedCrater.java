@@ -59,7 +59,22 @@ public class AutoRedCrater extends AutoBase {
         //drivetrain.Turn(0.25f, 51, Direction.COUNTERCLOCKWISE, imu, this);
         //sleep(300);
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////alternative-less tested///////
+       // drivetrain.Drive(0.20f, 3.0f, Direction.FORWARD); //3.5
+       // sleep(300);
+       // drivetrain.Turn(0.25f, 35, Direction.COUNTERCLOCKWISE, imu, this);
+       // sleep(300);
+       // drivetrain.Strafe(0.25f, 3.0f, Direction.RIGHT);
+       // sleep(300);
+       // drivetrain.Drive(0.2f, 2.0f, Direction.BACKWARD);
+       // sleep(500);
+////////////////////////fully-tested//////////////////////////////////////////////////////////////////////////////////////
+        drivetrain.Strafe(0.25f, 6.5f, Direction.RIGHT);
+        sleep(400);
+        drivetrain.Drive(0.2f, 1.5f, Direction.BACKWARD);
+        sleep(300);
+/////////////////////////////////////////////////////
+
         // scan first mineral
 
         int detectionOutcome = 0;
@@ -75,7 +90,7 @@ public class AutoRedCrater extends AutoBase {
         if (detectionOutcome == 1) { //ScanFirstMineral() == 1
             telemetry.addData("Gold found", "during first scan");
             Log.i("[phoenix]:gold detected", "found gold");
-            sleep(300);
+            //sleep(300);
             StrafeWhileVisible(0.4f, 12.5f, 520f, 10, this); // was 10, goldwidth was 460
             telemetry.addData("Gold aft straf", "after strafe");
             Log.i("[phoenix]:gold aft str", "after strafe");
@@ -88,12 +103,12 @@ public class AutoRedCrater extends AutoBase {
         else if (detectionOutcome == 2) { //ScanFirstMineral() == 2, in this scenario, either B or C is GOLD
             telemetry.addData("Silver found", "during first scan");
             Log.i("[phoenix]:Silv detected", "found silver");
-            sleep(300);
+            //sleep(300);
             drivetrain.Turn(0.2f, 35, Direction.COUNTERCLOCKWISE, imu, this); // should be 45, compensate for wheels issue
             telemetry.addData("Silver aft turn", "after turn");
             Log.i("[phoenix]:Silv aft turn", "aft turn");
             sleep(300);
-            drivetrain.Drive(0.2f, 3.0f, Direction.BACKWARD);
+            drivetrain.Drive(0.2f, 1.5f, Direction.BACKWARD);
             sleep(300);
             // scan the next two minerals for GOLD
             scanGold_Diagonal(0.11f, 200, 420, this); // was 240 and 380

@@ -146,7 +146,8 @@ public class ScanGoldTestNew extends AutoBase {
             drivetrain.Drive(.4f, 56f, Direction.FORWARD);
             sleep(300);
             // drop marker
-            //markerHook.setPosition(0.1);
+            markerHook.setPosition(0.1);
+
 
             sleep(300);
             drivetrain.Drive(.65f, 75, Direction.BACKWARD); // continue to drive to crater

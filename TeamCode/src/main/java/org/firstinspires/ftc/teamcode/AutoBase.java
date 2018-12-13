@@ -68,7 +68,7 @@ public abstract class AutoBase extends LinearOpMode {
     protected VuforiaLocalizer vuforia;
     protected TFObjectDetector tfod;
 
-    Servo markerHook;
+    protected Servo markerHook;
 
     public void initialize() {
 
@@ -353,10 +353,11 @@ public abstract class AutoBase extends LinearOpMode {
 
 // drivetrain.StopAll();
                                         drivetrain.Drive(0.2f, 3.0f, Direction.FORWARD);
-                                        sleep(200);
+                                        sleep(300);
                                         drivetrain.Strafe(0.4f, 6.25f, Direction.RIGHT);// was 6.5
-                                        sleep(200);
+                                        sleep(300);
                                         drivetrain.Strafe(0.4f, 5.5f, Direction.LEFT); // was 4.5
+
                                         drivetrain.StopAll();
                                         sleep(200);
                                         // here drive 1.414*12 inch = 17.0
@@ -373,12 +374,14 @@ public abstract class AutoBase extends LinearOpMode {
                                     } else if ((gold_Found == 0)) { //1380 + 700 = 2180, 1380+600= 1980, 7 inches more, currentTime > (secondHitTime + 4000)) { // third time hit
                                         //StrafeWhileVisible(0.30f, 5.5f, 5);
                                         drivetrain.Drive(0.2f, 3.0f, Direction.FORWARD);
+                                        sleep(300);
                                         drivetrain.Strafe(0.4f, 6F, Direction.RIGHT); //// was 6.5
+                                        sleep(100);
                                         drivetrain.StopAll();
-                                        sleep(500);
+                                        sleep(300);
                                         drivetrain.Strafe(0.4f, 5.5F, Direction.LEFT); //// was 4.5
                                         drivetrain.StopAll();
-                                        sleep(500);
+                                        sleep(300);
                                         drivetrain.Drive(0.3f, 14f, Direction.FORWARD);
                                         gold_Found = 3;  // gold is in C position
                                         currentPosition = 0;
