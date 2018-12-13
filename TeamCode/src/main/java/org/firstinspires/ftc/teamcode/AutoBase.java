@@ -92,7 +92,7 @@ public abstract class AutoBase extends LinearOpMode {
 
         // WARNING!!!  Do not enable this line unless you are specifically testing the marker hook because when it is in position 1,
         // It is using power the entire time and the servo will overheat.
-        //markerHook.setPosition(0.9);
+        markerHook.setPosition(0.9);
 
         imu = new MyBoschIMU(hardwareMap);
 
@@ -354,7 +354,7 @@ public abstract class AutoBase extends LinearOpMode {
 // drivetrain.StopAll();
                                         drivetrain.Drive(0.2f, 3.0f, Direction.FORWARD);
                                         sleep(200);
-                                        drivetrain.Strafe(0.4f, 7.5f, Direction.RIGHT);// was 6.5
+                                        drivetrain.Strafe(0.4f, 6.25f, Direction.RIGHT);// was 6.5
                                         sleep(200);
                                         drivetrain.Strafe(0.4f, 5.5f, Direction.LEFT); // was 4.5
                                         drivetrain.StopAll();
@@ -373,7 +373,7 @@ public abstract class AutoBase extends LinearOpMode {
                                     } else if ((gold_Found == 0)) { //1380 + 700 = 2180, 1380+600= 1980, 7 inches more, currentTime > (secondHitTime + 4000)) { // third time hit
                                         //StrafeWhileVisible(0.30f, 5.5f, 5);
                                         drivetrain.Drive(0.2f, 3.0f, Direction.FORWARD);
-                                        drivetrain.Strafe(0.4f, 7.5F, Direction.RIGHT); //// was 6.5
+                                        drivetrain.Strafe(0.4f, 6F, Direction.RIGHT); //// was 6.5
                                         drivetrain.StopAll();
                                         sleep(500);
                                         drivetrain.Strafe(0.4f, 5.5F, Direction.LEFT); //// was 4.5
@@ -388,24 +388,7 @@ public abstract class AutoBase extends LinearOpMode {
                                         opMode.telemetry.addData("gold frequency", gold_loop_No);
                                         Log.i("[phoenix]:gold freq", Integer.toString(gold_loop_No));
                                         opMode.telemetry.update();
-                                    } /*else if (gold_Found == 0) {
-
-                                        StrafeWhileVisible(0.30f, 14f, 5);
-//                                            drivetrain.Strafe(0.4f, 14F, Direction.RIGHT);
-//                                            drivetrain.StopAll();
-//                                            sleep(1500);
-//                                            drivetrain.Strafe(0.4f, 14F, Direction.LEFT);
-//                                            drivetrain.StopAll();
-//                                            sleep(1500);                                            //tfod.deactivate();
-                                        gold_Found = 2;  // gold is in B position
-                                        currentPosition = 0;
-                                        //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                        telemetry.addData("at end of gold loop", "gold 2");
-                                        Log.i("[phoenix]:goldloop", "at end of gold loop 2");
-                                        telemetry.addData("gold frequency", gold_loop_No);
-                                        Log.i("[phoenix]:gold freq", Integer.toString(gold_loop_No));
-                                        telemetry.update();
-                                    }*/
+                                    }
                                 }
                             }
                         }
