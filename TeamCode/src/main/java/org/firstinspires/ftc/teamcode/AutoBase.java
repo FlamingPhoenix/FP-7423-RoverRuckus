@@ -354,9 +354,9 @@ public abstract class AutoBase extends LinearOpMode {
 // drivetrain.StopAll();
                                         drivetrain.Drive(0.2f, 3.0f, Direction.FORWARD);
                                         sleep(300);
-                                        drivetrain.Strafe(0.4f, 6.25f, Direction.RIGHT);// was 6.5
+                                        drivetrain.Strafe(0.4f, 6.5f, Direction.RIGHT);// was 6.5
                                         sleep(300);
-                                        drivetrain.Strafe(0.4f, 5.5f, Direction.LEFT); // was 4.5
+                                        drivetrain.Strafe(0.4f, 5.75f, Direction.LEFT); // was 4.5
 
                                         drivetrain.StopAll();
                                         sleep(200);
@@ -375,11 +375,11 @@ public abstract class AutoBase extends LinearOpMode {
                                         //StrafeWhileVisible(0.30f, 5.5f, 5);
                                         drivetrain.Drive(0.2f, 3.0f, Direction.FORWARD);
                                         sleep(300);
-                                        drivetrain.Strafe(0.4f, 6F, Direction.RIGHT); //// was 6.5
+                                        drivetrain.Strafe(0.4f, 6.5F, Direction.RIGHT); //// was 6.5
                                         sleep(100);
                                         drivetrain.StopAll();
                                         sleep(300);
-                                        drivetrain.Strafe(0.4f, 5.5F, Direction.LEFT); //// was 4.5
+                                        drivetrain.Strafe(0.4f, 5.75F, Direction.LEFT); //// was 4.5
                                         drivetrain.StopAll();
                                         sleep(300);
                                         drivetrain.Drive(0.3f, 14f, Direction.FORWARD);
@@ -753,6 +753,21 @@ public abstract class AutoBase extends LinearOpMode {
         }
 
         return canseegold;
+    }
+
+    public boolean isGoldVisible()
+    {
+        if (tfod != null) {
+
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions.size() > 0)
+            {
+                if (updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL))
+                    return true;
+            }
+        }
+
+        return false;
     }
 
 }

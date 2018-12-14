@@ -70,10 +70,10 @@ public class AutoRedDepot extends AutoBase {
             // drivetrain.Drive(0.2f, 2.0f, Direction.BACKWARD);
             // sleep(500);
 ////////////////////////fully-tested//////////////////////////////////////////////////////////////////////////////////////
-            drivetrain.Strafe(0.25f, 6.5f, Direction.RIGHT);
-            sleep(400);
-            drivetrain.Drive(0.2f, 1.5f, Direction.BACKWARD);
+            drivetrain.Strafe(0.3f, 6.5f, Direction.RIGHT);
             sleep(300);
+            //drivetrain.Drive(0.2f, 1.5f, Direction.BACKWARD);
+            //sleep(300);
 /////////////////////////////////////////////////////
 
             // scan first mineral
@@ -132,7 +132,7 @@ public class AutoRedDepot extends AutoBase {
             telemetry.addData(" after the turn, before strafe to image", "before strafe to image");
             Log.i("[phoenix]:after turn", "before strafe to image");
             // this is optional, as most likely the robot will see image after above 52 degree turn.
-            drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, redTarget, imu, this);
+            drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, backTarget, imu, this);
             //strafe to image
             drivetrain.StrafeToImage(0.25f, backTarget, this); // was 0.4
             telemetry.addData(" after the strafe to image", "after strafe to image");
@@ -146,7 +146,7 @@ public class AutoRedDepot extends AutoBase {
             }
 
             // drive backward for to depot, it was 58
-            drivetrain.Drive(.4f, 56f, Direction.BACKWARD);
+            drivetrain.Drive(.4f, 53f, Direction.BACKWARD);
             sleep(300);
             // drop marker
             markerHook.setPosition(0.1);

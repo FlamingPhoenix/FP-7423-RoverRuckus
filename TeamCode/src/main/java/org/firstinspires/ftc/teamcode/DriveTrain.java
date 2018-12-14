@@ -247,10 +247,10 @@ public class DriveTrain {
 
 
                 if (adjustedOrientation.secondAngle < -3 && x > -rotationMargin) {
-                    flTurnAdjust = actualPower * 1.5F * (Math.abs(adjustedOrientation.secondAngle) / 40F) * ((1200F-distanceAdjustment) / 1200F);
+                    flTurnAdjust = actualPower * 1.25F * (Math.abs(adjustedOrientation.secondAngle) / 40F) * ((1200F-distanceAdjustment) / 1200F);
                 }
                 else if (adjustedOrientation.secondAngle > 3 && x < rotationMargin) {
-                    blTurnAdjust = actualPower * -1.5F * (Math.abs(adjustedOrientation.secondAngle) / 40F) * ((1200F-distanceAdjustment) / 1200F);
+                    blTurnAdjust = actualPower * -1.25F * (Math.abs(adjustedOrientation.secondAngle) / 40F) * ((1200F-distanceAdjustment) / 1200F);
                 }
 
                 float flPower, frPower, blPower, brPower;

@@ -69,10 +69,10 @@ public class AutoRedCrater extends AutoBase {
        // drivetrain.Drive(0.2f, 2.0f, Direction.BACKWARD);
        // sleep(500);
 ////////////////////////fully-tested//////////////////////////////////////////////////////////////////////////////////////
-        drivetrain.Strafe(0.25f, 6.5f, Direction.RIGHT);
-        sleep(400);
-        drivetrain.Drive(0.2f, 1.5f, Direction.BACKWARD);
+        drivetrain.Strafe(0.3f, 6.5f, Direction.RIGHT);
         sleep(300);
+    //    drivetrain.Drive(0.2f, 1.80f, Direction.BACKWARD);
+      //  sleep(500);
 /////////////////////////////////////////////////////
 
         // scan first mineral
@@ -91,7 +91,7 @@ public class AutoRedCrater extends AutoBase {
             telemetry.addData("Gold found", "during first scan");
             Log.i("[phoenix]:gold detected", "found gold");
             //sleep(300);
-            StrafeWhileVisible(0.4f, 12.5f, 520f, 10, this); // was 10, goldwidth was 460
+            StrafeWhileVisible(0.4f, 13f, 720f, 10, this); // was 10, goldwidth was 460
             telemetry.addData("Gold aft straf", "after strafe");
             Log.i("[phoenix]:gold aft str", "after strafe");
             sleep(300);
@@ -145,7 +145,7 @@ public class AutoRedCrater extends AutoBase {
         }
 
         // drive backward for to depot, it was 58
-       drivetrain.Drive(.4f, 56f, Direction.FORWARD);
+       drivetrain.Drive(.4f, 53f, Direction.FORWARD);
         sleep(300);
         // drop marker
         markerHook.setPosition(0.1);
