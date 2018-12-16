@@ -105,11 +105,11 @@ public class V2_RedCrater extends AutoBase {
             drivetrain.Strafe(0.3f, 8.5f, Direction.LEFT);
             drivetrain.Turn(0.4f, 35, Direction.COUNTERCLOCKWISE, imu, this); // shouid be 45, compensate for wheel issue
             drivetrain.Drive(0.3f, 32f, Direction.FORWARD);}
-        else if (detectionOutcome == 2) { //ScanFirstMineral() == 2, in this scenario, either B or C is GOLD
+        else { //ScanFirstMineral() == 2, in this scenario, either B or C is GOLD
             telemetry.addData("Silver found", "during first scan");
             Log.i("[phoenix]:Silv detected", "found silver");
             // strafe to the right position
-            drivetrain.Strafe(0.25f, 5.5f, Direction.RIGHT);
+            drivetrain.Strafe(0.25f, 2f, Direction.RIGHT);
             sleep(500);
             drivetrain.Turn(0.2f, 35, Direction.COUNTERCLOCKWISE, imu, this); // should be 45, compensate for wheels issue
             telemetry.addData("Silver aft turn", "after turn");
@@ -123,11 +123,6 @@ public class V2_RedCrater extends AutoBase {
             //drivetrain.Drive(0.3f, 1f, Direction.FORWARD);
             }
 
-         else {
-            telemetry.addData("no mineral found", "during first scan");
-            telemetry.update();
-            Log.i("[phoenix]: scan result", "no gold");
-        }
 
 
 
@@ -151,7 +146,16 @@ public class V2_RedCrater extends AutoBase {
             tfod.shutdown();
         }
 
+
+
+        drivetrain.Drive(.4f, 48f, Direction.FORWARD);
+        sleep(300);
+        markerHook.setPosition(0.1);
+        sleep(300 );
+        drivetrain.Drive(.4f, 70f, Direction.BACKWARD);
+
         // drive backward for to depot, it was 58
+
        //drivetrain.Drive(.4f, 53f, Direction.FORWARD);
         //sleep(300);
         // drop marker
@@ -174,7 +178,7 @@ public class V2_RedCrater extends AutoBase {
                 tfod.activate();
             }
 
-            while (opModeIsActive() && (scanResult == 0)) {
+            if (opModeIsActive()) {
 
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
@@ -205,6 +209,7 @@ public class V2_RedCrater extends AutoBase {
                                     //telemetry.addData("no mineral found", 0);
                                     //Log.i("[phoenix]:No Mineral:", Integer.toString(0));
                                     //scanResult = 0;
+
                                 }
                             }
 
@@ -214,8 +219,10 @@ public class V2_RedCrater extends AutoBase {
                 }
             }
         }
-
-        return scanResult;
+        if (scanResult == 0)
+            return 2;
+        else
+            return scanResult;
     }
 
 
