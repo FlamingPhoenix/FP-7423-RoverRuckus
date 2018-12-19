@@ -20,7 +20,7 @@ import java.util.List;
  * Created by Steve on 7/22/2018.
  */
 
-//@Disabled
+@Disabled
 @Autonomous(name="Test Scan Gold New", group="none")// this approach do not scan while drive, will just stop and scan.
 
 public class ScanGoldTestNew extends AutoBase {
