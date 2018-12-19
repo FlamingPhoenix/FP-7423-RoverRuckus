@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 /**
  * Created by Steve on 7/22/2018.
  */
-@Disabled
+//@Disabled
 @Autonomous(name="StrafeTest", group="none")
 public class StrafeTest extends AutoBase {
 

@@ -94,6 +94,45 @@ public class AutoRedCrater_Backup_Nov27 extends AutoBase {
 
 
         scanGold(0.12f);
+
+        // here we need to decide which position is Gold and then drive respectively
+        /*currentTime = Math.round(runtime.milliseconds());
+        switch (gold_Found) {
+            case 0: // didnt detect gold
+                telemetry.addData("gold found flag not set", gold_Found);
+                Log.i("gold found flag not set", Integer.toString(gold_Found));
+                telemetry.addData("current time is ", currentTime);
+                Log.i("current time is ", Long.toString(currentTime));
+                break;
+            case 1:  // position A
+                drivetrain.Drive(0.3f, 32F, Direction.FORWARD);
+                telemetry.addData("position A ", "gold found is 1");
+                Log.i("gold is A ", Integer.toString(gold_Found));
+                telemetry.addData("current time is ", currentTime);
+                Log.i("current time is ", Long.toString(currentTime));
+                break;
+            case 2:  // position B
+                drivetrain.Drive(0.3f, 21F, Direction.FORWARD);
+                telemetry.addData("position B ", "gold found is 2");
+                Log.i("gold is B ", Integer.toString(gold_Found));
+                telemetry.addData("current time is ", currentTime);
+                Log.i("current time is ", Long.toString(currentTime));
+                break;
+            case 3:  // position C
+                drivetrain.Drive(0.3f, 3.5F, Direction.FORWARD);
+                telemetry.addData("position C ", "gold found is 3");
+                Log.i("gold is C ", Integer.toString(gold_Found));
+                telemetry.addData("current time is ", currentTime);
+                Log.i("current time is ", Long.toString(currentTime));
+                break;
+            default:  // didnt detect Gold
+                telemetry.addData("gold found flag not set", gold_Found);
+                Log.i("gold found flag not set", Integer.toString(gold_Found));
+        }
+
+        telemetry.update(); */
+
+
         sleep(300);
         //drivetrain.Turn(), first turn 100 - 120 degree, can test proturn
         drivetrain.Turn(0.35f, 95, Direction.COUNTERCLOCKWISE, imu, this);

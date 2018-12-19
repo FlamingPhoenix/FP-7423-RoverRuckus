@@ -109,7 +109,7 @@ public class V2_RedCrater extends AutoBase {
             telemetry.addData("Silver found", "during first scan");
             Log.i("[phoenix]:Silv detected", "found silver");
             // strafe to the right position
-            drivetrain.Strafe(0.25f, 2f, Direction.RIGHT);
+            drivetrain.Strafe(0.25f, 2f, Direction.RIGHT);  // was 5.5 before..need to evaluate the risk of hitting lander leg
             sleep(500);
             drivetrain.Turn(0.2f, 35, Direction.COUNTERCLOCKWISE, imu, this); // should be 45, compensate for wheels issue
             telemetry.addData("Silver aft turn", "after turn");
@@ -166,64 +166,7 @@ public class V2_RedCrater extends AutoBase {
         // end of auto routine.
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
-
-
-    public Integer ScanFirstMineralSimple() {
-        // this version of scan first mineral, will return Gold, OR if not GOLD, will not confirm but just assume Silver
-        int scanResult = 0;
-
-        if (opModeIsActive()) {
-            /** Activate Tensor Flow Object Detection. */
-            if (tfod != null) {
-                tfod.activate();
-            }
-
-            if (opModeIsActive()) {
-
-                if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        if (updatedRecognitions.size() <= 3) {
-                            int goldMineralX = -1;
-                            int silverMineral1X = -1;
-                            int silverMineral2X = -1;
-                            for (Recognition recognition : updatedRecognitions) {
-                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                    goldMineralX = (int) recognition.getLeft();
-                                    telemetry.addData("Gold Mineral Position", goldMineralX);
-                                    Log.i("[phoenix]:Gold:", Integer.toString(goldMineralX));
-                                    scanResult = 1;
-                                    /*} else if (recognition.getLabel().equals(LABEL_SILVER_MINERAL)) {
-                                        silverMineral1X = (int) recognition.getLeft();
-                                        telemetry.addData("Silver Mineral Position", goldMineralX);
-                                        Log.i("[phoenix]:Silver ", Integer.toString(goldMineralX));
-                                        scanResult = 2;*/
-                                } else {
-                                    silverMineral1X = (int) recognition.getLeft();
-                                    telemetry.addData("assume Silver Mineral Position", silverMineral1X);
-                                    Log.i("[phoenix]:assume Sil", Integer.toString(silverMineral1X));
-                                    scanResult = 2;
-                                    //telemetry.addData("no mineral found", 0);
-                                    //Log.i("[phoenix]:No Mineral:", Integer.toString(0));
-                                    //scanResult = 0;
-
-                                }
-                            }
-
-                        }
-                        telemetry.update();
-                    }
-                }
-            }
-        }
-        if (scanResult == 0)
-            return 2;
-        else
-            return scanResult;
-    }
+        
 
 
 }
