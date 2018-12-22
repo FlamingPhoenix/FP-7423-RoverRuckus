@@ -42,7 +42,7 @@ public class DriveTrain {
     public  static final double  LATERAL_GAIN   =  0.05; //0.0027,  Rate at which we respond to off-axis error
     public  static final double  AXIAL_GAIN     =  0.05;  // 0.0017, Rate at which we respond to target distance errors
 
-    private float PPR = 1120F;  // 560 for new robot 1120 for old robot
+    private float PPR = 560F;  // 560 for new robot 1120 for old robot
 
 
     public DriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright) {
@@ -78,8 +78,8 @@ public class DriveTrain {
         if (d == Direction.LEFT)
             actualPower = -(power);
 
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         int currentPosition = 0;
 
         while (currentPosition < targetEncoderValue && op.opModeIsActive()) {
@@ -108,8 +108,8 @@ public class DriveTrain {
         int targetEncoderValue = Math.round(x);
 
 
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         int currentPosition = 0;
 
         //added code below to support reverse driving, tested Oct 29, Erik did ofc this
@@ -120,7 +120,7 @@ public class DriveTrain {
 
         while (currentPosition < targetEncoderValue && op.opModeIsActive()) {
 
-            currentPosition = (Math.abs(fr.getCurrentPosition()));
+            currentPosition = (Math.abs(fl.getCurrentPosition()));
             fl.setPower(power);
             fr.setPower(power);
             bl.setPower(power);

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoControllerEx;
@@ -59,6 +60,12 @@ public abstract class AutoBase extends LinearOpMode {
     protected DcMotor br;
     protected DriveTrain drivetrain;
     protected MyBoschIMU imu;
+    DcMotor rightLift;
+    DcMotor leftLift;
+    Servo hook;
+    boolean isHookOpen = false;
+    DigitalChannel liftSensor;
+    int magZero = 0;
 
     protected VuforiaTrackable backTarget;
     protected VuforiaTrackable frontTarget;
@@ -76,8 +83,20 @@ public abstract class AutoBase extends LinearOpMode {
         fr = hardwareMap.dcMotor.get("frontright");
         bl = hardwareMap.dcMotor.get("backleft");
         br = hardwareMap.dcMotor.get("backright");
-        fr.setDirection(DcMotorSimple.Direction.REVERSE);
-        br.setDirection(DcMotorSimple.Direction.REVERSE);
+        fl.setDirection(DcMotorSimple.Direction.REVERSE);
+        bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightLift = hardwareMap.dcMotor.get("rightlift");
+        leftLift = hardwareMap.dcMotor.get("leftlift");
+
+        hook = hardwareMap.servo.get("hook");
+        ServoControllerEx hookController = (ServoControllerEx) hook.getController();
+        int hookServoPort = hook.getPortNumber();
+        PwmControl.PwmRange hookPwmRange = new PwmControl.PwmRange(899, 2000);
+        hookController.setServoPwmRange(hookServoPort, hookPwmRange);
+
+        liftSensor = hardwareMap.get(DigitalChannel.class, "liftsensor");
+        rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         drivetrain = new DriveTrain(fl, fr, bl, br, this);
         // boolean drivetrain.robotWork = true;
@@ -290,10 +309,10 @@ public abstract class AutoBase extends LinearOpMode {
         telemetry.addData("before moving time", currentTime);
         Log.i("[phoenix]:pretime", Double.toString(currentTime));
 
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         while (gold_Found == 0 && opModeIsActive() && (currentTime < (thirdHitTime - 2000))) { // 12000-2000 = 10000
 
@@ -453,8 +472,8 @@ public abstract class AutoBase extends LinearOpMode {
         telemetry.addData("before moving time", currentTime);
         Log.i("[phoenix]:pretime", Double.toString(currentTime));
 
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         while (gold_Found == 0 && opModeIsActive() && (currentTime < (thirdHitTime - 2000))) { // 12000-2000 = 10000
 
@@ -622,9 +641,9 @@ public abstract class AutoBase extends LinearOpMode {
         //     Log.i("[phoenix]:Gold Fflag ", Integer.toString(gold_Found));
         opMode.telemetry.update();
 
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
@@ -640,7 +659,7 @@ public abstract class AutoBase extends LinearOpMode {
             // report every 50 m
 
             //base_Time = Math.round(runtime.milliseconds());
-            local_encoder_count = Math.abs(fr.getCurrentPosition()) - base_encoder_count;
+            local_encoder_count = Math.abs(fl.getCurrentPosition()) - base_encoder_count;
 
             Log.i("[phoenix]:opAct l-enco", Integer.toString(local_encoder_count));
 
@@ -1009,6 +1028,28 @@ public abstract class AutoBase extends LinearOpMode {
         }
 
         return false;
+    }
+
+    public void releaseFromLander()
+    {
+        while (liftSensor.getState() == true && this.opModeIsActive())
+        {
+            if (rightLift.getCurrentPosition() > -3000)
+            {
+                rightLift.setPower(-1.0);
+                leftLift.setPower(-1.0);
+            }
+            else
+            {
+                rightLift.setPower(-0.3);
+                leftLift.setPower(-0.3);
+            }
+        }
+        rightLift.setPower(0);
+        leftLift.setPower(0);
+
+        hook.setPosition(0.1);
+        sleep(700);
     }
 
 }

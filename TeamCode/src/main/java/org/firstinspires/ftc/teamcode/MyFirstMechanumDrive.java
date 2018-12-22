@@ -6,7 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoControllerEx;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "Mechanum", group = "none")
@@ -21,6 +23,7 @@ public class MyFirstMechanumDrive extends OpMode {
     Servo hook;
     boolean isHookOpen = false;
     DigitalChannel liftSensor;
+    int magZero = 0;
 
     public void drive(float x1, float y1, float x2) {
         float frontLeft = y1 + x1 + x2;
@@ -47,8 +50,16 @@ public class MyFirstMechanumDrive extends OpMode {
         bl = hardwareMap.dcMotor.get("backleft");
         rightLift = hardwareMap.dcMotor.get("rightlift");
         leftLift = hardwareMap.dcMotor.get("leftlift");
+
         hook = hardwareMap.servo.get("hook");
+        ServoControllerEx primaryController = (ServoControllerEx) hook.getController();
+        int hookServoPort = hook.getPortNumber();
+        PwmControl.PwmRange hookPwmRange = new PwmControl.PwmRange(899, 2000);
+        primaryController.setServoPwmRange(hookServoPort, hookPwmRange);
+
         liftSensor = hardwareMap.get(DigitalChannel.class, "liftsensor");
+        rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
         fl.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -57,22 +68,40 @@ public class MyFirstMechanumDrive extends OpMode {
     @Override
     public void loop() {
         drive(gamepad1.left_stick_x, gamepad1.left_stick_y * -1, gamepad1.right_stick_x);
-        telemetry.addData("y1;", gamepad1.left_stick_y);
-        telemetry.addData("x1;", gamepad1.left_stick_x);
-        telemetry.update();
+        //telemetry.addData("y1;", gamepad1.left_stick_y);
+        //telemetry.addData("x1;", gamepad1.left_stick_x);
+        //telemetry.update();
 
-        float power = gamepad1.right_stick_y;
+        float power = gamepad2.right_stick_y;
 
-        // lift motors
-        if (gamepad1.right_stick_y < -0.2)
+
+        if (liftSensor.getState() == false)
         {
-            rightLift.setPower(power);
-            leftLift.setPower(power);
+            magZero = rightLift.getCurrentPosition();
         }
-        else if (gamepad1.right_stick_y > 0.2)
+
+
+        if (power < -0.2)
         {
-            rightLift.setPower(power);
+            if ((rightLift.getCurrentPosition() - magZero) < -7000)
+            {
+                if (power < -0.5)
+                    power = -0.5f;
+            }
+
             leftLift.setPower(power);
+            rightLift.setPower(power);
+        }
+        else if (power > 0.2)
+        {
+            if ((rightLift.getCurrentPosition() - magZero) > 2500)
+            {
+                if (power > 0.5)
+                    power = 0.5f;
+            }
+
+            leftLift.setPower(power);
+            rightLift.setPower(power);
         }
         else
         {
@@ -80,8 +109,9 @@ public class MyFirstMechanumDrive extends OpMode {
             leftLift.setPower(0);
         }
 
+
         // servo motors
-        if (gamepad1.left_bumper)
+        if (gamepad2.left_bumper)
         {
             if (isHookOpen)
             {
@@ -90,12 +120,15 @@ public class MyFirstMechanumDrive extends OpMode {
             }
             else
             {
-                hook.setPosition(.5);
+                hook.setPosition(.1);
                 isHookOpen = true;
             }
         }
 
         telemetry.addData("lift sensor:", liftSensor.getState());
+        telemetry.addData("encoder value: ", rightLift.getCurrentPosition());
+        telemetry.addData("power: ", power);
+        telemetry.addData("magZero: ", magZero);
         telemetry.update(); //graffiti
     }
 }

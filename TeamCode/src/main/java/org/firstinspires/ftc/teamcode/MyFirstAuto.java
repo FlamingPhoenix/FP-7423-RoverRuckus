@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.MyClass.PositionToImage;
 /**
  * Created by Steve on 7/22/2018.
  */
-@Disabled
+
 @Autonomous(name="My First Auto", group="none")
 public class MyFirstAuto extends AutoBase {
 
@@ -30,6 +30,7 @@ public class MyFirstAuto extends AutoBase {
         initialize();
         waitForStart();
 
-        this.drivetrain.StrafeToImage(0.4f, this.redTarget, this);
+        releaseFromLander();
+        drivetrain.Drive(.5F, 4.5F, Direction.FORWARD);
     }
 }
