@@ -4,20 +4,17 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.AutoBase;
 import org.firstinspires.ftc.teamcode.Direction;
-
-import java.util.List;
 
 /**
  * Created by Steve on 7/22/2018.
  */
 
 //@Disabled
-@Autonomous(name="V2 RedCrater", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
+@Autonomous(name="V2 RedCrater New", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
 
-public class V2_RedCrater extends AutoBase {
+public class V2_RedCrater_Filter extends AutoBase {
 
     //private ElapsedTime runtime = new ElapsedTime();
     //private static final long firstHitTime = 1250; // this is from calibration, it is time to detect first object
@@ -116,12 +113,12 @@ public class V2_RedCrater extends AutoBase {
             Log.i("[phoenix]:Silv aft turn", "aft turn");
             sleep(300);
             // here will do a still scan, return mineral bottom, as reference for filtering.
-            //reference_Bottom_Y = FindClosestMineral_Y(this);
+            reference_Bottom_Y = FindClosestMineral_Y(this);
             drivetrain.Drive(0.2f, 1.5f, Direction.BACKWARD);
             sleep(300);
             // scan the next two minerals for GOLD
-            scanGold_Diagonal(0.11f, 200, 420, this); // was 240 and 380
-            //scanGold_Diagonal_Filter(0.11f, 200, 420, reference_Bottom_Y, this);
+            //scanGold_Diagonal(0.11f, 200, 420, this); // was 240 and 380
+            scanGold_Diagonal_Filter(0.11f, 200, 420, reference_Bottom_Y, this);
             sleep(100);
             //drivetrain.Drive(0.3f, 1f, Direction.FORWARD);
             }

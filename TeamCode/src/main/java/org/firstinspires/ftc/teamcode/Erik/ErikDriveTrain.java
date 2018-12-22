@@ -355,7 +355,7 @@ public class ErikDriveTrain extends DriveTrain {
     public void DriveStraight(float power, float distance, Direction d, MyBoschIMU myIMU, OpMode opMode) {
 
         // gear box ratio is not right, float x = 25.4F*(1120F * distance)/(4F * (float)Math.PI);// here distance is in mm
-        float x = 2.54f * (1120F * distance) / (4F * (float) Math.PI); // still in inch ?
+        float x = 2.54f * (PPR * distance) / (4F * (float) Math.PI); // still in inch ?
         int targetEncoderValue = Math.round(x);
         //float angleError = 0;
         //float startAngle;
@@ -491,7 +491,7 @@ public class ErikDriveTrain extends DriveTrain {
         float distance_Error = 0.0f;
         //float end_Ref = 0f; // end_Ref will be the smaller of distance or distance_Error, which controls starting or ending speed
         float pro_power = power;
-        float x = (1120F * distance) / (4F * (float) Math.PI);
+        float x = (PPR * distance) / (4F * (float) Math.PI);
         int targetEncoderValue = Math.round(x);
 
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -512,7 +512,7 @@ public class ErikDriveTrain extends DriveTrain {
                 }
             } else {
                 // using mm as unit for measuring distance error and pairing with axial-gain
-                distance_Error = Math.abs(25.4f * (distance - currentPosition * (4F * (float) Math.PI) / 1120f));
+                distance_Error = Math.abs(25.4f * (distance - currentPosition * (4F * (float) Math.PI) /PPR));
                 opMode.telemetry.addData("distance_error", distance_Error);
                 Log.i("distance error", Float.toString(distance_Error));
                 pro_power = Math.max(0.15f, power * Range.clip(distance_Error * ((float) AXIAL_GAIN), -1, 1));
@@ -543,7 +543,7 @@ public class ErikDriveTrain extends DriveTrain {
 
         float distance_Error = 0.0f;
         float pro_power = power;
-        float x = (1120 * 2 * distance) / (4F * (float) Math.PI);
+        float x = (PPR* 2 * distance) / (4F * (float) Math.PI);
         int targetEncoderValue = Math.round(x);
 
         //float actualPower = power;

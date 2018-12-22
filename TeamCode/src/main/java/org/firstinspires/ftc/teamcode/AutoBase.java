@@ -366,11 +366,6 @@ public abstract class AutoBase extends LinearOpMode {
                                     Log.i("[phoenix]:aft encoder ", Integer.toString(currentPosition));
                                     opMode.telemetry.update();
                                     if (currentPosition < (firstHitEncoderCount + 900) && (gold_Found == 0)) {//900+312 = 1112 //300+firsthit = 612,about 3.5 inches extra(currentTime < (secondHitTime - 500)) { // this is first time hit
-                                        // should try pro-strafe instead of regular strafe, to test navigation control
-
-                                        //StrafeWhileVisible(0.30f, 29f, 5);
-
-// drivetrain.StopAll();
                                         drivetrain.Drive(0.2f, 3.0f, Direction.FORWARD);
                                         sleep(300);
                                         drivetrain.Strafe(0.4f, 6.5f, Direction.RIGHT);// was 6.5
