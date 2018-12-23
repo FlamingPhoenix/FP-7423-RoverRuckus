@@ -24,6 +24,8 @@ public class MyFirstMechanumDrive extends OpMode {
     boolean isHookOpen = false;
     DigitalChannel liftSensor;
     int magZero = 0;
+    Servo arm;
+    boolean isArmInitiliazed = false;
 
     public void drive(float x1, float y1, float x2) {
         float frontLeft = y1 + x1 + x2;
@@ -51,11 +53,17 @@ public class MyFirstMechanumDrive extends OpMode {
         rightLift = hardwareMap.dcMotor.get("rightlift");
         leftLift = hardwareMap.dcMotor.get("leftlift");
 
+        arm = hardwareMap.servo.get("arm");
+        ServoControllerEx armController = (ServoControllerEx) arm.getController();
+        int armServoPort = arm.getPortNumber();
+        PwmControl.PwmRange armPwmRange = new PwmControl.PwmRange(1280, 1760);
+        armController.setServoPwmRange(armServoPort, armPwmRange);
+
         hook = hardwareMap.servo.get("hook");
-        ServoControllerEx primaryController = (ServoControllerEx) hook.getController();
+        ServoControllerEx hookController = (ServoControllerEx) hook.getController();
         int hookServoPort = hook.getPortNumber();
         PwmControl.PwmRange hookPwmRange = new PwmControl.PwmRange(899, 2000);
-        primaryController.setServoPwmRange(hookServoPort, hookPwmRange);
+        hookController.setServoPwmRange(hookServoPort, hookPwmRange);
 
         liftSensor = hardwareMap.get(DigitalChannel.class, "liftsensor");
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -67,7 +75,13 @@ public class MyFirstMechanumDrive extends OpMode {
 
     @Override
     public void loop() {
-        drive(gamepad1.left_stick_x, gamepad1.left_stick_y * -1, gamepad1.right_stick_x);
+        if (!isArmInitiliazed)
+        {
+            arm.setPosition(0.3);
+            isArmInitiliazed = true;
+        }
+
+        drive(gamepad1.left_stick_x,  gamepad1.left_stick_y * -1, gamepad1.right_stick_x);
         //telemetry.addData("y1;", gamepad1.left_stick_y);
         //telemetry.addData("x1;", gamepad1.left_stick_x);
         //telemetry.update();
@@ -124,6 +138,35 @@ public class MyFirstMechanumDrive extends OpMode {
                 isHookOpen = true;
             }
         }
+
+        if (gamepad2.a && liftSensor.getState() == true)
+        {
+            if(rightLift.getCurrentPosition() < (magZero + 200))
+            {
+                rightLift.setPower(0.4);
+                leftLift.setPower(0.4);
+            }
+            else if ((rightLift.getCurrentPosition() > (magZero - 200)))
+            {
+                rightLift.setPower(-0.4);
+                leftLift.setPower(-0.4);
+            }
+        }
+
+        if (gamepad1.right_trigger > 0.5)
+        {
+            arm.setPosition(1);
+        }
+        else if (gamepad1.right_bumper)
+        {
+            arm.setPosition(0.8);
+        }
+        else if (gamepad1.y)
+        {
+            arm.setPosition(0);
+        }
+
+
 
         telemetry.addData("lift sensor:", liftSensor.getState());
         telemetry.addData("encoder value: ", rightLift.getCurrentPosition());

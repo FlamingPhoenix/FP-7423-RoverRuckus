@@ -21,7 +21,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
-@Disabled
+@Autonomous(name="Plot Angular Velocity", group="none")
 public class PlotAngularVelocity extends LinearOpMode {
     DcMotor fl;
     DcMotor fr;
@@ -47,12 +47,22 @@ public class PlotAngularVelocity extends LinearOpMode {
         waitForStart();
 
         //Log.i("[phoenix:PlotAngVel]", String.format("Initiating loop"));
-        for (float power = 1; power >= .15; power-=.05){
+        for (float power = 1; power >= .40; power-=.05){
 
             float diffAverage = 0;
             float velocityAverage = 0;
 
             for (int i = 0; i < 4; i++){
+                BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+                parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+                parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+                parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+                parameters.loggingEnabled = true;
+                parameters.loggingTag = "IMU";
+                parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+                imu.initialize(parameters);
+
                 Orientation startOrientation = imu.resetAndStart(Direction.COUNTERCLOCKWISE);
                 float startAngle = 0;
                 if (startOrientation != null)
@@ -68,27 +78,31 @@ public class PlotAngularVelocity extends LinearOpMode {
 
             }
 
-            diffAverage = diffAverage / 4;
-            velocityAverage = velocityAverage / 4;
+            diffAverage = diffAverage / 4f;
+            velocityAverage = velocityAverage / 4f;
 
             Log.i("[phoenix:PlotAngVel]", String.format("%f: %f: %f",
                     power, diffAverage, velocityAverage));
         }
 
+        sleep(300000);
+
     }
 
     float Turn(float power) {
 
-        //Log.i("[phoenix:PlotAngVel]", String.format("Beginning Turn at %f power.", power));
-         Orientation startOrientation = imu.resetAndStart(Direction.COUNTERCLOCKWISE);
+
+
+        //Log.i("[phoenix:PlotAngVel]", String.format("Beginning Turn at %f power.", power))
+        Orientation startOrientation = imu.resetAndStart(Direction.COUNTERCLOCKWISE);
          float startAngle = 0;
          if (startOrientation != null)
             startAngle = startOrientation.firstAngle;
 
-         float endingAngle = startAngle + 90;
+         float endingAngle = startAngle - 45;
          float currentAngle = startAngle;
 
-         while (currentAngle < endingAngle) {
+         while (currentAngle > endingAngle) {
              fl.setPower(power);
              bl.setPower(power);
              fr.setPower(-power);

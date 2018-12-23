@@ -42,7 +42,7 @@ public class DriveTrain {
     public  static final double  LATERAL_GAIN   =  0.05; //0.0027,  Rate at which we respond to off-axis error
     public  static final double  AXIAL_GAIN     =  0.05;  // 0.0017, Rate at which we respond to target distance errors
 
-    private float PPR = 560F;  // 560 for new robot 1120 for old robot
+    public float PPR = 560F;  // 560 for new robot 1120 for old robot
 
 
     public DriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright) {
@@ -78,25 +78,35 @@ public class DriveTrain {
         if (d == Direction.LEFT)
             actualPower = -(power);
 
-        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        int currentPosition = 0;
+        //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        int initialPosition = fl.getCurrentPosition();
+        int positionDiff = 0;
 
-        while (currentPosition < targetEncoderValue && op.opModeIsActive()) {
+        while (positionDiff < targetEncoderValue && op.opModeIsActive()) {
             /*
             op.telemetry.addData("current:", currentPosition);
             op.telemetry.addData("target:", targetEncoderValue);
             op.telemetry.update();
             */
-            currentPosition = (Math.abs(fr.getCurrentPosition()));
+            positionDiff = Math.abs(fl.getCurrentPosition() - initialPosition);
 
             //if(currentPosition < 200)
                 //actualPower = .28F;
 
-            fl.setPower(actualPower);
-            fr.setPower(-(actualPower));
-            bl.setPower(-(actualPower));
-            br.setPower(actualPower);
+            float flPower, frPower, blPower, brPower;
+
+            flPower = actualPower;
+            frPower = -actualPower * 1.2F;
+            blPower = -actualPower;
+            brPower = actualPower;
+
+            float max = Max(flPower, frPower, blPower, brPower);
+
+            fl.setPower(flPower/max);
+            fr.setPower(frPower/max);
+            bl.setPower(blPower/max);
+            br.setPower(brPower/max);
         }
 
         StopAll();
@@ -256,7 +266,7 @@ public class DriveTrain {
                 float flPower, frPower, blPower, brPower;
 
                 flPower = actualPower + additionalpower + flTurnAdjust;
-                frPower = -actualPower + additionalpower;
+                frPower = (-actualPower + additionalpower) * 1.2F;
                 blPower = -actualPower + additionalpower + blTurnAdjust;
                 brPower = actualPower + additionalpower;
 
