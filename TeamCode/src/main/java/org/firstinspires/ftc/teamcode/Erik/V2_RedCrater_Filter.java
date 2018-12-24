@@ -113,12 +113,12 @@ public class V2_RedCrater_Filter extends AutoBase {
             Log.i("[phoenix]:Silv aft turn", "aft turn");
             sleep(300);
             // here will do a still scan, return mineral bottom, as reference for filtering.
-            //reference_Bottom_Y = FindClosestMineral_Y(this);
+            reference_Bottom_Y = FindClosestMineral_Y(this);
             drivetrain.Drive(0.2f, 1.5f, Direction.BACKWARD);
             sleep(300);
             // scan the next two minerals for GOLD
             //scanGold_Diagonal(0.11f, 200, 420, this); // was 240 and 380
-            scanGold_Diagonal_Filter(0.11f, 200f, 420f, this);
+            scanGold_Diagonal_Filter(0.11f, 200, 420, reference_Bottom_Y, this);
             sleep(100);
             //drivetrain.Drive(0.3f, 1f, Direction.FORWARD);
             }
