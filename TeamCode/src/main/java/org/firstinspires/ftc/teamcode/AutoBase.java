@@ -83,9 +83,10 @@ public abstract class AutoBase extends LinearOpMode {
         fr = hardwareMap.dcMotor.get("frontright");
         bl = hardwareMap.dcMotor.get("backleft");
         br = hardwareMap.dcMotor.get("backright");
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
-        bl.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightLift = hardwareMap.dcMotor.get("rightlift");
+        fr.setDirection(DcMotorSimple.Direction.REVERSE);
+        br.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        /*rightLift = hardwareMap.dcMotor.get("rightlift");
         leftLift = hardwareMap.dcMotor.get("leftlift");
 
         hook = hardwareMap.servo.get("hook");
@@ -96,16 +97,16 @@ public abstract class AutoBase extends LinearOpMode {
 
         liftSensor = hardwareMap.get(DigitalChannel.class, "liftsensor");
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); */
 
         drivetrain = new DriveTrain(fl, fr, bl, br, this);
         // boolean drivetrain.robotWork = true;
 
-        markerHook = hardwareMap.servo.get("markerhook");
+        /*markerHook = hardwareMap.servo.get("markerhook");
         ServoControllerEx primaryController = (ServoControllerEx) markerHook.getController();
         int grabberServoPort = markerHook.getPortNumber();
         PwmControl.PwmRange grabberPwmRange = new PwmControl.PwmRange(899, 2150);
-        primaryController.setServoPwmRange(grabberServoPort, grabberPwmRange);
+        primaryController.setServoPwmRange(grabberServoPort, grabberPwmRange); */
 
         //setting up variable "markerHook" to the hardware of the robot
 
@@ -455,10 +456,10 @@ public abstract class AutoBase extends LinearOpMode {
         float current_Gold_Width; // width of gold, to drive towards it..
         float actualPower = power;
         float mineral_Bottom = 0;
-        float max_Mineral_Bottom = 0;
+        float min_Mineral_Bottom = 1100;
         float max_mineral_height = 0;
         int index_Gold = -1;
-        int index_Max_Bottom_Mineral = -1;
+        int index_Min_Bottom_Mineral = -1;
         int is_Real_Gold = 0;
 
 
@@ -486,35 +487,37 @@ public abstract class AutoBase extends LinearOpMode {
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
                     opMode.telemetry.addData("# Object Detected", updatedRecognitions.size());
-                    if (updatedRecognitions.size() <= 3) {
+                    if (updatedRecognitions.size() <= 10) {
                         int goldMineralX = -1;
                         int silverMineral1X = -1;
                         int silverMineral2X = -1;
-                        max_Mineral_Bottom = 0;
+                        min_Mineral_Bottom = 1100;
+                        index_Min_Bottom_Mineral = -1;
+                        index_Gold = -1;
                         mineral_Bottom = 0;
                         for (Recognition recognition : updatedRecognitions) {
                             // here needs a loop to find out bottom value for each mineral, and the highest..
-                            mineral_Bottom = recognition.getBottom();
+                            mineral_Bottom = recognition.getTop();
                             max_mineral_height = recognition.getBottom() - recognition.getTop();
                             telemetry.addData("cur max height", max_mineral_height);
                             Log.i("[phoenix]:max height", Float.toString(max_mineral_height));
-                            telemetry.addData("cur top", max_mineral_height);
-                            Log.i("[phoenix]:max height", Float.toString(max_mineral_height));
+                            telemetry.addData("cur btm", mineral_Bottom);
+                            Log.i("[phoenix]:cur btm", Float.toString(mineral_Bottom));
                             telemetry.addData("height by call", recognition.getHeight());
                             Log.i("[phoenix]:height byCall", Float.toString(recognition.getHeight()));
-                            telemetry.addData("height by image call", recognition.getImageHeight());
-                            Log.i("[phoenix]:heightByImage", Float.toString(recognition.getImageHeight()));
+                            //telemetry.addData("height by image call", recognition.getImageHeight());
+                            //Log.i("[phoenix]:heightByImage", Float.toString(recognition.getImageHeight()));
                             telemetry.update();
 
-                            if (mineral_Bottom > max_Mineral_Bottom) {
-                                max_Mineral_Bottom = mineral_Bottom;
-                                index_Max_Bottom_Mineral = updatedRecognitions.indexOf(recognition);
-                                telemetry.addData("cur max bottom", max_Mineral_Bottom);
-                                Log.i("[phoenix]:cur max Bttm", Float.toString(max_Mineral_Bottom));
-                                telemetry.addData("max bottom index", index_Max_Bottom_Mineral);
-                                Log.i("[phoenix]:max btm ind", Integer.toString(index_Max_Bottom_Mineral));
-                                telemetry.addData("cur top", recognition.getTop());
-                                Log.i("[phoenix]:cur top", Float.toString(recognition.getTop()));
+                            if (mineral_Bottom < min_Mineral_Bottom) {
+                                min_Mineral_Bottom = mineral_Bottom;
+                                index_Min_Bottom_Mineral = updatedRecognitions.indexOf(recognition);
+                                telemetry.addData("cur max bottom", min_Mineral_Bottom);
+                                Log.i("[phoenix]:cur max Bttm", Float.toString(min_Mineral_Bottom));
+                                telemetry.addData("max bottom index", index_Min_Bottom_Mineral);
+                                Log.i("[phoenix]:max btm ind", Integer.toString(index_Min_Bottom_Mineral));
+                                telemetry.addData("cur top", recognition.getBottom());
+                                Log.i("[phoenix]:cur top", Float.toString(recognition.getBottom()));
                                 telemetry.update();
 
                             }
@@ -527,7 +530,7 @@ public abstract class AutoBase extends LinearOpMode {
                             telemetry.update();
                         }
 
-                        if (index_Gold == index_Max_Bottom_Mineral && max_Mineral_Bottom > known_max_mineral_bottom)
+                        if (index_Gold == index_Min_Bottom_Mineral && min_Mineral_Bottom < known_max_mineral_bottom)
                          {    // max_Mineral_Bottom > (known_max_mineral_bottom - 0.5*max_mineral_height)
                                 gold_loop_No = gold_loop_No + 1;
                                 currentTime = Math.round(runtime.milliseconds());
@@ -948,13 +951,13 @@ public abstract class AutoBase extends LinearOpMode {
         return scanResult;
     }
 
-    public Float FindClosestMineral_Y(LinearOpMode opMode) {
+    public Float FindClosestMineral_Y(float rangeFactor, LinearOpMode opMode) {
 
-        float mineral_Bottom = -1;
-        float max_Mineral_Bottom = -1;
+        float mineral_Bottom = 1100;
+        float min_Mineral_Bottom = 1100;
         //int index_Gold = -1;
         float mineral_Height = 0;
-        int index_Max_Bottom_Mineral = -1;
+        int index_Min_Bottom_Mineral = -1;
 
         if (opModeIsActive()) {
             /** Activate Tensor Flow Object Detection. */
@@ -962,7 +965,7 @@ public abstract class AutoBase extends LinearOpMode {
                 tfod.activate();
             }
 
-            while (opModeIsActive() && (max_Mineral_Bottom == -1)) {
+            while (opModeIsActive() && (min_Mineral_Bottom == 1100)) {
 
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
@@ -970,24 +973,30 @@ public abstract class AutoBase extends LinearOpMode {
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
                         opMode.telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        if (updatedRecognitions.size() <= 3) {
+                        if (updatedRecognitions.size() <= 10) {
 
                             for (Recognition recognition : updatedRecognitions) {
                                 // here needs a loop to find out bottom value for each mineral, and the highest..
-                                mineral_Bottom = recognition.getBottom();
-                                if (mineral_Bottom > max_Mineral_Bottom) {
-                                    max_Mineral_Bottom = mineral_Bottom;
-                                    index_Max_Bottom_Mineral = updatedRecognitions.indexOf(recognition);
-                                    telemetry.addData("cur max bottom", max_Mineral_Bottom);
-                                    Log.i("[phoenix]:cur max Bttm", Float.toString(max_Mineral_Bottom));
-                                    telemetry.addData("max bottom index", index_Max_Bottom_Mineral);
-                                    Log.i("[phoenix]:max btm ind", Integer.toString(index_Max_Bottom_Mineral));
-                                    opMode.telemetry.update();
+                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL) || recognition.getLabel().equals(LABEL_SILVER_MINERAL)) {
+                                    mineral_Bottom = recognition.getTop(); // should be top because cell fliped
+                                    if (mineral_Bottom < min_Mineral_Bottom) {
+                                        min_Mineral_Bottom = mineral_Bottom;
+                                        index_Min_Bottom_Mineral = updatedRecognitions.indexOf(recognition);
+                                        telemetry.addData("cur max bottom", min_Mineral_Bottom);
+                                        Log.i("[phoenix]:cur max Bttm", Float.toString(min_Mineral_Bottom));
+                                        telemetry.addData("max bottom index", index_Min_Bottom_Mineral);
+                                        Log.i("[phoenix]:max btm ind", Integer.toString(index_Min_Bottom_Mineral));
+                                        opMode.telemetry.update();
+                                    }
                                 }
-
+                                else
+                                    {telemetry.addData("didnt find any gold or sliver", "no mineral found");
+                                    Log.i("[phoenix]:None found", "no mineral found");
+                                    opMode.telemetry.update(); }
                             }
-                            if (index_Max_Bottom_Mineral != -1 ) {
-                                mineral_Height = updatedRecognitions.get(index_Max_Bottom_Mineral).getHeight();
+
+                            if (index_Min_Bottom_Mineral != -1 ) {
+                                mineral_Height = updatedRecognitions.get(index_Min_Bottom_Mineral).getHeight();
                                 telemetry.addData("mineral height: ", mineral_Height);
                                 Log.i("[phoenix]:mineral hight", Float.toString(mineral_Height));
                                 opMode.telemetry.update();
@@ -997,7 +1006,7 @@ public abstract class AutoBase extends LinearOpMode {
                 }
             }
         }
-        return max_Mineral_Bottom - 0.5f*mineral_Height;
+        return min_Mineral_Bottom + rangeFactor*mineral_Height;
     }
 
     public Integer ScanFirstMineralSimple() {
@@ -1010,7 +1019,7 @@ public abstract class AutoBase extends LinearOpMode {
                 tfod.activate();
             }
 
-            if (opModeIsActive()) {
+            while (opModeIsActive() && scanResult == 0) { // change from if since it is missing scaning gold
 
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
