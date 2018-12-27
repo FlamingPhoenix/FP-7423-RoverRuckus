@@ -83,10 +83,10 @@ public abstract class AutoBase extends LinearOpMode {
         fr = hardwareMap.dcMotor.get("frontright");
         bl = hardwareMap.dcMotor.get("backleft");
         br = hardwareMap.dcMotor.get("backright");
-        fr.setDirection(DcMotorSimple.Direction.REVERSE);
-        br.setDirection(DcMotorSimple.Direction.REVERSE);
+        fl.setDirection(DcMotorSimple.Direction.REVERSE);
+        bl.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        /*rightLift = hardwareMap.dcMotor.get("rightlift");
+        rightLift = hardwareMap.dcMotor.get("rightlift");
         leftLift = hardwareMap.dcMotor.get("leftlift");
 
         hook = hardwareMap.servo.get("hook");
@@ -97,16 +97,16 @@ public abstract class AutoBase extends LinearOpMode {
 
         liftSensor = hardwareMap.get(DigitalChannel.class, "liftsensor");
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); */
+        rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         drivetrain = new DriveTrain(fl, fr, bl, br, this);
         // boolean drivetrain.robotWork = true;
 
-        /*markerHook = hardwareMap.servo.get("markerhook");
+        markerHook = hardwareMap.servo.get("markerhook");
         ServoControllerEx primaryController = (ServoControllerEx) markerHook.getController();
         int grabberServoPort = markerHook.getPortNumber();
         PwmControl.PwmRange grabberPwmRange = new PwmControl.PwmRange(899, 2150);
-        primaryController.setServoPwmRange(grabberServoPort, grabberPwmRange); */
+        primaryController.setServoPwmRange(grabberServoPort, grabberPwmRange);
 
         //setting up variable "markerHook" to the hardware of the robot
 
