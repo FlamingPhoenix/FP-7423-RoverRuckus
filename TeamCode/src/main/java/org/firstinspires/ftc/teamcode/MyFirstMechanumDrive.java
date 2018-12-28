@@ -26,6 +26,9 @@ public class MyFirstMechanumDrive extends OpMode {
     int magZero = 0;
     Servo arm;
     boolean isArmInitiliazed = false;
+    Servo hopper;
+    boolean isAPressed = false;
+
 
     public void drive(float x1, float y1, float x2) {
         float frontLeft = y1 + x1 + x2;
@@ -56,7 +59,7 @@ public class MyFirstMechanumDrive extends OpMode {
         arm = hardwareMap.servo.get("arm");
         ServoControllerEx armController = (ServoControllerEx) arm.getController();
         int armServoPort = arm.getPortNumber();
-        PwmControl.PwmRange armPwmRange = new PwmControl.PwmRange(1280, 1760);
+        PwmControl.PwmRange armPwmRange = new PwmControl.PwmRange(1480, 1700);
         armController.setServoPwmRange(armServoPort, armPwmRange);
 
         hook = hardwareMap.servo.get("hook");
@@ -64,6 +67,13 @@ public class MyFirstMechanumDrive extends OpMode {
         int hookServoPort = hook.getPortNumber();
         PwmControl.PwmRange hookPwmRange = new PwmControl.PwmRange(899, 2000);
         hookController.setServoPwmRange(hookServoPort, hookPwmRange);
+
+        hopper = hardwareMap.servo.get("hopper");
+        ServoControllerEx hopperController = (ServoControllerEx) hopper.getController();
+        int hopperServoPort = hopper.getPortNumber();
+        PwmControl.PwmRange hopperPwmRange = new PwmControl.PwmRange(899, 2105);
+        hopperController.setServoPwmRange(hopperServoPort, hopperPwmRange);
+        hopper.setPosition(0.2);
 
         liftSensor = hardwareMap.get(DigitalChannel.class, "liftsensor");
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -75,6 +85,8 @@ public class MyFirstMechanumDrive extends OpMode {
 
     @Override
     public void loop() {
+
+
         if (!isArmInitiliazed)
         {
             arm.setPosition(0.3);
@@ -166,7 +178,29 @@ public class MyFirstMechanumDrive extends OpMode {
             arm.setPosition(0);
         }
 
+        if (gamepad1.a)
+        {
+            hopper.setPosition(1);
+        }
 
+        if (gamepad1.a)
+        {
+            hopper.setPosition(0.3);
+            isAPressed = true;
+        }
+        else if (!isAPressed)
+        {
+            double armAngle = arm.getPosition();
+            double hopperPosition = 0.3 + ((((1 - armAngle) / 0.7) * 90) * 0.0667);
+            hopper.setPosition(hopperPosition);
+        }
+        else if (isAPressed)
+        {
+            if (arm.getPosition() > 0.5)
+            {
+                isAPressed = false;
+            }
+        }
 
         telemetry.addData("lift sensor:", liftSensor.getState());
         telemetry.addData("encoder value: ", rightLift.getCurrentPosition());

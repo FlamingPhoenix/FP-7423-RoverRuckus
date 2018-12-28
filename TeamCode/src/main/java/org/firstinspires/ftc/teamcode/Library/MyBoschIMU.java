@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.Library;
 
-
+import android.util.Log;
 import android.support.annotation.NonNull;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -70,9 +70,11 @@ public class MyBoschIMU implements BNO055IMU {
 
         if (startOrientation.firstAngle > 0 && turningDirection == Direction.COUNTERCLOCKWISE && orientation.firstAngle < 0) {
              orientation.firstAngle = orientation.firstAngle + 360;
+             Log.i("[phoenix:turnTest]", String.format("clockwise:%f", orientation.firstAngle));
         }
         else if (startOrientation.firstAngle < 0 && turningDirection == Direction.CLOCKWISE && orientation.firstAngle > 0) {
              orientation.firstAngle = orientation.firstAngle - 360;
+             Log.i("[phoenix:turnTest]", String.format("counterclockwise:%f", orientation.firstAngle));
         }
 
 

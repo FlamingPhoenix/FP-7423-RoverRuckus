@@ -31,8 +31,10 @@ public class MyFirstAuto extends AutoBase {
         waitForStart();
 
         //releaseFromLander();
-        drivetrain.Strafe(1F, 30, Direction.LEFT);
-        sleep(500);
-        drivetrain.Strafe(1F, 30, Direction.RIGHT);
+       drivetrain.Turn(.5F, 90, Direction.CLOCKWISE, imu, this);
+       sleep(1000);
+       drivetrain.Turn(.5F, 45, Direction.CLOCKWISE, imu, this);
+       sleep(1000);
+       drivetrain.Turn(.5F, 90, Direction.COUNTERCLOCKWISE, imu, this);
     }
 }
