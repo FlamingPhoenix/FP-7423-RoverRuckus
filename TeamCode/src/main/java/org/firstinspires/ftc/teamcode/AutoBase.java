@@ -76,6 +76,8 @@ public abstract class AutoBase extends LinearOpMode {
     protected TFObjectDetector tfod;
 
     protected Servo markerHook;
+    Servo arm;
+    Servo hopper;
 
     public void initialize() {
 
@@ -95,6 +97,12 @@ public abstract class AutoBase extends LinearOpMode {
         PwmControl.PwmRange hookPwmRange = new PwmControl.PwmRange(899, 2000);
         hookController.setServoPwmRange(hookServoPort, hookPwmRange);
 
+        hopper = hardwareMap.servo.get("hopper");
+        ServoControllerEx hopperController = (ServoControllerEx) hopper.getController();
+        int hopperServoPort = hopper.getPortNumber();
+        PwmControl.PwmRange hopperPwmRange = new PwmControl.PwmRange(899, 2105);
+        hopperController.setServoPwmRange(hopperServoPort, hopperPwmRange);
+
         liftSensor = hardwareMap.get(DigitalChannel.class, "liftsensor");
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -108,11 +116,16 @@ public abstract class AutoBase extends LinearOpMode {
         PwmControl.PwmRange grabberPwmRange = new PwmControl.PwmRange(899, 2150);
         primaryController.setServoPwmRange(grabberServoPort, grabberPwmRange);
 
+        arm = hardwareMap.servo.get("arm");
+        ServoControllerEx armController = (ServoControllerEx) arm.getController();
+        int armServoPort = arm.getPortNumber();
+        PwmControl.PwmRange armPwmRange = new PwmControl.PwmRange(1480, 1700);
+        armController.setServoPwmRange(armServoPort, armPwmRange);
         //setting up variable "markerHook" to the hardware of the robot
 
         // WARNING!!!  Do not enable this line unless you are specifically testing the marker hook because when it is in position 1,
         // It is using power the entire time and the servo will overheat.
-        //markerHook.setPosition(0.9);
+        markerHook.setPosition(0.9);
 
         imu = new MyBoschIMU(hardwareMap);
 
@@ -1120,8 +1133,54 @@ public abstract class AutoBase extends LinearOpMode {
         rightLift.setPower(0);
         leftLift.setPower(0);
 
-        hook.setPosition(0.1);
+        hook.setPosition(0.2);
         sleep(700);
     }
 
+    public void sampleGold(LinearOpMode opMode) {
+        float reference_Bottom_Y = 0;
+        int detectionOutcome = 0;
+
+        //detectionOutcome = DriveToScanFirstMineral(0.11f, Direction.FORWARD, this); // 0.11 at Dr Warner, 0.15 at carpets
+        detectionOutcome = ScanFirstMineralSimple();
+        telemetry.addData("mineral scan outcome", detectionOutcome);
+        Log.i("[phoenix]:min outcome", Integer.toString(detectionOutcome));
+
+        // Explanation: decide next step based on outcome of first mineral,
+        // if A is gold, hit it anc come back, turn 45 dgree CCW
+        // if A is not Gold, turn 45 degrees CCW, scan Gold Diagonally, once find the gold, hit and come back.
+        sleep(200);
+        if (detectionOutcome == 1) { //ScanFirstMineral() == 1
+            telemetry.addData("Gold found", "during first scan");
+            Log.i("[phoenix]:gold detected", "found gold");
+            sleep(200);
+            StrafeWhileVisible(0.3f, 22f, 720, 10, this);
+            telemetry.addData("Gold aft straf", "after strafe");
+            Log.i("[phoenix]:gold aft str", "after strafe");
+            sleep(300);
+            drivetrain.Strafe(0.3f, 8.5f, Direction.LEFT);
+            drivetrain.Turn(0.4f, 35, Direction.COUNTERCLOCKWISE, imu, this); // shouid be 45, compensate for wheel issue
+            drivetrain.Drive(0.3f, 32f, Direction.FORWARD);}
+        else { //ScanFirstMineral() == 2, in this scenario, either B or C is GOLD
+            telemetry.addData("Silver found", "during first scan");
+            Log.i("[phoenix]:Silv detected", "found silver");
+            // strafe to the right position
+            drivetrain.Strafe(0.25f, 5.5f, Direction.RIGHT);  // was 2 or 5.5 before..need to evaluate the risk of hitting lander leg
+            sleep(500);
+            drivetrain.Turn(0.2f, 35, Direction.COUNTERCLOCKWISE, imu, this); // should be 45, compensate for wheels issue
+            telemetry.addData("Silver aft turn", "after turn");
+            Log.i("[phoenix]:Silv aft turn", "aft turn");
+            sleep(500);
+            // here will do a still scan, return mineral bottom, as reference for filtering.
+            reference_Bottom_Y = FindClosestMineral_Y(0.9f,this);
+            telemetry.addData("ref bottomY", reference_Bottom_Y);
+            Log.i("[phoenix]:refBottomY", Float.toString(reference_Bottom_Y));
+            sleep(500);
+            drivetrain.Drive(0.2f, 1.5f, Direction.BACKWARD);
+            sleep(300);
+            // scan the next two minerals for GOLD
+            //scanGold_Diagonal(0.11f, 200, 420, this); // was 240 and 380
+            scanGold_Diagonal_Filter(0.11f, 200, 420, reference_Bottom_Y, this);
+        }
+    }
 }

@@ -42,7 +42,7 @@ public class DriveTrain {
     public  static final double  LATERAL_GAIN   =  0.05; //0.0027,  Rate at which we respond to off-axis error
     public  static final double  AXIAL_GAIN     =  0.05;  // 0.0017, Rate at which we respond to target distance errors
 
-    public float PPR = 560F;  // 560 for new robot 1120 for old robot
+    public float PPR = 1120F;  // 560 for new robot 1120 for old robot
 
 
     public DriveTrain(DcMotor frontleft, DcMotor frontright, DcMotor backleft, DcMotor backright) {

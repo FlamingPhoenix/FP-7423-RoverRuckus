@@ -27,7 +27,9 @@ public class MyFirstMechanumDrive extends OpMode {
     Servo arm;
     boolean isArmInitiliazed = false;
     Servo hopper;
+    Servo bucket;
     boolean isAPressed = false;
+    boolean isReadyToDropMineral = false;
 
 
     public void drive(float x1, float y1, float x2) {
@@ -75,6 +77,13 @@ public class MyFirstMechanumDrive extends OpMode {
         hopperController.setServoPwmRange(hopperServoPort, hopperPwmRange);
         hopper.setPosition(0.2);
 
+        bucket = hardwareMap.servo.get("bucket");
+        ServoControllerEx bucketController = (ServoControllerEx) bucket.getController();
+        int bucketServoPort = bucket.getPortNumber();
+        PwmControl.PwmRange bucketPwmRange = new PwmControl.PwmRange(899, 2105);
+        bucketController.setServoPwmRange(bucketServoPort, hopperPwmRange);
+        bucket.setPosition(1);
+
         liftSensor = hardwareMap.get(DigitalChannel.class, "liftsensor");
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -106,7 +115,7 @@ public class MyFirstMechanumDrive extends OpMode {
             magZero = rightLift.getCurrentPosition();
         }
 
-
+        //driver 2 control lift
         if (power < -0.2)
         {
             if ((rightLift.getCurrentPosition() - magZero) < -7000)
@@ -117,6 +126,13 @@ public class MyFirstMechanumDrive extends OpMode {
 
             leftLift.setPower(power);
             rightLift.setPower(power);
+
+            //prevent arm to get in harms way
+
+                if (arm.getPosition() < 0.3d) {
+                    arm.setPosition(0.3d);
+                }
+
         }
         else if (power > 0.2)
         {
@@ -134,7 +150,6 @@ public class MyFirstMechanumDrive extends OpMode {
             rightLift.setPower(0);
             leftLift.setPower(0);
         }
-
 
         // servo motors
         if (gamepad2.left_bumper)
@@ -165,33 +180,52 @@ public class MyFirstMechanumDrive extends OpMode {
             }
         }
 
+        //driver 2 control buckets
+        if (gamepad2.right_trigger > 0.5) {
+            bucket.setPosition(0);
+        }
+
+        else if (gamepad2.right_bumper) {
+            bucket.setPosition(1);
+        }
+
+        //driver 1 control arm position
         if (gamepad1.right_trigger > 0.5)
         {
             arm.setPosition(1);
+            isReadyToDropMineral = false;
         }
         else if (gamepad1.right_bumper)
         {
-            arm.setPosition(0.8);
+            arm.setPosition(0.7);
+            isReadyToDropMineral = false;
         }
         else if (gamepad1.y)
         {
-            arm.setPosition(0);
+            if (rightLift.getCurrentPosition() > magZero) {
+                double newArmPosition = arm.getPosition() - 0.05d;
+                if (newArmPosition < 0.05)
+                    newArmPosition = 0.05d;
+                arm.setPosition(newArmPosition);
+                isReadyToDropMineral = true;
+            }
         }
+
 
         if (gamepad1.a)
         {
-            hopper.setPosition(1);
-        }
-
-        if (gamepad1.a)
-        {
-            hopper.setPosition(0.3);
+            hopper.setPosition(0.1);
             isAPressed = true;
         }
         else if (!isAPressed)
         {
             double armAngle = arm.getPosition();
-            double hopperPosition = 0.3 + ((((1 - armAngle) / 0.7) * 90) * 0.0667);
+
+            telemetry.addData("arm position", armAngle);
+            double hopperPosition = 0.13d + (120.0d * (1d - armAngle)) * 0.0078d;
+            if (hopperPosition > 1.0d) {
+                hopperPosition = 1.0d;
+            }
             hopper.setPosition(hopperPosition);
         }
         else if (isAPressed)
@@ -202,10 +236,6 @@ public class MyFirstMechanumDrive extends OpMode {
             }
         }
 
-        telemetry.addData("lift sensor:", liftSensor.getState());
-        telemetry.addData("encoder value: ", rightLift.getCurrentPosition());
-        telemetry.addData("power: ", power);
-        telemetry.addData("magZero: ", magZero);
         telemetry.update(); //graffiti
     }
 }
