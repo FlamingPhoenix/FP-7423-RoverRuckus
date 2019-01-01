@@ -48,8 +48,8 @@ public class AutoRedCrater extends AutoBase {
         sleep(500);
         this.sampleGold(this);
 
-        // ???
-        drivetrain.Strafe(0.6f, 3.5f, Direction.RIGHT);
+        // ??? dont think this line is needed
+        //drivetrain.Strafe(0.6f, 3.5f, Direction.RIGHT);
         sleep(300);
         // ???
 
