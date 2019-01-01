@@ -27,7 +27,7 @@ import java.util.List;
  */
 
 //@Disabled
-@Autonomous(name="Archmere BlueDepot", group="none")
+@Autonomous(name="M_W BlueDepot", group="none")
 public class AutoBlueDepot extends AutoBase {
     @Override
     public void runOpMode() throws InterruptedException {

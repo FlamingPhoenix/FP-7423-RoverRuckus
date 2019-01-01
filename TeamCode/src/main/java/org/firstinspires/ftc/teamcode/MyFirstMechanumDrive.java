@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -109,6 +111,12 @@ public class MyFirstMechanumDrive extends OpMode {
 
         float power = gamepad2.right_stick_y;
 
+        telemetry.addData("lift power: ", power);
+        telemetry.addData("lift encoder: ", rightLift.getCurrentPosition());
+        telemetry.update();
+        Log.i("lift power: ", Float.toString(power));
+        Log.i("lift encoder: ", Integer.toString(rightLift.getCurrentPosition()));
+
 
         if (liftSensor.getState() == false)
         {
@@ -136,7 +144,7 @@ public class MyFirstMechanumDrive extends OpMode {
         }
         else if (power > 0.2)
         {
-            if ((rightLift.getCurrentPosition() - magZero) > 2500)
+            if ((rightLift.getCurrentPosition() - magZero) > 2500)// why positive 2500 ? while above is -7000 ?
             {
                 if (power > 0.5)
                     power = 0.5f;

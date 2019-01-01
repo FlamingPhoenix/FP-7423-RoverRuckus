@@ -27,7 +27,7 @@ import java.util.List;
  */
 
 //@Disabled
-@Autonomous(name="Archmere BlueCrater", group="none")
+@Autonomous(name="M_W BlueCrater", group="none")
 
 public class AutoBlueCrater extends AutoBase {
 

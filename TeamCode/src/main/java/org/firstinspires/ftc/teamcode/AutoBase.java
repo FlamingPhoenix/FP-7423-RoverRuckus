@@ -691,7 +691,7 @@ public abstract class AutoBase extends LinearOpMode {
             Log.i("[phoenix]:opAct l-enco", Integer.toString(local_encoder_count));
 
             fl.setPower(power + lateral_power);
-            fr.setPower(-power + lateral_power);
+            fr.setPower(-power*1.2F + lateral_power); // adjust for weight, as long as wont exceed 1.0, otherwise, need to normalize power
             bl.setPower(-power + lateral_power);
             br.setPower(power + lateral_power);
             Log.i("[phoenix]:aft setpower", "setpower");
@@ -1025,6 +1025,8 @@ public abstract class AutoBase extends LinearOpMode {
     public Integer ScanFirstMineralSimple() {
         // this version of scan first mineral, will return Gold, OR if not GOLD, will not confirm but just assume Silver
         int scanResult = 0;
+        int i = 0;
+        int numberOfScanObjects = 0; // this is to deal with no able to scan anything..
 
         if (opModeIsActive()) {
             /** Activate Tensor Flow Object Detection. */
@@ -1032,37 +1034,35 @@ public abstract class AutoBase extends LinearOpMode {
                 tfod.activate();
             }
 
-            while (opModeIsActive() && scanResult == 0) { // change from if since it is missing scaning gold
+            // scan five times
+
+
+            while (opModeIsActive() && scanResult == 0 && (i <= 5) && numberOfScanObjects == 0) { // change from if since it is missing scaning gold, (Dec 30)change to if b/c it scans nothing (it is tradeoff)
 
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+
                     if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        if (updatedRecognitions.size() <= 3) {
+                        numberOfScanObjects = updatedRecognitions.size();
+                        telemetry.addData("# Object Detected", numberOfScanObjects);
+                        i = i + 1; // will just scan five times.
+                        if (numberOfScanObjects <= 5) {
                             int goldMineralX = -1;
                             int silverMineral1X = -1;
-                            int silverMineral2X = -1;
+
                             for (Recognition recognition : updatedRecognitions) {
                                 if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                                     goldMineralX = (int) recognition.getLeft();
                                     telemetry.addData("Gold Mineral Position", goldMineralX);
                                     Log.i("[phoenix]:Gold:", Integer.toString(goldMineralX));
                                     scanResult = 1;
-                                    /*} else if (recognition.getLabel().equals(LABEL_SILVER_MINERAL)) {
-                                        silverMineral1X = (int) recognition.getLeft();
-                                        telemetry.addData("Silver Mineral Position", goldMineralX);
-                                        Log.i("[phoenix]:Silver ", Integer.toString(goldMineralX));
-                                        scanResult = 2;*/
                                 } else {
                                     silverMineral1X = (int) recognition.getLeft();
                                     telemetry.addData("assume Silver Mineral Position", silverMineral1X);
                                     Log.i("[phoenix]:assume Sil", Integer.toString(silverMineral1X));
                                     scanResult = 2;
-                                    //telemetry.addData("no mineral found", 0);
-                                    //Log.i("[phoenix]:No Mineral:", Integer.toString(0));
-                                    //scanResult = 0;
 
                                 }
                             }
@@ -1073,6 +1073,7 @@ public abstract class AutoBase extends LinearOpMode {
                 }
             }
         }
+
         if (scanResult == 0)
             return 2;
         else

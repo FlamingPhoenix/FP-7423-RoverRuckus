@@ -18,18 +18,9 @@ import java.util.List;
  */
 
 //@Disabled
-@Autonomous(name="Archmere RedCrater", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
+@Autonomous(name="M_W RedCrater", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
 
 public class AutoRedCrater extends AutoBase {
-
-    //private ElapsedTime runtime = new ElapsedTime();
-    //private static final long firstHitTime = 1250; // this is from calibration, it is time to detect first object
-    //private static final long secondHitTime = 5300; // this is time to hit 2nd object..need to calibrate
-    //private static final long thirdHitTime = 12000;
-
-    //private static final float firstHitDistance = 3.5f; // this is from calibration, it is time to detect first object
-    //private static final float secondHitDistance = 15.5f; // this is time to hit 2nd object..need to calibrate
-    //private static final float thirdHitDistance = 27.5f;
 
 
     @Override
@@ -46,10 +37,8 @@ public class AutoRedCrater extends AutoBase {
 
         arm.setPosition(0.1);
         hopper.setPosition(0.9);
-        // Lower the robot
+        // Lower the robot and detach from the lander
         this.releaseFromLander();
-
-        // Detach from the lander
 
         // Prep steps a) Move forward 3 inches, b) strafe, c) turn about 45 degree, ready to scan mineral
         drivetrain.Drive(0.4f, 5f, Direction.FORWARD); //3.5
@@ -59,8 +48,10 @@ public class AutoRedCrater extends AutoBase {
         sleep(500);
         this.sampleGold(this);
 
+        // ???
         drivetrain.Strafe(0.6f, 3.5f, Direction.RIGHT);
         sleep(300);
+        // ???
 
         drivetrain.Turn(0.35f, 52, Direction.COUNTERCLOCKWISE, imu, this);
         // then turn to image
@@ -73,6 +64,8 @@ public class AutoRedCrater extends AutoBase {
         drivetrain.StrafeToImage(0.25f, redTarget, this); // was 0.4
         telemetry.addData(" after the strafe to image", "after strafe to image");
         Log.i("[phoenix]:after strafe", "after strafe to image");
+
+
         // this sleep could be tuned to accommodate alliance partner, depending on when they coming to depot and drop their maker
         sleep(300);
 
@@ -90,7 +83,7 @@ public class AutoRedCrater extends AutoBase {
        drivetrain.Drive(.65f, 75, Direction.BACKWARD); // continue to drive to crater
 
         // end of auto routine.
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         }
 
 

@@ -37,7 +37,7 @@ import java.util.List;
 
 @Disabled
 @Autonomous(name="DE RedCrater Backup", group="none") // keep a copy of Nov 27, red crater code
-public class AutoRedCrater_Backup_Nov27 extends AutoBase {
+public class AutoRedCrater_Backup_Padua_Nov27 extends AutoBase {
     private ElapsedTime runtime = new ElapsedTime();
     private static final long  firstHitTime = 1250; // this is from calibration, it is time to detect first object
     private static final long secondHitTime = 5300; // this is time to hit 2nd object..need to calibrate
