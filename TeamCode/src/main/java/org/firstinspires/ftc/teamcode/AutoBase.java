@@ -50,6 +50,8 @@ public abstract class AutoBase extends LinearOpMode {
     protected static final long secondHitTime = 5300; // this is time to hit 2nd object..need to calibrate
     protected static final long thirdHitTime = 12000;
 
+    public float PPR = 1120F;
+
     protected ElapsedTime runtime = new ElapsedTime();
 
     protected enum MineralPosition {LEFT, CENTER, RIGHT, UNKNOWN}
@@ -297,9 +299,9 @@ public abstract class AutoBase extends LinearOpMode {
         int turnAngle;
         int gold_Found = 0;
         float distanceFromStart = 0f;
-        int firstHitEncoderCount = Math.round(1120f * firstHitDistance / (4 * 3.1416f)); //89*3.5 = 312, 0.8 is a factor
-        int secondHitEncoderCount = Math.round(1120f * secondHitDistance / (4 * 3.1416f)); // 89*15.5 = 1380
-        int thirdEncoderCount = Math.round(1120f * thirdHitDistance / (4 * 3.1416f)); // 89*27.5 = 2448
+        int firstHitEncoderCount = Math.round(PPR * firstHitDistance / (4 * 3.1416f)); //89*3.5 = 312, 0.8 is a factor
+        int secondHitEncoderCount = Math.round(PPR * secondHitDistance / (4 * 3.1416f)); // 89*15.5 = 1380
+        int thirdEncoderCount = Math.round(PPR * thirdHitDistance / (4 * 3.1416f)); // 89*27.5 = 2448
         int currentPosition = 0;
         int gold_loop_No = 0;
 
@@ -449,9 +451,9 @@ public abstract class AutoBase extends LinearOpMode {
         int turnAngle;
         int gold_Found = 0;
         float distanceFromStart = 0f;
-        int firstHitEncoderCount = Math.round(1120f * firstHitDistance / (4 * 3.1416f)); //89*3.5 = 312, 0.8 is a factor
-        int secondHitEncoderCount = Math.round(1120f * secondHitDistance / (4 * 3.1416f)); // 89*15.5 = 1380
-        int thirdEncoderCount = Math.round(1120f * thirdHitDistance / (4 * 3.1416f)); // 89*27.5 = 2448
+        int firstHitEncoderCount = Math.round(PPR* firstHitDistance / (4 * 3.1416f)); //89*3.5 = 312, 0.8 is a factor
+        int secondHitEncoderCount = Math.round(PPR * secondHitDistance / (4 * 3.1416f)); // 89*15.5 = 1380
+        int thirdEncoderCount = Math.round(PPR * thirdHitDistance / (4 * 3.1416f)); // 89*27.5 = 2448
         int currentPosition = 0;
         int gold_loop_No = 0;
 
@@ -668,7 +670,7 @@ public abstract class AutoBase extends LinearOpMode {
         //fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
-        stop_encoder_count = Math.round(1120 * (stop_distance / (4f * 3.1416f)));
+        stop_encoder_count = Math.round(PPR * (stop_distance / (4f * 3.1416f)));
         base_Time = Math.round(runtime.milliseconds());
         base_encoder_count = Math.abs(fr.getCurrentPosition());
         Log.i("[phoenix]:bfr setpower", Float.toString(power));
@@ -684,10 +686,10 @@ public abstract class AutoBase extends LinearOpMode {
 
             Log.i("[phoenix]:opAct l-enco", Integer.toString(local_encoder_count));
 
-            fl.setPower(power*1.3F + lateral_power*1.3F);
-            fr.setPower(-power*1.3F + lateral_power*1.3F); // adjust for weight, as long as wont exceed 1.0, otherwise, need to normalize power
-            bl.setPower(-power + lateral_power);
-            br.setPower(power + lateral_power);
+            fl.setPower(power*1.2F + lateral_power*1.2F - 0.1f*power);
+            fr.setPower(-power*1.2F + lateral_power*1.2F - 0.1f*power); // adjust for weight, as long as wont exceed 1.0, otherwise, need to normalize power
+            bl.setPower(-power + lateral_power - 0.1f*power);
+            br.setPower(power + lateral_power - 0.1f*power);
             Log.i("[phoenix]:aft setpower", "setpower");
 
             if (tfod != null) {
@@ -752,9 +754,9 @@ public abstract class AutoBase extends LinearOpMode {
         int turnAngle;
         int gold_Found = 0;
         float distanceFromStart = 0f;
-        int firstHitEncoderCount = Math.round(1120f * firstHitDistance / (4 * 3.1416f)); //89*3.5 = 312, 0.8 is a factor
-        int secondHitEncoderCount = Math.round(1120f * secondHitDistance / (4 * 3.1416f)); // 89*15.5 = 1380
-        int thirdEncoderCount = Math.round(1120f * thirdHitDistance / (4 * 3.1416f)); // 89*27.5 = 2448
+        int firstHitEncoderCount = Math.round(PPR * firstHitDistance / (4 * 3.1416f)); //89*3.5 = 312, 0.8 is a factor
+        int secondHitEncoderCount = Math.round(PPR * secondHitDistance / (4 * 3.1416f)); // 89*15.5 = 1380
+        int thirdEncoderCount = Math.round(PPR * thirdHitDistance / (4 * 3.1416f)); // 89*27.5 = 2448
         int currentPosition = 0;
         int gold_loop_No = 0;
 
