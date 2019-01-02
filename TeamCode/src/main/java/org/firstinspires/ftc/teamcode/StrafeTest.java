@@ -30,16 +30,35 @@ public class StrafeTest extends AutoBase {
 ////        drivetrain.Strafe(1F, 10, Direction.LEFT);
 ////        sleep(2000);
         drivetrain.Strafe(0.5F, 20, Direction.RIGHT);
-//        sleep(2000);
-//        drivetrain.Strafe(1F, 20, Direction.LEFT);
+        sleep(2000);
+        drivetrain.Strafe(0.5F, 20, Direction.LEFT);
+        sleep(2000);
+        drivetrain.Strafe(0.5F, 10, Direction.RIGHT);
+        sleep(2000);
+        drivetrain.Strafe(0.5F, 10, Direction.LEFT);
+
+        //
+        sleep(2000);
 //
-//        sleep(6000);
-//
-//        drivetrain.Strafe(.75F, 5, Direction.RIGHT);
-//        sleep(2000);
-//        drivetrain.Strafe(.75F, 5, Direction.LEFT);
-//        sleep(2000);
-//        drivetrain.Strafe(.75F, 10, Direction.RIGHT);
+        drivetrain.Strafe(.35F, 20, Direction.RIGHT);
+        sleep(2000);
+        drivetrain.Strafe(.35F, 20, Direction.LEFT);
+        sleep(2000);
+        drivetrain.Strafe(.35F, 10, Direction.RIGHT);
+        sleep(2000);
+        drivetrain.Strafe(.35F, 10, Direction.LEFT);
+        sleep(2000);
+
+        drivetrain.Strafe(.25F, 10, Direction.RIGHT);
+        sleep(2000);
+        drivetrain.Strafe(.25F, 10, Direction.LEFT);
+        sleep(2000);
+        drivetrain.Strafe(.25F, 5, Direction.RIGHT);
+        sleep(2000);
+        drivetrain.Strafe(.25F, 5, Direction.LEFT);
+        sleep(2000);
+
+        //        drivetrain.Strafe(.75F, 10, Direction.RIGHT);
 //        sleep(2000);
 //        drivetrain.Strafe(.75F, 10, Direction.LEFT);
 //        sleep(2000);
