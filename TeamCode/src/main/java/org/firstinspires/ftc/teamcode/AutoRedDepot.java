@@ -71,8 +71,6 @@ public class AutoRedDepot extends AutoBase {
         drivetrain.Turn(.3f, 180, Direction.COUNTERCLOCKWISE, imu, this);
         drivetrain.Strafe(.4F, 3, Direction.LEFT);
 
-        // KEEP ABOVE..
-
         telemetry.addData(" after the strafe to image", "after strafe to image");
         Log.i("[phoenix]:after strafe", "after strafe to image");
         // this sleep could be tuned to accommodate alliance partner, depending on when they coming to depot and drop their maker
@@ -91,17 +89,9 @@ public class AutoRedDepot extends AutoBase {
         sleep(300 );
         drivetrain.Drive(.4f, 70f, Direction.BACKWARD);
 
-        // drive backward for to depot, it was 58
-
-        //drivetrain.Drive(.4f, 53f, Direction.FORWARD);
-        //sleep(300);
-        // drop marker
-        //markerHook.setPosition(0.1);
-        //sleep(300);
-        //drivetrain.Drive(.65f, 75, Direction.BACKWARD); // continue to drive to crater
+        // drive backward to depot, it was 58
 
         // end of auto routine.
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
 }

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.Erik;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.AutoBase;
 import org.firstinspires.ftc.teamcode.Direction;
 
@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Direction;
  * Created by Steve on 7/22/2018.
  */
 
-//@Disabled
+@Disabled
 @Autonomous(name="Archmere BlueCrater", group="none")
 
 public class AutoBlueCrater_Backup_Archmere_Dec13 extends AutoBase {
@@ -61,7 +61,6 @@ public class AutoBlueCrater_Backup_Archmere_Dec13 extends AutoBase {
             sleep(300);
             //drivetrain.Drive(0.2f, 1.5f, Direction.BACKWARD);
             //sleep(300);
-/////////////////////////////////////////////////////
 
 
             // scan first mineral
@@ -141,8 +140,7 @@ public class AutoBlueCrater_Backup_Archmere_Dec13 extends AutoBase {
             sleep(300);
             drivetrain.Drive(.65f, 75, Direction.BACKWARD); // continue to drive to crater
 
-            // end of auto routine.
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // end of auto routine
         }
 
 

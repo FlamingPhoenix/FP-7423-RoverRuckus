@@ -96,10 +96,10 @@ public class DriveTrain {
 
             float flPower, frPower, blPower, brPower;
 
-            flPower = actualPower;
-            frPower = -actualPower * 1.2F;
-            blPower = -actualPower;
-            brPower = actualPower;
+            flPower = actualPower * 1.2F - 0.05F;
+            frPower = -actualPower * 1.2F - 0.05F;
+            blPower = -actualPower * 1F - 0.05F;
+            brPower = actualPower * 1F - 0.05F;
 
             float max = Max(flPower, frPower, blPower, brPower);
 

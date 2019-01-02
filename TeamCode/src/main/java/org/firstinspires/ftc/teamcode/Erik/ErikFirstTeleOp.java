@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
-//@Disabled
+@Disabled
 @TeleOp(name = "ErikFirstTele", group = "none") // with microsoft gamepad
 public class ErikFirstTeleOp extends OpMode {
     DcMotor frontLeftWheel;

@@ -108,7 +108,6 @@ public abstract class AutoBase extends LinearOpMode {
         rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         drivetrain = new DriveTrain(fl, fr, bl, br, this);
-        // boolean drivetrain.robotWork = true;
 
         markerHook = hardwareMap.servo.get("markerhook");
         ServoControllerEx primaryController = (ServoControllerEx) markerHook.getController();
@@ -121,11 +120,6 @@ public abstract class AutoBase extends LinearOpMode {
         int armServoPort = arm.getPortNumber();
         PwmControl.PwmRange armPwmRange = new PwmControl.PwmRange(1480, 1700);
         armController.setServoPwmRange(armServoPort, armPwmRange);
-        //setting up variable "markerHook" to the hardware of the robot
-
-        // WARNING!!!  Do not enable this line unless you are specifically testing the marker hook because when it is in position 1,
-        // It is using power the entire time and the servo will overheat.
-        markerHook.setPosition(0.9);
 
         imu = new MyBoschIMU(hardwareMap);
 
@@ -581,9 +575,9 @@ public abstract class AutoBase extends LinearOpMode {
                                         //StrafeWhileVisible(0.30f, 29f, 5);
 
 // drivetrain.StopAll();
-                                        drivetrain.Drive(0.2f, 3.0f, Direction.FORWARD);
+                                        drivetrain.Drive(0.2f, 2.0f, Direction.FORWARD); // was 3
                                         sleep(300);
-                                        drivetrain.Strafe(0.4f, 6.5f, Direction.RIGHT);// was 6.5
+                                        drivetrain.Strafe(0.4f, 7.5f, Direction.RIGHT);// was 6.5
                                         sleep(300);
                                         drivetrain.Strafe(0.4f, 5.75f, Direction.LEFT); // was 4.5
 
@@ -602,9 +596,9 @@ public abstract class AutoBase extends LinearOpMode {
                                         opMode.telemetry.update();
                                     } else if ((gold_Found == 0)) { //1380 + 700 = 2180, 1380+600= 1980, 7 inches more, currentTime > (secondHitTime + 4000)) { // third time hit
                                         //StrafeWhileVisible(0.30f, 5.5f, 5);
-                                        drivetrain.Drive(0.2f, 3.0f, Direction.FORWARD);
+                                        drivetrain.Drive(0.2f, 2.0f, Direction.FORWARD);
                                         sleep(300);
-                                        drivetrain.Strafe(0.4f, 6.5F, Direction.RIGHT); //// was 6.5
+                                        drivetrain.Strafe(0.4f, 7.5F, Direction.RIGHT); //// was 6.5
                                         sleep(100);
                                         drivetrain.StopAll();
                                         sleep(300);
@@ -690,8 +684,8 @@ public abstract class AutoBase extends LinearOpMode {
 
             Log.i("[phoenix]:opAct l-enco", Integer.toString(local_encoder_count));
 
-            fl.setPower(power + lateral_power);
-            fr.setPower(-power*1.2F + lateral_power); // adjust for weight, as long as wont exceed 1.0, otherwise, need to normalize power
+            fl.setPower(power*1.3F + lateral_power*1.3F);
+            fr.setPower(-power*1.3F + lateral_power*1.3F); // adjust for weight, as long as wont exceed 1.0, otherwise, need to normalize power
             bl.setPower(-power + lateral_power);
             br.setPower(power + lateral_power);
             Log.i("[phoenix]:aft setpower", "setpower");
@@ -734,9 +728,9 @@ public abstract class AutoBase extends LinearOpMode {
                                 // adjustment
 
                                 if (cur_center_Gold < 180f) {
-                                    lateral_power = 0.08f;
+                                    lateral_power = 0.10f;
                                 } else if (cur_center_Gold > 350) {
-                                    lateral_power = -0.10f;
+                                    lateral_power = -0.12f;
                                 } else {
                                     lateral_power = 0;
                                 }
@@ -1155,33 +1149,35 @@ public abstract class AutoBase extends LinearOpMode {
             telemetry.addData("Gold found", "during first scan");
             Log.i("[phoenix]:gold detected", "found gold");
             sleep(200);
-            StrafeWhileVisible(0.3f, 22f, 720, 10, this);
+            drivetrain.Strafe(0.3f, 10f, Direction.RIGHT);
+            sleep(300);
+            StrafeWhileVisible(0.3f, 14.f, 720, 10, this);
             telemetry.addData("Gold aft straf", "after strafe");
             Log.i("[phoenix]:gold aft str", "after strafe");
             sleep(300);
-            drivetrain.Strafe(0.3f, 8.5f, Direction.LEFT);
+            drivetrain.Strafe(0.3f, 6.5f, Direction.LEFT);
             drivetrain.Turn(0.4f, 35, Direction.COUNTERCLOCKWISE, imu, this); // shouid be 45, compensate for wheel issue
-            drivetrain.Drive(0.3f, 32f, Direction.FORWARD);}
+            drivetrain.Drive(0.3f, 34f, Direction.FORWARD);}
         else { //ScanFirstMineral() == 2, in this scenario, either B or C is GOLD
             telemetry.addData("Silver found", "during first scan");
             Log.i("[phoenix]:Silv detected", "found silver");
             // strafe to the right position
-            drivetrain.Strafe(0.25f, 5.5f, Direction.RIGHT);  // was 2 or 5.5 before..need to evaluate the risk of hitting lander leg
+            drivetrain.Strafe(0.3f, 7.5f, Direction.RIGHT);  // was 2 or 5.5 before..need to evaluate the risk of hitting lander leg
             sleep(500);
             drivetrain.Turn(0.2f, 35, Direction.COUNTERCLOCKWISE, imu, this); // should be 45, compensate for wheels issue
             telemetry.addData("Silver aft turn", "after turn");
             Log.i("[phoenix]:Silv aft turn", "aft turn");
             sleep(500);
             // here will do a still scan, return mineral bottom, as reference for filtering.
-            reference_Bottom_Y = FindClosestMineral_Y(0.9f,this);
+            reference_Bottom_Y = FindClosestMineral_Y(0.7f,this);
             telemetry.addData("ref bottomY", reference_Bottom_Y);
             Log.i("[phoenix]:refBottomY", Float.toString(reference_Bottom_Y));
             sleep(500);
-            drivetrain.Drive(0.2f, 1.5f, Direction.BACKWARD);
+            drivetrain.Drive(0.3f, 3.5f, Direction.BACKWARD);
             sleep(300);
             // scan the next two minerals for GOLD
             //scanGold_Diagonal(0.11f, 200, 420, this); // was 240 and 380
-            scanGold_Diagonal_Filter(0.11f, 200, 420, reference_Bottom_Y, this);
+            scanGold_Diagonal_Filter(0.13f, 200, 420, reference_Bottom_Y, this);
         }
     }
 }
