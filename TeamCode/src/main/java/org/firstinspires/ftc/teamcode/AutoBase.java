@@ -577,7 +577,7 @@ public abstract class AutoBase extends LinearOpMode {
                                         //StrafeWhileVisible(0.30f, 29f, 5);
 
 // drivetrain.StopAll();
-                                        drivetrain.Drive(0.2f, 2.0f, Direction.FORWARD); // was 3
+                                        drivetrain.Drive(0.3f, 2.0f, Direction.FORWARD); // was 3
                                         sleep(300);
                                         drivetrain.Strafe(0.4f, 7.5f, Direction.RIGHT);// was 6.5
                                         sleep(300);
@@ -598,7 +598,7 @@ public abstract class AutoBase extends LinearOpMode {
                                         opMode.telemetry.update();
                                     } else if ((gold_Found == 0)) { //1380 + 700 = 2180, 1380+600= 1980, 7 inches more, currentTime > (secondHitTime + 4000)) { // third time hit
                                         //StrafeWhileVisible(0.30f, 5.5f, 5);
-                                        drivetrain.Drive(0.2f, 2.0f, Direction.FORWARD);
+                                        drivetrain.Drive(0.3f, 2.0f, Direction.FORWARD);
                                         sleep(300);
                                         drivetrain.Strafe(0.4f, 7.5F, Direction.RIGHT); //// was 6.5
                                         sleep(100);
@@ -1167,18 +1167,18 @@ public abstract class AutoBase extends LinearOpMode {
             Log.i("[phoenix]:Silv detected", "found silver");
             // strafe to the right position
             drivetrain.Strafe(0.3f, 7.5f, Direction.RIGHT);  // was 2 or 5.5 before..need to evaluate the risk of hitting lander leg
-            sleep(500);
+            sleep(100);
             drivetrain.Turn(0.2f, 35, Direction.COUNTERCLOCKWISE, imu, this); // should be 45, compensate for wheels issue
             telemetry.addData("Silver aft turn", "after turn");
             Log.i("[phoenix]:Silv aft turn", "aft turn");
-            sleep(500);
+            sleep(100);
             // here will do a still scan, return mineral bottom, as reference for filtering.
             reference_Bottom_Y = FindClosestMineral_Y(0.7f,this);
             telemetry.addData("ref bottomY", reference_Bottom_Y);
             Log.i("[phoenix]:refBottomY", Float.toString(reference_Bottom_Y));
-            sleep(500);
-            drivetrain.Drive(0.3f, 3.5f, Direction.BACKWARD);
-            sleep(300);
+            sleep(100);
+            drivetrain.Drive(0.3f, 2.5f, Direction.BACKWARD);
+            sleep(100);
             // scan the next two minerals for GOLD
             //scanGold_Diagonal(0.11f, 200, 420, this); // was 240 and 380
             scanGold_Diagonal_Filter(0.13f, 200, 420, reference_Bottom_Y, this);

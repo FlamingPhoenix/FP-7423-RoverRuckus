@@ -3,12 +3,13 @@ package org.firstinspires.ftc.teamcode;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 /**
  * Created by Steve on 7/22/2018.
  */
 
-//@Disabled
+@Disabled
 //@Autonomous(name="AutoRedSilver", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
 
 public class AutoRedSilver extends AutoBase {

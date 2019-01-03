@@ -41,20 +41,20 @@ public class AutoRedCrater extends AutoBase {
         this.releaseFromLander();
 
         // Prep steps a) Move forward 3 inches, b) strafe, c) turn about 45 degree, ready to scan mineral
-        drivetrain.Drive(0.30f, 3.5f, Direction.FORWARD); //3.5
-        sleep(500);
-        drivetrain.Turn(0.4f, 43, Direction.COUNTERCLOCKWISE, imu, this); // was 46
+        drivetrain.Drive(0.40f, 3.5f, Direction.FORWARD); //3.5
+        sleep(100);
+        drivetrain.Turn(0.25f, 43, Direction.COUNTERCLOCKWISE, imu, this); // was 46
 
-        sleep(200);
+        sleep(100);
         this.sampleGold(this);
 
         // ??? dont think this line is needed
         //drivetrain.Strafe(0.6f, 3.5f, Direction.RIGHT);
-        sleep(300);
+        sleep(100);
 
-        drivetrain.Turn(0.35f, 52, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.4f, 52, Direction.COUNTERCLOCKWISE, imu, this);
         // then turn to image
-        sleep(300);
+        sleep(100);
         telemetry.addData(" after the turn, before strafe to image", "before strafe to image");
         Log.i("[phoenix]:after turn", "before strafe to image");
         // this is optional, as most likely the robot will see image after above 52 degree turn.
@@ -66,7 +66,7 @@ public class AutoRedCrater extends AutoBase {
 
 
         // this sleep could be tuned to accommodate alliance partner, depending on when they coming to depot and drop their maker
-        sleep(300);
+        sleep(100);
 
         if (tfod != null) { // now it is ok to shutdown tfod/vuforia
             tfod.deactivate();
@@ -75,10 +75,10 @@ public class AutoRedCrater extends AutoBase {
 
         // drive backward for to depot, it was 58
        drivetrain.Drive(0.6f, 54.5f, Direction.FORWARD);
-        sleep(300);
+        sleep(100);
         // drop marker
         markerHook.setPosition(0.0);
-        sleep(300);
+        sleep(100);
        drivetrain.Drive(.65f, 68f, Direction.BACKWARD); // continue to drive to crater
 
         // end of auto routine.

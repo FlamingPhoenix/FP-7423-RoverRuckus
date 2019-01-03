@@ -66,6 +66,7 @@ public class AutoRedDepot extends AutoBase {
         //strafe to image
         drivetrain.StrafeToImage(0.4f, backTarget, this); // was 0.4
 
+        sleep(100);
         // VERY IMPORTANT, PLEASE KEEP THIS PART WHEN UPDATING FINAL VERSION OF AUTONOMOUS PROGRAM !!
         drivetrain.Strafe(.4F, 3, Direction.LEFT);
         sleep(100);
