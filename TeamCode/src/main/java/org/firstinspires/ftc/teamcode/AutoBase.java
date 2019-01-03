@@ -686,8 +686,8 @@ public abstract class AutoBase extends LinearOpMode {
 
             Log.i("[phoenix]:opAct l-enco", Integer.toString(local_encoder_count));
 
-            fl.setPower(power*1.2F + lateral_power*1.2F - 0.1f*power);
-            fr.setPower(-power*1.2F + lateral_power*1.2F - 0.1f*power); // adjust for weight, as long as wont exceed 1.0, otherwise, need to normalize power
+            fl.setPower(power*1.2F + lateral_power*1.0F - 0.1f*power); // could consider adding 1.2 to later power
+            fr.setPower(-power*1.2F + lateral_power*1.0F - 0.1f*power); // adjust for weight, as long as wont exceed 1.0, otherwise, need to normalize power
             bl.setPower(-power + lateral_power - 0.1f*power);
             br.setPower(power + lateral_power - 0.1f*power);
             Log.i("[phoenix]:aft setpower", "setpower");
@@ -1114,7 +1114,9 @@ public abstract class AutoBase extends LinearOpMode {
 
     public void releaseFromLander()
     {
-        while (liftSensor.getState() == true && this.opModeIsActive())
+        int startLiftPosition = rightLift.getCurrentPosition();
+
+        while (liftSensor.getState() == true && this.opModeIsActive() && (rightLift.getCurrentPosition() - startLiftPosition) > -5150)
         {
             if (rightLift.getCurrentPosition() > -3000)
             {
@@ -1144,22 +1146,22 @@ public abstract class AutoBase extends LinearOpMode {
         Log.i("[phoenix]:min outcome", Integer.toString(detectionOutcome));
 
         // Explanation: decide next step based on outcome of first mineral,
-        // if A is gold, hit it anc come back, turn 45 dgree CCW
+        // if A is gold, hit it and come back, turn 45 degree CCW
         // if A is not Gold, turn 45 degrees CCW, scan Gold Diagonally, once find the gold, hit and come back.
         sleep(200);
         if (detectionOutcome == 1) { //ScanFirstMineral() == 1
             telemetry.addData("Gold found", "during first scan");
             Log.i("[phoenix]:gold detected", "found gold");
-            sleep(200);
-            drivetrain.Strafe(0.3f, 10f, Direction.RIGHT);
-            sleep(300);
-            StrafeWhileVisible(0.3f, 14.f, 720, 10, this);
+            sleep(100);
+            drivetrain.Strafe(0.3f, 18f, Direction.RIGHT);
+            sleep(100);
+            //StrafeWhileVisible(1f, 18f, 720, 10, this);
             telemetry.addData("Gold aft straf", "after strafe");
             Log.i("[phoenix]:gold aft str", "after strafe");
-            sleep(300);
-            drivetrain.Strafe(0.3f, 6.5f, Direction.LEFT);
-            drivetrain.Turn(0.4f, 35, Direction.COUNTERCLOCKWISE, imu, this); // shouid be 45, compensate for wheel issue
-            drivetrain.Drive(0.3f, 34f, Direction.FORWARD);}
+            sleep(100);
+            drivetrain.Strafe(0.3f, 8f, Direction.LEFT);
+            drivetrain.Turn(0.4f, 45, Direction.COUNTERCLOCKWISE, imu, this); // shouid be 45, compensate for wheel issue
+            drivetrain.Drive(0.3f, 25f, Direction.FORWARD);}
         else { //ScanFirstMineral() == 2, in this scenario, either B or C is GOLD
             telemetry.addData("Silver found", "during first scan");
             Log.i("[phoenix]:Silv detected", "found silver");

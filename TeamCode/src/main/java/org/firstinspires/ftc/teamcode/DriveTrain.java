@@ -78,8 +78,6 @@ public class DriveTrain {
         if (d == Direction.LEFT)
             actualPower = -(power);
 
-        //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         int initialPosition = fl.getCurrentPosition();
         int positionDiff = 0;
 

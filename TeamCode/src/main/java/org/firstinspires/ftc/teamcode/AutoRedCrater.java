@@ -35,23 +35,22 @@ public class AutoRedCrater extends AutoBase {
         // Wait for the start button
         waitForStart();
 
-//        arm.setPosition(0.1);
-//        hopper.setPosition(0.9);
-//        // Lower the robot and detach from the lander
-//        this.releaseFromLander();
+        arm.setPosition(0.1);
+        hopper.setPosition(0.9);
+        // Lower the robot and detach from the lander
+        this.releaseFromLander();
 
         // Prep steps a) Move forward 3 inches, b) strafe, c) turn about 45 degree, ready to scan mineral
         drivetrain.Drive(0.30f, 3.5f, Direction.FORWARD); //3.5
         sleep(500);
-        drivetrain.Turn(0.4f, 46, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.4f, 43, Direction.COUNTERCLOCKWISE, imu, this); // was 46
 
-        sleep(500);
+        sleep(200);
         this.sampleGold(this);
 
         // ??? dont think this line is needed
         //drivetrain.Strafe(0.6f, 3.5f, Direction.RIGHT);
         sleep(300);
-        // ???
 
         drivetrain.Turn(0.35f, 52, Direction.COUNTERCLOCKWISE, imu, this);
         // then turn to image
@@ -61,7 +60,7 @@ public class AutoRedCrater extends AutoBase {
         // this is optional, as most likely the robot will see image after above 52 degree turn.
         drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, redTarget, imu, this);
         //strafe to image
-        drivetrain.StrafeToImage(0.25f, redTarget, this); // was 0.4
+        drivetrain.StrafeToImage(0.4f, redTarget, this); // was 0.4
         telemetry.addData(" after the strafe to image", "after strafe to image");
         Log.i("[phoenix]:after strafe", "after strafe to image");
 
@@ -78,7 +77,7 @@ public class AutoRedCrater extends AutoBase {
        drivetrain.Drive(0.6f, 54.5f, Direction.FORWARD);
         sleep(300);
         // drop marker
-        markerHook.setPosition(0.1);
+        markerHook.setPosition(0.0);
         sleep(300);
        drivetrain.Drive(.65f, 68f, Direction.BACKWARD); // continue to drive to crater
 

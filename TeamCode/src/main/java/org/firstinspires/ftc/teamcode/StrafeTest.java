@@ -21,58 +21,32 @@ public class StrafeTest extends AutoBase {
 
         waitForStart();
 
-//        drivetrain.Strafe(1F, 5, Direction.RIGHT);
-////        sleep(2000);
-////        drivetrain.Strafe(1F, 5, Direction.LEFT);
-////        sleep(2000);
-////        drivetrain.Strafe(1F, 10, Direction.RIGHT);
-////        sleep(2000);
-////        drivetrain.Strafe(1F, 10, Direction.LEFT);
-////        sleep(2000);
-        drivetrain.Strafe(0.5F, 20, Direction.RIGHT);
-        sleep(2000);
-        drivetrain.Strafe(0.5F, 20, Direction.LEFT);
-        sleep(2000);
-        drivetrain.Strafe(0.5F, 10, Direction.RIGHT);
-        sleep(2000);
-        drivetrain.Strafe(0.5F, 10, Direction.LEFT);
-
-        //
-        sleep(2000);
+        drivetrain.Strafe(1F, 10, Direction.RIGHT);
+//        sleep(2000);
+//        drivetrain.Strafe(0.5F, 20, Direction.LEFT);
+//        sleep(2000);
+//        drivetrain.Strafe(0.5F, 10, Direction.RIGHT);
+//        sleep(2000);
+//        drivetrain.Strafe(0.5F, 10, Direction.LEFT);
 //
-        drivetrain.Strafe(.35F, 20, Direction.RIGHT);
-        sleep(2000);
-        drivetrain.Strafe(.35F, 20, Direction.LEFT);
-        sleep(2000);
-        drivetrain.Strafe(.35F, 10, Direction.RIGHT);
-        sleep(2000);
-        drivetrain.Strafe(.35F, 10, Direction.LEFT);
-        sleep(2000);
-
-        drivetrain.Strafe(.25F, 10, Direction.RIGHT);
-        sleep(2000);
-        drivetrain.Strafe(.25F, 10, Direction.LEFT);
-        sleep(2000);
-        drivetrain.Strafe(.25F, 5, Direction.RIGHT);
-        sleep(2000);
-        drivetrain.Strafe(.25F, 5, Direction.LEFT);
-        sleep(2000);
-
-        //        drivetrain.Strafe(.75F, 10, Direction.RIGHT);
 //        sleep(2000);
-//        drivetrain.Strafe(.75F, 10, Direction.LEFT);
-//        sleep(2000);
-//        drivetrain.Strafe(.75F, 20, Direction.RIGHT);
-//        sleep(2000);
-//        drivetrain.Strafe(.75F, 20, Direction.LEFT);
 //
-//        sleep(6000);
+//        drivetrain.Strafe(.35F, 20, Direction.RIGHT);
+//        sleep(2000);
+//        drivetrain.Strafe(.35F, 20, Direction.LEFT);
+//        sleep(2000);
+//        drivetrain.Strafe(.35F, 10, Direction.RIGHT);
+//        sleep(2000);
+//        drivetrain.Strafe(.35F, 10, Direction.LEFT);
+//        sleep(2000);
 //
-//        drivetrain.Strafe(.5F, 5, Direction.RIGHT);
+//        drivetrain.Strafe(.25F, 10, Direction.RIGHT);
 //        sleep(2000);
-//        drivetrain.Strafe(.5F, 5, Direction.LEFT);
+//        drivetrain.Strafe(.25F, 10, Direction.LEFT);
 //        sleep(2000);
-//        drivetrain.Strafe(.5F, 10, Direction.RIGHT);
+//        drivetrain.Strafe(.25F, 5, Direction.RIGHT);
+//        sleep(2000);
+//        drivetrain.Strafe(.25F, 5, Direction.LEFT);
 //        sleep(2000);
 
         drivetrain.StopAll();
