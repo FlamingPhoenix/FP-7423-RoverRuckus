@@ -85,7 +85,7 @@ public class AutoBlueCrater extends AutoBase {
             sleep(100);
             // drop marker
             markerHook.setPosition(0.0);
-            sleep(100);
+            sleep(500);
             drivetrain.Drive(.65f, 68f, Direction.BACKWARD); // continue to drive to crater
 
             // end of auto routine.

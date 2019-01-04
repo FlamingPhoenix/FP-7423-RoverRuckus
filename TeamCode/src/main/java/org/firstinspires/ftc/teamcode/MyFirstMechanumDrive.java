@@ -32,6 +32,10 @@ public class MyFirstMechanumDrive extends OpMode {
     Servo bucket;
     boolean isAPressed = false;
     boolean isReadyToDropMineral = false;
+    boolean isLatchenabled = true;
+    float x1, x2, y1;
+    boolean isPickingMineral = false;
+
 
 
     public void drive(float x1, float y1, float x2) {
@@ -104,7 +108,15 @@ public class MyFirstMechanumDrive extends OpMode {
             isArmInitiliazed = true;
         }
 
-        drive(gamepad1.left_stick_x,  gamepad1.left_stick_y * -1, gamepad1.right_stick_x);
+        x1 = gamepad1.left_stick_x;
+        y1 = gamepad1.left_stick_y;
+        x2 = gamepad1.right_stick_x;
+        if (gamepad1.left_bumper){
+            x1 = x1/2f;
+            y1 = y1/2f;
+            x2 = x2/2f;
+        }
+        drive(x1,  y1 * -1, x2);
         //telemetry.addData("y1;", gamepad1.left_stick_y);
         //telemetry.addData("x1;", gamepad1.left_stick_x);
         //telemetry.update();
@@ -118,7 +130,7 @@ public class MyFirstMechanumDrive extends OpMode {
         Log.i("lift encoder: ", Integer.toString(rightLift.getCurrentPosition()));
 
 
-        if (liftSensor.getState() == false)
+        if (!liftSensor.getState())
         {
             magZero = rightLift.getCurrentPosition();
         }
@@ -160,8 +172,9 @@ public class MyFirstMechanumDrive extends OpMode {
         }
 
         // servo motors
-        if (gamepad2.left_bumper)
+        if ((gamepad2.left_bumper) && isLatchenabled)
         {
+            isLatchenabled = false;
             if (isHookOpen)
             {
                 hook.setPosition(1);
@@ -173,8 +186,10 @@ public class MyFirstMechanumDrive extends OpMode {
                 isHookOpen = true;
             }
         }
+        else if (!gamepad2.left_bumper)
+            isLatchenabled = true;
 
-        if (gamepad2.a && liftSensor.getState() == true)
+        if (gamepad2.a && liftSensor.getState())
         {
             if(rightLift.getCurrentPosition() < (magZero + 200))
             {
@@ -202,11 +217,13 @@ public class MyFirstMechanumDrive extends OpMode {
         {
             arm.setPosition(1);
             isReadyToDropMineral = false;
+            isPickingMineral = true;
         }
         else if (gamepad1.right_bumper)
         {
             arm.setPosition(0.7);
             isReadyToDropMineral = false;
+            isPickingMineral = true;
         }
         else if (gamepad1.y)
         {
@@ -216,6 +233,7 @@ public class MyFirstMechanumDrive extends OpMode {
                     newArmPosition = 0.05d;
                 arm.setPosition(newArmPosition);
                 isReadyToDropMineral = true;
+                isPickingMineral = false;
             }
         }
 

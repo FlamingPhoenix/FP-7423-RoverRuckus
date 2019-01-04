@@ -242,7 +242,7 @@ public abstract class AutoBase extends LinearOpMode {
         }
 
         if (opModeIsActive()) {
-            /** Activate Tensor Flow Object Detection. */
+            // Activate Tensor Flow Object Detection.
             if (tfod != null) {
                 tfod.activate();
             }
@@ -471,6 +471,10 @@ public abstract class AutoBase extends LinearOpMode {
         int index_Min_Bottom_Mineral = -1;
         int is_Real_Gold = 0;
 
+        if (known_max_mineral_bottom == 0) {
+            known_max_mineral_bottom = 600;
+        }
+
 
         runtime.reset(); // need to use time for tracking minerals instead of just  number of objects
         currentTime = Math.round(runtime.milliseconds());
@@ -579,7 +583,7 @@ public abstract class AutoBase extends LinearOpMode {
 // drivetrain.StopAll();
                                         drivetrain.Drive(0.3f, 2.0f, Direction.FORWARD); // was 3
                                         sleep(300);
-                                        drivetrain.Strafe(0.4f, 7.5f, Direction.RIGHT);// was 6.5
+                                        drivetrain.Strafe(0.4f, 9.5f, Direction.RIGHT);// was 6.5
                                         sleep(300);
                                         drivetrain.Strafe(0.4f, 5.75f, Direction.LEFT); // was 4.5
 
@@ -596,18 +600,18 @@ public abstract class AutoBase extends LinearOpMode {
                                         opMode.telemetry.addData("gold frequency", gold_loop_No);
                                         Log.i("[phoenix]:gold freq", Integer.toString(gold_loop_No));
                                         opMode.telemetry.update();
-                                    } else if ((gold_Found == 0)) { //1380 + 700 = 2180, 1380+600= 1980, 7 inches more, currentTime > (secondHitTime + 4000)) { // third time hit
+                                    } else if (gold_Found == 0) { //1380 + 700 = 2180, 1380+600= 1980, 7 inches more, currentTime > (secondHitTime + 4000)) { // third time hit
                                         //StrafeWhileVisible(0.30f, 5.5f, 5);
-                                        drivetrain.Drive(0.3f, 2.0f, Direction.FORWARD);
+                                        drivetrain.Drive(0.3f, 2f, Direction.FORWARD);
                                         sleep(300);
-                                        drivetrain.Strafe(0.4f, 7.5F, Direction.RIGHT); //// was 6.5
+                                        drivetrain.Strafe(0.4f, 8F, Direction.RIGHT); //// was 6.5
                                         sleep(100);
                                         drivetrain.StopAll();
                                         sleep(300);
                                         drivetrain.Strafe(0.4f, 5.75F, Direction.LEFT); //// was 4.5
                                         drivetrain.StopAll();
                                         sleep(300);
-                                        drivetrain.Drive(0.3f, 14f, Direction.FORWARD);
+                                        drivetrain.Drive(0.3f, 8.5f, Direction.FORWARD);
                                         gold_Found = 3;  // gold is in C position
                                         currentPosition = 0;
                                         //fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -915,7 +919,7 @@ public abstract class AutoBase extends LinearOpMode {
         int scanResult = 0;
 
         if (opModeIsActive()) {
-            /** Activate Tensor Flow Object Detection. */
+            // Activate Tensor Flow Object Detection.
             if (tfod != null) {
                 tfod.activate();
             }
@@ -969,7 +973,7 @@ public abstract class AutoBase extends LinearOpMode {
         int index_Min_Bottom_Mineral = -1;
 
         if (opModeIsActive()) {
-            /** Activate Tensor Flow Object Detection. */
+            // Activate Tensor Flow Object Detection.
             if (tfod != null) {
                 tfod.activate();
             }
@@ -1025,7 +1029,7 @@ public abstract class AutoBase extends LinearOpMode {
         int numberOfScanObjects = 0; // this is to deal with no able to scan anything..
 
         if (opModeIsActive()) {
-            /** Activate Tensor Flow Object Detection. */
+            // Activate Tensor Flow Object Detection.
             if (tfod != null) {
                 tfod.activate();
             }
@@ -1180,8 +1184,8 @@ public abstract class AutoBase extends LinearOpMode {
             drivetrain.Drive(0.3f, 2.5f, Direction.BACKWARD);
             sleep(100);
             // scan the next two minerals for GOLD
-            //scanGold_Diagonal(0.11f, 200, 420, this); // was 240 and 380
-            scanGold_Diagonal_Filter(0.13f, 200, 420, reference_Bottom_Y, this);
+            //scanGold_Diagonal(0.12f, 200, 420, this); // was 240 and 380
+            scanGold_Diagonal_Filter(0.13f, 200, 460, reference_Bottom_Y, this);
         }
     }
 }

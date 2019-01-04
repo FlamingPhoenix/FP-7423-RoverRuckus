@@ -34,7 +34,7 @@ public class AutoRedCrater extends AutoBase {
         // need to set up Marker first.
         // Wait for the start button
         waitForStart();
-
+//
         arm.setPosition(0.1);
         hopper.setPosition(0.9);
         // Lower the robot and detach from the lander
@@ -77,8 +77,8 @@ public class AutoRedCrater extends AutoBase {
        drivetrain.Drive(0.6f, 54.5f, Direction.FORWARD);
         sleep(100);
         // drop marker
-        markerHook.setPosition(0.0);
-        sleep(100);
+        markerHook.setPosition(0);
+        sleep(500);
        drivetrain.Drive(.65f, 68f, Direction.BACKWARD); // continue to drive to crater
 
         // end of auto routine.

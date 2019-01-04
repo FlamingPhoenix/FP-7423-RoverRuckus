@@ -86,7 +86,7 @@ public class AutoBlueDepot extends AutoBase {
         drivetrain.Drive(.7f, 40f, Direction.FORWARD);
         sleep(100);
         markerHook.setPosition(0.1);
-        sleep(100 );
+        sleep(500 );
         drivetrain.Drive(.7f, 65f, Direction.BACKWARD);
 
         // drive backward to depot, it was 58

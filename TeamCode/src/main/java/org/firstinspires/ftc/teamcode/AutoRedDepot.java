@@ -62,7 +62,7 @@ public class AutoRedDepot extends AutoBase {
         telemetry.addData(" after the turn, before strafe to image", "before strafe to image");
         Log.i("[phoenix]:after turn", "before strafe to image");
         // this is optional, as most likely the robot will see image after above 52 degree turn.
-        //drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, backTarget, imu, this);
+        drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, backTarget, imu, this);
         //strafe to image
         drivetrain.StrafeToImage(0.4f, backTarget, this); // was 0.4
 
@@ -89,7 +89,7 @@ public class AutoRedDepot extends AutoBase {
         drivetrain.Drive(.7f, 40f, Direction.FORWARD);
         sleep(100);
         markerHook.setPosition(0.1);
-        sleep(100 );
+        sleep(500 );
         drivetrain.Drive(.7f, 65f, Direction.BACKWARD);
 
         // drive backward to depot, it was 58
