@@ -42,21 +42,21 @@ public class AutoRedDepot extends AutoBase {
         // Wait for the start button
         waitForStart();
 
-        arm.setPosition(0.1);
-        hopper.setPosition(0.9);
+        //arm.setPosition(0.1);
+        //hopper.setPosition(0.9);
         // Lower the robot and detach from the lander
-        this.releaseFromLander();
+        //this.releaseFromLander();
 
         // Prep steps a) Move forward 3 inches, b) strafe, c) turn about 45 degree, ready to scan mineral
         drivetrain.Drive(0.4f, 3.5f, Direction.FORWARD); //3.5
         sleep(100);
-        drivetrain.Turn(0.25f, 43, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.25f, 44, Direction.COUNTERCLOCKWISE, imu, this); // 43 is good numbr
 
         sleep(100);
         this.sampleGold(this);
 
         sleep(100);
-        drivetrain.Turn(0.4f, 52, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.4f, 42, Direction.COUNTERCLOCKWISE, imu, this);
         // then turn to image
         sleep(100);
         telemetry.addData(" after the turn, before strafe to image", "before strafe to image");
@@ -86,11 +86,11 @@ public class AutoRedDepot extends AutoBase {
 
 
 
-        drivetrain.Drive(.7f, 40f, Direction.FORWARD);
+        //drivetrain.Drive(.7f, 40f, Direction.FORWARD);
         sleep(100);
-        markerHook.setPosition(0.1);
+        //markerHook.setPosition(0.1);
         sleep(500 );
-        drivetrain.Drive(.7f, 65f, Direction.BACKWARD);
+        //drivetrain.Drive(.7f, 65f, Direction.BACKWARD);
 
         // drive backward to depot, it was 58
 

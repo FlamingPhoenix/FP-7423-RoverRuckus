@@ -49,13 +49,13 @@ public class AutoBlueDepot extends AutoBase {
         // Prep steps a) Move forward 3 inches, b) strafe, c) turn about 45 degree, ready to scan mineral
         drivetrain.Drive(0.4f, 3.5f, Direction.FORWARD); //3.5
         sleep(100);
-        drivetrain.Turn(0.25f, 43, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.25f, 44, Direction.COUNTERCLOCKWISE, imu, this);
 
         sleep(100);
         this.sampleGold(this);
 
         sleep(100);
-        drivetrain.Turn(0.4f, 52, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.4f, 42, Direction.COUNTERCLOCKWISE, imu, this);
         // then turn to image
         sleep(100);
         telemetry.addData(" after the turn, before strafe to image", "before strafe to image");

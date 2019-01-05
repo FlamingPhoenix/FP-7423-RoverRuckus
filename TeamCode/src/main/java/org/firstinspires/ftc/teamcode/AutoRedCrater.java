@@ -35,24 +35,22 @@ public class AutoRedCrater extends AutoBase {
         // Wait for the start button
         waitForStart();
 //
-        arm.setPosition(0.1);
-        hopper.setPosition(0.9);
+        //arm.setPosition(0.1);
+        //hopper.setPosition(0.9);
         // Lower the robot and detach from the lander
-        this.releaseFromLander();
+        //this.releaseFromLander();
 
         // Prep steps a) Move forward 3 inches, b) strafe, c) turn about 45 degree, ready to scan mineral
         drivetrain.Drive(0.40f, 3.5f, Direction.FORWARD); //3.5
         sleep(100);
-        drivetrain.Turn(0.25f, 43, Direction.COUNTERCLOCKWISE, imu, this); // was 46
+        drivetrain.Turn(0.25f, 44, Direction.COUNTERCLOCKWISE, imu, this); // 46 too much, 43 44 maybe right.
 
         sleep(100);
         this.sampleGold(this);
 
-        // ??? dont think this line is needed
-        //drivetrain.Strafe(0.6f, 3.5f, Direction.RIGHT);
         sleep(100);
 
-        drivetrain.Turn(0.4f, 52, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.4f, 42, Direction.COUNTERCLOCKWISE, imu, this); // was 52
         // then turn to image
         sleep(100);
         telemetry.addData(" after the turn, before strafe to image", "before strafe to image");
@@ -74,12 +72,12 @@ public class AutoRedCrater extends AutoBase {
         }
 
         // drive backward for to depot, it was 58
-       drivetrain.Drive(0.6f, 54.5f, Direction.FORWARD);
+       //drivetrain.Drive(0.6f, 54.5f, Direction.FORWARD);
         sleep(100);
         // drop marker
-        markerHook.setPosition(0);
+        //markerHook.setPosition(0);
         sleep(500);
-       drivetrain.Drive(.65f, 68f, Direction.BACKWARD); // continue to drive to crater
+       //drivetrain.Drive(.65f, 68f, Direction.BACKWARD); // continue to drive to crater
 
         // end of auto routine.
 

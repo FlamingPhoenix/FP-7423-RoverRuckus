@@ -10,9 +10,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  */
 
 @Disabled
-//@Autonomous(name="AutoRedSilver", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
+@Autonomous(name="Exp Auto", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
 
-public class AutoRedSilver extends AutoBase {
+public class ExpRedSilver extends AutoBase {
 
     //private ElapsedTime runtime = new ElapsedTime();
     //private static final long firstHitTime = 1250; // this is from calibration, it is time to detect first object
@@ -58,30 +58,6 @@ public class AutoRedSilver extends AutoBase {
         }
 
         telemetry.addData("GoldPosition: ", goldPosition);
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //drivetrain.Drive(0.20f, 6.0f, Direction.FORWARD); //3.5
-        //sleep(300);
-        //drivetrain.Strafe(0.25f, 7.0f, Direction.RIGHT );
-        //sleep(300);
-        //drivetrain.Turn(0.25f, 51, Direction.COUNTERCLOCKWISE, imu, this);
-        //sleep(300);
-
-        ////////////alternative-less tested///////
-       // drivetrain.Drive(0.20f, 3.0f, Direction.FORWARD); //3.5
-       // sleep(300);
-       // drivetrain.Turn(0.25f, 35, Direction.COUNTERCLOCKWISE, imu, this);
-       // sleep(300);
-       // drivetrain.Strafe(0.25f, 3.0f, Direction.RIGHT);
-       // sleep(300);
-       // drivetrain.Drive(0.2f, 2.0f, Direction.BACKWARD);
-       // sleep(500);
-////////////////////////fully-tested//////////////////////////////////////////////////////////////////////////////////////
-       // drivetrain.Strafe(0.3f, 6.5f, Direction.RIGHT);
-        //sleep(300);
-    //    drivetrain.Drive(0.2f, 1.80f, Direction.BACKWARD);
-      //  sleep(500);
-/////////////////////////////////////////////////////
 
         // scan first mineral
 
@@ -163,15 +139,5 @@ public class AutoRedSilver extends AutoBase {
         // end of auto routine.
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
-
-
-
-
-
-
-
-
-
-
 
 }
