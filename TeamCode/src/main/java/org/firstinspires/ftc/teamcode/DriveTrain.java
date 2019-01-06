@@ -88,6 +88,7 @@ public class DriveTrain {
             op.telemetry.update();
             */
             positionDiff = Math.abs(fl.getCurrentPosition() - initialPosition);
+            //Log.i("[Phoenix]:encoder #", Integer.toString(positionDiff));
 
             //if(currentPosition < 200)
                 //actualPower = .28F;
@@ -129,6 +130,7 @@ public class DriveTrain {
         while (currentPosition < targetEncoderValue && op.opModeIsActive()) {
 
             currentPosition = (Math.abs(fl.getCurrentPosition()));
+            //Log.i("[Phoenix]:encoder #", Integer.toString(currentPosition));
             fl.setPower(power);
             fr.setPower(power);
             bl.setPower(power);

@@ -464,10 +464,11 @@ public abstract class AutoBase extends LinearOpMode {
         int index_Min_Bottom_Mineral = -1;
 
         // below is added in case scanning max bottom method(findClosestMineral_Y) failed, ie, 0
-        if (known_max_mineral_bottom == 0) {
-            known_max_mineral_bottom = 600;
+        if (known_max_mineral_bottom == 0 && known_max_mineral_bottom > 500) {
+            known_max_mineral_bottom = 350;
         }
 
+        Log.i("[phoenix]:refBotInside", Float.toString(known_max_mineral_bottom));
 
         runtime.reset(); // need to use time for tracking minerals instead of just  number of objects
         currentTime = Math.round(runtime.milliseconds());
@@ -566,7 +567,7 @@ public abstract class AutoBase extends LinearOpMode {
 
                                         drivetrain.Drive(0.3f, 3.75f, Direction.FORWARD); // was 3
                                         sleep(250);
-                                        drivetrain.Strafe(0.4f, 10f, Direction.RIGHT);// was 6.5
+                                        drivetrain.Strafe(0.4f, 11.5f, Direction.RIGHT);// was 6.5
                                         sleep(200);
                                         drivetrain.Strafe(0.4f, 6.5f, Direction.LEFT); // was 4.5
                                         sleep(100);
@@ -586,7 +587,7 @@ public abstract class AutoBase extends LinearOpMode {
 
                                         drivetrain.Drive(0.3f, 3.0f, Direction.FORWARD);
                                         sleep(250);
-                                        drivetrain.Strafe(0.4f, 8.5F, Direction.RIGHT); //// was 6.5
+                                        drivetrain.Strafe(0.4f, 10.5F, Direction.RIGHT); //// was 6.5
                                         sleep(200);
                                         drivetrain.StopAll();
                                         sleep(100);
@@ -961,7 +962,7 @@ public abstract class AutoBase extends LinearOpMode {
                 tfod.activate();
             }
 
-            while (opModeIsActive() && (min_Mineral_Bottom == 1100)) {
+            if (opModeIsActive() && (min_Mineral_Bottom == 1100)) {
 
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
@@ -1107,7 +1108,7 @@ public abstract class AutoBase extends LinearOpMode {
     {
         int startLiftPosition = rightLift.getCurrentPosition();
 
-        while (liftSensor.getState() == true && this.opModeIsActive() && (rightLift.getCurrentPosition() - startLiftPosition) > -5150)
+        while (liftSensor.getState() == true && this.opModeIsActive() && (rightLift.getCurrentPosition() - startLiftPosition) > -5000) // was -5150
         {
             if (rightLift.getCurrentPosition() > -3000)
             {
@@ -1175,7 +1176,7 @@ public abstract class AutoBase extends LinearOpMode {
             sleep(100);
             // scan the next two minerals for GOLD
             //scanGold_Diagonal(0.13f, 200, 420, this); // was 240 and 380
-            scanGold_Diagonal_Filter(0.15f, 100, 340, reference_Bottom_Y, this);
+            scanGold_Diagonal_Filter(0.14f, 100, 340, reference_Bottom_Y, this);
         }
     }
 }
