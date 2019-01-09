@@ -46,6 +46,7 @@ public class MyBoschIMU implements BNO055IMU {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         myIMU.initialize(parameters);
+        resetAndStart(Direction.COUNTERCLOCKWISE);
 
         return true;
     }

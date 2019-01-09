@@ -306,10 +306,8 @@ public class DriveTrain {
         while (pos == null  && op.opModeIsActive()) {
             pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
             opMode.telemetry.addData("in turn to image", "while loop");
-            Log.i("[phoenix]:in turn2image", "while loop");
         }
         opMode.telemetry.addData("in turn to image", "out of while loop");
-        Log.i("[phoenix]:in turn2image", "out of while loop");
     }
 
     // copied from ErikDriveTrain.TurnToImage in for DE match, since existing TurnToImage not working yet,

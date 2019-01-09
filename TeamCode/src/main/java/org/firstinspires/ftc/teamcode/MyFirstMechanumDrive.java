@@ -67,7 +67,7 @@ public class MyFirstMechanumDrive extends OpMode {
         arm = hardwareMap.servo.get("arm");
         ServoControllerEx armController = (ServoControllerEx) arm.getController();
         int armServoPort = arm.getPortNumber();
-        PwmControl.PwmRange armPwmRange = new PwmControl.PwmRange(1480, 1700);
+        PwmControl.PwmRange armPwmRange = new PwmControl.PwmRange(1480, 1705);
         armController.setServoPwmRange(armServoPort, armPwmRange);
 
         hook = hardwareMap.servo.get("hook");
@@ -228,9 +228,9 @@ public class MyFirstMechanumDrive extends OpMode {
         else if (gamepad1.y)
         {
             if (rightLift.getCurrentPosition() > magZero) {
-                double newArmPosition = arm.getPosition() - 0.05d;
-                if (newArmPosition < 0.05)
-                    newArmPosition = 0.05d;
+                double newArmPosition = arm.getPosition() - 0.075d;
+                if (newArmPosition < 0.075)
+                    newArmPosition = 0.075d;
                 arm.setPosition(newArmPosition);
                 isReadyToDropMineral = true;
                 isPickingMineral = false;
@@ -240,7 +240,7 @@ public class MyFirstMechanumDrive extends OpMode {
 
         if (gamepad1.a)
         {
-            hopper.setPosition(0.1);
+            hopper.setPosition(0);
             isAPressed = true;
         }
         else if (!isAPressed)

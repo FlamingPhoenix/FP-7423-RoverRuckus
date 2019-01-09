@@ -46,17 +46,19 @@ public class AutoRedDepot extends AutoBase {
         hopper.setPosition(0.9);
         // Lower the robot and detach from the lander
         this.releaseFromLander();
+        setRobotStartingAngle();
 
         // Prep steps a) Move forward 3 inches, b) strafe, c) turn about 45 degree, ready to scan mineral
         drivetrain.Drive(0.4f, 3.5f, Direction.FORWARD); //3.5
         sleep(100);
-        drivetrain.Turn(0.25f, 44, Direction.COUNTERCLOCKWISE, imu, this); // 43 is good numbr
+        drivetrain.Turn(0.25f, 44, Direction.COUNTERCLOCKWISE, imu, this); // 43 is good number
 
         sleep(100);
         this.sampleGold(this);
 
         sleep(100);
-        drivetrain.Turn(0.4f, 42, Direction.COUNTERCLOCKWISE, imu, this);
+        float turningAngle = Math.abs(robotStartingAngle + 135f - imu.getAngularOrientation().firstAngle);
+        drivetrain.Turn(0.4f, (int)turningAngle, Direction.COUNTERCLOCKWISE, imu, this);
         // then turn to image
         sleep(100);
         telemetry.addData(" after the turn, before strafe to image", "before strafe to image");
