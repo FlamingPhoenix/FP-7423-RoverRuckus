@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoControllerEx;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.vuforia.HINT;
 
@@ -77,9 +78,10 @@ public abstract class AutoBase extends LinearOpMode {
     protected VuforiaLocalizer vuforia;
     protected TFObjectDetector tfod;
 
+    protected VoltageSensor voltageSensor;
     protected Servo markerHook;
-    Servo arm;
-    Servo hopper;
+    protected Servo arm;
+    protected Servo hopper;
     float robotStartingAngle = 0;
 
     public void initialize() {
@@ -123,6 +125,9 @@ public abstract class AutoBase extends LinearOpMode {
         int armServoPort = arm.getPortNumber();
         PwmControl.PwmRange armPwmRange = new PwmControl.PwmRange(1480, 1700);
         armController.setServoPwmRange(armServoPort, armPwmRange);
+
+        // voltage sensor
+        voltageSensor = hardwareMap.voltageSensor.get("Motor Controller 1");
 
         imu = new MyBoschIMU(hardwareMap);
 
@@ -637,6 +642,118 @@ public abstract class AutoBase extends LinearOpMode {
 
     }
 
+    // this version of scan diagonal_simple, will drive specified distance and scan, will NOT scan while driving.
+    public int scanGold_Diagonal_Filter_Simple (float known_max_mineral_bottom, LinearOpMode opMode){
+        long currentTime;
+        int scan_outcome = 0;
+        int firstHitEncoderCount = Math.round(PPR* firstHitDistance / (4 * 3.1416f)); //89*3.5 = 312,
+        int currentPosition = 0;
+        int returnValue = 0;
+
+        // below is added in case scanning max bottom method(findClosestMineral_Y) failed, ie, 0
+        if (known_max_mineral_bottom == 0 && known_max_mineral_bottom > 500) {
+            known_max_mineral_bottom = 350;
+        }
+
+        Log.i("[phoenix]:refBotInside", Float.toString(known_max_mineral_bottom));
+
+        runtime.reset(); // need to use time for tracking minerals instead of just  number of objects
+        currentTime = Math.round(runtime.milliseconds());
+
+        telemetry.addData("before moving time", currentTime);
+        Log.i("[phoenix]:pretime", Double.toString(currentTime));
+
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // 10000 below means 10 second, which sort of works out given the scenario if missing gold during scan.
+        while ( scan_outcome == 0 && opModeIsActive() && (currentTime < (thirdHitTime - 3000))) { // was -2000, there is a risk of hitting lander, so -3000
+
+
+            currentTime = Math.round(runtime.milliseconds());
+
+            //  here will just be two positions to scan and take actions
+            // position B and C
+            // scan position B, if Gold, knock if off, otherwise, drive 1.4*12 = 16.8 inch forward, just use 16 for now
+
+            scan_outcome = confirm_Close_Gold_Mineral(known_max_mineral_bottom,this);
+
+            if (currentPosition < (firstHitEncoderCount + 900) && (scan_outcome == 0)) {//900+312 = 1112 //300+firsthit = 612,about 3.5 inches extra(currentTime < (secondHitTime - 500)) { // this is first time hit
+
+                drivetrain.Drive(0.3f, 3.75f, Direction.FORWARD); // was 3
+                sleep(100);
+                drivetrain.Strafe(0.4f, 11.5f, Direction.RIGHT);// was 6.5
+                sleep(100);
+                drivetrain.Strafe(0.4f, 6.5f, Direction.LEFT); // was 4.5
+                sleep(100);
+                drivetrain.StopAll();
+                sleep(100);
+                // here drive 1.414*12 inch = 17.0
+                // ACTIVE TESTING:  Original value 34f for distance
+                drivetrain.Drive(0.3f, 27.5f, Direction.FORWARD);  // was 25
+                returnValue = 2; // gold is in B position
+                currentPosition = 0;
+                opMode.telemetry.addData("at end of gold loop", "gold 2");
+                Log.i("[phoenix]:goldloop", "at end of gold loop 2");
+                opMode.telemetry.update();
+            }
+
+            else if (scan_outcome == 2) { // B is Silver, need to drive further and scan next mineral at positoin C
+
+                drivetrain.Drive(0.4f, 16f, Direction.FORWARD);
+                // scan again for C
+                scan_outcome = confirm_Close_Gold_Mineral(known_max_mineral_bottom, this);
+                if (scan_outcome == 1) {
+                    currentTime = Math.round(runtime.milliseconds());
+                    Log.i("[phoenix]:2nd goldtime ", Double.toString(currentTime));
+                    currentPosition = Math.abs(fl.getCurrentPosition());
+                    opMode.telemetry.addData("2nd G encoder ", currentPosition);
+                    Log.i("[phoenix]:2nd G encoder", Integer.toString(currentPosition));
+                    opMode.telemetry.update();
+
+                    drivetrain.Drive(0.3f, 3.0f, Direction.FORWARD);
+                    sleep(100);
+                    drivetrain.Strafe(0.4f, 10.5F, Direction.RIGHT); //// was 6.5
+                    sleep(100);
+                    drivetrain.StopAll();
+                    sleep(100);
+                    drivetrain.Strafe(0.4f, 6.5F, Direction.LEFT); //// was 4.5
+                    drivetrain.StopAll();
+                    sleep(100);
+                    drivetrain.Drive(0.3f, 10f, Direction.FORWARD); // was 14
+                    returnValue = 3;  // gold is in C position
+                    currentPosition = 0;
+
+                    opMode.telemetry.addData("at end of gold loop", "gold 3");
+                    Log.i("[phoenix]:goldloop", "at end of gold loop 3");
+                    opMode.telemetry.update();
+                }
+            }
+        }
+
+
+         opMode.telemetry.update();
+
+        if (scan_outcome == 2) { // if time out before gold is found..need to adjust position of robot and avoid hitting lander
+            currentTime = Math.round(runtime.milliseconds());
+            currentPosition = fl.getCurrentPosition();
+            opMode.telemetry.addData("no gold found, current time ", currentTime);
+            opMode.telemetry.addData("no gold found, current counter ", currentPosition);
+            opMode.telemetry.addData("gold found flag ", scan_outcome);
+
+            Log.i("[phoenix]:NoGold, time ", Double.toString(currentTime));
+            Log.i("[phoenix]:NoGold, eCnt ", Integer.toString(currentPosition));
+            Log.i("[phoenix]:Gold Fflag ", Integer.toString(scan_outcome));
+            opMode.telemetry.update();
+            drivetrain.StopAll();
+            sleep(100);
+            drivetrain.Strafe(0.4f, 3.0f, Direction.RIGHT); // to avoid lander, never tested this part.
+        }
+
+    return returnValue;
+
+    }
+
     public void StrafeWhileVisible ( float power, float stop_distance, float maxGoldWidth, long report_time, LinearOpMode opMode){
 
         double cur_Angle; // angle provided by TF method
@@ -962,7 +1079,7 @@ public abstract class AutoBase extends LinearOpMode {
         int index_Min_Bottom_Mineral = -1;
 
         if (opModeIsActive()) {
-            // Activate Tensor Flow Object Detection.
+            // Activate Tensor Flow Object Detection
             if (tfod != null) {
                 tfod.activate();
             }
@@ -1072,6 +1189,142 @@ public abstract class AutoBase extends LinearOpMode {
             return scanResult;
     }
 
+    // this version of confirm diagonal gold, will take a reference bottom, and confirm it gold is closest mineral
+    public int confirm_Close_Gold_Mineral ( float known_max_mineral_bottom, LinearOpMode opMode){
+
+        int gold_Found = 0;
+        float left_Mineral;
+        float right_Mineral;
+        float center_Mineral;  // center coordinates of gold
+        float current_Mineral_Width; // width of gold, to drive towards it..
+
+        float mineral_Bottom = 0;
+        float min_Mineral_Bottom = 1100;
+        float max_mineral_height = 0;
+        int index_Gold = -1;
+        int index_Min_Bottom_Mineral = -1;
+
+        // below is added in case scanning max bottom method(findClosestMineral_Y) failed, ie, 0
+        if (known_max_mineral_bottom == 0 && known_max_mineral_bottom > 500) {
+            known_max_mineral_bottom = 350;
+        }
+
+        Log.i("[phoenix]:refBotInside", Float.toString(known_max_mineral_bottom));
+
+        int scanResult = 0;
+        int i = 0;
+        int numberOfScanObjects = 0; // this is to deal with no able to scan anything..
+
+        if (opModeIsActive()) {
+            // Activate Tensor Flow Object Detection.
+            if (tfod != null) {
+                tfod.activate();
+            }
+
+            // scan 20 times
+
+            while (opModeIsActive() && scanResult == 0 && (i <= 20) && numberOfScanObjects == 0) { // change from if since it is missing scaning gold, (Dec 30)change to if b/c it scans nothing (it is tradeoff)
+
+                if (tfod != null) {
+                    // getUpdatedRecognitions() will return null if no new information is available since
+                    // the last time that call was made.
+                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+
+                    if (updatedRecognitions != null) {
+                        numberOfScanObjects = updatedRecognitions.size();
+                        telemetry.addData("# Object Detected", numberOfScanObjects);
+                        telemetry.addData("dect iteration", i);
+                        telemetry.update();
+                        i = i + 1; // will just scan five times.
+                        Log.i("[phoenix]:iteration", Integer.toString(i));
+                        Log.i("[phoenix]:#objects", Integer.toString(numberOfScanObjects));
+                        if (numberOfScanObjects <= 10) {
+
+                            min_Mineral_Bottom = 1100;
+                            index_Min_Bottom_Mineral = -1;
+                            index_Gold = -1;
+                            mineral_Bottom = 0;
+                            for (Recognition recognition : updatedRecognitions) {
+                                // here needs a loop to find out bottom value for each mineral, and the highest..
+                                mineral_Bottom = recognition.getTop();
+                                max_mineral_height = recognition.getBottom() - recognition.getTop();
+                                telemetry.addData("cur max height", max_mineral_height);
+                                Log.i("[phoenix]:max height", Float.toString(max_mineral_height));
+                                telemetry.addData("cur btm", mineral_Bottom);
+                                Log.i("[phoenix]:cur btm", Float.toString(mineral_Bottom));
+                                telemetry.addData("height by call", recognition.getHeight());
+                                Log.i("[phoenix]:height byCall", Float.toString(recognition.getHeight()));
+                                telemetry.update();
+
+                                if (mineral_Bottom < min_Mineral_Bottom) {
+                                    min_Mineral_Bottom = mineral_Bottom;
+                                    index_Min_Bottom_Mineral = updatedRecognitions.indexOf(recognition);
+                                    telemetry.addData("cur max bottom", min_Mineral_Bottom);
+                                    Log.i("[phoenix]:cur max Bttm", Float.toString(min_Mineral_Bottom));
+                                    telemetry.addData("max bottom index", index_Min_Bottom_Mineral);
+                                    Log.i("[phoenix]:max btm ind", Integer.toString(index_Min_Bottom_Mineral));
+                                    telemetry.addData("cur top", recognition.getBottom());
+                                    Log.i("[phoenix]:cur top", Float.toString(recognition.getBottom()));
+                                    telemetry.update();
+
+                                }
+
+                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                    index_Gold = updatedRecognitions.indexOf(recognition);
+                                    telemetry.addData("gold index", index_Gold);
+                                    Log.i("[phoenix]:gold index", Integer.toString(index_Gold));
+                                }
+                                telemetry.update();
+                            }
+
+                            if (index_Gold == index_Min_Bottom_Mineral && min_Mineral_Bottom < known_max_mineral_bottom)
+                            {    // max_Mineral_Bottom > (known_max_mineral_bottom - 0.5*max_mineral_height)
+                                scanResult = 1; // closest mineral is GOLD
+                                left_Mineral = updatedRecognitions.get(index_Gold).getLeft();//recognition.getLeft();
+                                right_Mineral = updatedRecognitions.get(index_Gold).getRight();//recognition.getRight();
+                                // here, need to add code to come up with center of gold and use that as control varialble for moving robot towards it..
+                                center_Mineral = (left_Mineral + right_Mineral) / 2f;
+                                current_Mineral_Width = right_Mineral - left_Mineral;
+
+                                opMode.telemetry.addData("center of gold ", center_Mineral);
+                                Log.i("[phoenix]:i_goldcenter", Float.toString(center_Mineral));
+                                Log.i("[phoenix]:i_goldleft", Float.toString(left_Mineral));
+                                Log.i("[phoenix]:i_goldright", Float.toString(right_Mineral));
+                                Log.i("[phoenix]:i_gwidth", Float.toString(current_Mineral_Width));
+
+                            }
+
+                            else
+                            {
+                                scanResult = 2; // not gold, assume silver, need to use another index =
+                                left_Mineral = updatedRecognitions.get(index_Min_Bottom_Mineral).getLeft();//recognition.getLeft();
+                                right_Mineral = updatedRecognitions.get(index_Min_Bottom_Mineral).getRight();//recognition.getRight();
+                                // here, need to add code to come up with center of gold and use that as control varialble for moving robot towards it..
+                                center_Mineral = (left_Mineral + right_Mineral) / 2f;
+                                current_Mineral_Width = right_Mineral - left_Mineral;
+
+                                opMode.telemetry.addData("center of gold ", center_Mineral);
+                                Log.i("[phoenix]:i_silvercetr", Float.toString(center_Mineral));
+                                Log.i("[phoenix]:i_silverleft", Float.toString(left_Mineral));
+                                Log.i("[phoenix]:i_silverright", Float.toString(right_Mineral));
+                                Log.i("[phoenix]:i_s_width", Float.toString(current_Mineral_Width));
+                            }
+
+//////////////////////////////////////////////////////////////
+                        }
+                        telemetry.update();
+                    }
+                }
+            }
+        }
+
+        if (scanResult == 0)
+            return 2;
+        else
+            return scanResult;
+
+    }
+
         // details is defined in subclass erikautobase, this one doesnt work out well since not enough stability while turning
     public void TurnToGold (float power, int angle, Direction d, MyBoschIMU imu, LinearOpMode opMode, long report_time) { // turn to A, B mineral
 
@@ -1135,6 +1388,7 @@ public abstract class AutoBase extends LinearOpMode {
     public void sampleGold(LinearOpMode opMode) {
         float reference_Bottom_Y = 0;
         int detectionOutcome = 0;
+        float firstTurningAngle = 44; // base value, will be determined by imu later on
 
         //detectionOutcome = DriveToScanFirstMineral(0.11f, Direction.FORWARD, this); // 0.11 at Dr Warner, 0.15 at carpets
 
@@ -1158,7 +1412,8 @@ public abstract class AutoBase extends LinearOpMode {
             sleep(100);
             drivetrain.Strafe(0.3f, 7.5f, Direction.LEFT); // was 8
             sleep(100);
-            drivetrain.Turn(0.4f, 44, Direction.COUNTERCLOCKWISE, imu, this); // shouid be 45, compensate for wheel issue
+            firstTurningAngle = Math.abs(robotStartingAngle + 90f - imu.getAngularOrientation().firstAngle);
+            drivetrain.Turn(0.4f, (int) firstTurningAngle, Direction.COUNTERCLOCKWISE, imu, this); // was 44, shouid be 45, compensate for wheel issue
             sleep(100);
             drivetrain.Drive(0.3f, 31.5f, Direction.FORWARD);} // was 25, seems too shore, and will hit lander
          else { //ScanFirstMineral() == 2, in this scenario, either B or C is GOLD
@@ -1167,7 +1422,8 @@ public abstract class AutoBase extends LinearOpMode {
             // strafe to the right position
             drivetrain.Strafe(0.3f, 8.5f, Direction.RIGHT);  // was 8.5, thinking about change to 9 to evaluate teh event if no gold found(this can shorten time as alternative solution,
             sleep(100);
-            drivetrain.Turn(0.4f, 40, Direction.COUNTERCLOCKWISE, imu, this); // should be 45, compensate for wheels issue
+            firstTurningAngle = Math.abs(robotStartingAngle + 90f - imu.getAngularOrientation().firstAngle);
+            drivetrain.Turn(0.4f, (int) firstTurningAngle, Direction.COUNTERCLOCKWISE, imu, this); // was 40, should be 45, compensate for wheels issue
             telemetry.addData("Silver aft turn", "after turn");
             Log.i("[phoenix]:Silv aft turn", "aft turn");
             sleep(100); // more time for get reference bottom..
@@ -1181,6 +1437,63 @@ public abstract class AutoBase extends LinearOpMode {
             // scan the next two minerals for GOLD
             //scanGold_Diagonal(0.13f, 200, 420, this); // was 240 and 380
             scanGold_Diagonal_Filter(0.14f, 100, 340, reference_Bottom_Y, this);
+        }
+    }
+
+    // this method will not drive and scan, but rather drive forward a fixed distance, and then scan
+    public void sampleGold_Simple(LinearOpMode opMode) {
+        float reference_Bottom_Y = 0;
+        int detectionOutcome = 0;
+        float firstTurningAngle = 44; // base value, will be determined by imu later on
+
+        //detectionOutcome = DriveToScanFirstMineral(0.11f, Direction.FORWARD, this); // 0.11 at Dr Warner, 0.15 at carpets
+
+        detectionOutcome = ScanFirstMineralSimple();
+        telemetry.addData("mineral scan outcome", detectionOutcome);
+        Log.i("[phoenix]:min outcome", Integer.toString(detectionOutcome));
+        sleep(100);
+
+        // Explanation: decide next step based on outcome of first mineral,
+        // if A is gold, hit it and come back, turn 45 degree CCW
+        // if A is not Gold, turn 45 degrees CCW, scan Gold Diagonally, once find the gold, hit and come back.
+
+        if (detectionOutcome == 1) { //ScanFirstMineral() == 1
+            telemetry.addData("Gold found", "during first scan");
+            Log.i("[phoenix]:gold detected", "found gold");
+
+            //drivetrain.Strafe(0.3f, 18f, Direction.RIGHT);
+            StrafeWhileVisible(0.45f, 19f, 1000, 10, this); // was 18
+            telemetry.addData("Gold aft straf", "after strafe");
+            Log.i("[phoenix]:gold aft str", "after strafe");
+            sleep(100);
+            drivetrain.Strafe(0.3f, 7.5f, Direction.LEFT); // was 8
+            sleep(100);
+            firstTurningAngle = Math.abs(robotStartingAngle + 90f - imu.getAngularOrientation().firstAngle);
+            drivetrain.Turn(0.4f, (int) firstTurningAngle, Direction.COUNTERCLOCKWISE, imu, this); // was 44, shouid be 45, compensate for wheel issue
+            sleep(100);
+            drivetrain.Drive(0.3f, 31.5f, Direction.FORWARD);} // was 25, seems too shore, and will hit lander
+        else { //ScanFirstMineral() == 2, in this scenario, either B or C is GOLD
+            telemetry.addData("Silver found", "during first scan");
+            Log.i("[phoenix]:Silv detected", "found silver");
+            // strafe to the right position
+            drivetrain.Strafe(0.3f, 8.5f, Direction.RIGHT);  // was 8.5, thinking about change to 9 to evaluate teh event if no gold found(this can shorten time as alternative solution,
+            sleep(100);
+            firstTurningAngle = Math.abs(robotStartingAngle + 90f - imu.getAngularOrientation().firstAngle);
+            drivetrain.Turn(0.4f, (int) firstTurningAngle, Direction.COUNTERCLOCKWISE, imu, this); // was 40, should be 45, compensate for wheels issue
+            telemetry.addData("Silver aft turn", "after turn");
+            Log.i("[phoenix]:Silv aft turn", "aft turn");
+            sleep(100); // more time for get reference bottom..
+            // here will do a still scan, return mineral bottom, as reference for filtering.
+
+            reference_Bottom_Y = FindClosestMineral_Y(0.7f,this); // need to check outcome of this value..if zero, could cause miss-detection down the road.
+            telemetry.addData("ref bottomY", reference_Bottom_Y);
+            Log.i("[phoenix]:refBottomY", Float.toString(reference_Bottom_Y));
+            sleep(100);
+            // here no need to drive back, will assume be able to see mineral after first turn
+            //drivetrain.Drive(0.3f, 2.75f, Direction.BACKWARD), no need to drive back..
+            sleep(100);
+            // scan the next two minerals for GOLD, with the simple method
+            scanGold_Diagonal_Filter_Simple(reference_Bottom_Y, this);
         }
     }
 }

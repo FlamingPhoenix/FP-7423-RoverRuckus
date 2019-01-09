@@ -48,6 +48,19 @@ public class AutoRedDepot extends AutoBase {
         this.releaseFromLander();
         setRobotStartingAngle();
 
+        telemetry.addData("Frontleft voltage", fl.getController().getMotorPower(0));
+        telemetry.addData("Frontright voltage", fr.getController().getMotorPower(1));
+        telemetry.addData("backleft voltage", bl.getController().getMotorPower(2));
+        telemetry.addData("backright voltage", br.getController().getMotorPower(3));
+        telemetry.addData("battery voltage", voltageSensor.getVoltage());
+
+        telemetry.update();
+        Log.i("[phoenix]:F-left vol", Double.toString(fl.getController().getMotorPower(0)));
+        Log.i("[phoenix]:F-right volt", Double.toString(fr.getController().getMotorPower(1)));
+        Log.i("[phoenix]:B-left volt", Double.toString(bl.getController().getMotorPower(2)));
+        Log.i("[phoenix]:B-right volt", Double.toString(br.getController().getMotorPower(3)));
+        Log.i("battery voltage", Double.toString(voltageSensor.getVoltage()));
+
         // Prep steps a) Move forward 3 inches, b) strafe, c) turn about 45 degree, ready to scan mineral
         drivetrain.Drive(0.4f, 3.5f, Direction.FORWARD); //3.5
         sleep(100);
@@ -57,8 +70,8 @@ public class AutoRedDepot extends AutoBase {
         this.sampleGold(this);
 
         sleep(100);
-        float turningAngle = Math.abs(robotStartingAngle + 135f - imu.getAngularOrientation().firstAngle);
-        drivetrain.Turn(0.4f, (int)turningAngle, Direction.COUNTERCLOCKWISE, imu, this);
+        float secondTurningAngle = Math.abs(robotStartingAngle + 135f - imu.getAngularOrientation().firstAngle);
+        drivetrain.Turn(0.4f, (int)secondTurningAngle, Direction.COUNTERCLOCKWISE, imu, this);
         // then turn to image
         sleep(100);
         telemetry.addData(" after the turn, before strafe to image", "before strafe to image");
@@ -70,11 +83,11 @@ public class AutoRedDepot extends AutoBase {
 
         sleep(100);
         // VERY IMPORTANT, PLEASE KEEP THIS PART WHEN UPDATING FINAL VERSION OF AUTONOMOUS PROGRAM !!
-        drivetrain.Strafe(.4F, 3, Direction.LEFT);
+        drivetrain.Strafe(.4F, 3f, Direction.LEFT);
         sleep(100);
         drivetrain.Turn(.5f, 180, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(100);
-        drivetrain.Strafe(.4F, 3, Direction.LEFT);
+        drivetrain.Strafe(.4F, 3.5f, Direction.LEFT); // strafe back more to ensure touch the wall
 
         telemetry.addData(" after the strafe to image", "after strafe to image");
         Log.i("[phoenix]:after strafe", "after strafe to image");

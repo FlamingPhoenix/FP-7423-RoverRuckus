@@ -1,34 +1,19 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Erik;
 
 import android.util.Log;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.vuforia.HINT;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-
-import java.util.List;
+import org.firstinspires.ftc.teamcode.AutoBase;
+import org.firstinspires.ftc.teamcode.Direction;
 
 /**
  * Created by Steve on 7/22/2018.
  */
 
 //@Disabled
-@Autonomous(name="M_W BlueDepot_Test_Simple_Diagonal_Scan", group="none")
-public class AutoBlueDepot extends AutoBase {
+@Autonomous(name="M_W BlueDepot_Backup", group="none")
+public class AutoBlueDepot_backup_Oxford_Jan6_2019 extends AutoBase {
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -52,11 +37,10 @@ public class AutoBlueDepot extends AutoBase {
         drivetrain.Turn(0.25f, 44, Direction.COUNTERCLOCKWISE, imu, this);
 
         sleep(100);
-        this.sampleGold_Simple(this);
+        this.sampleGold(this);
 
         sleep(100);
-        float secondTurningAngle = Math.abs(robotStartingAngle + 135f - imu.getAngularOrientation().firstAngle);
-        drivetrain.Turn(0.4f, (int) secondTurningAngle, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.4f, 42, Direction.COUNTERCLOCKWISE, imu, this);
         // then turn to image
         sleep(100);
         telemetry.addData(" after the turn, before strafe to image", "before strafe to image");
@@ -68,11 +52,11 @@ public class AutoBlueDepot extends AutoBase {
 
         sleep(100);
         // VERY IMPORTANT, PLEASE KEEP THIS PART WHEN UPDATING FINAL VERSION OF AUTONOMOUS PROGRAM !!
-        drivetrain.Strafe(.4F, 3f, Direction.LEFT);
+        drivetrain.Strafe(.4F, 3, Direction.LEFT);
         sleep(100);
         drivetrain.Turn(.5f, 180, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(100);
-        drivetrain.Strafe(.4F, 3.5f, Direction.LEFT);
+        drivetrain.Strafe(.4F, 3, Direction.LEFT);
 
         telemetry.addData(" after the strafe to image", "after strafe to image");
         Log.i("[phoenix]:after strafe", "after strafe to image");
