@@ -48,6 +48,7 @@ public class AutoRedDepot extends AutoBase {
         this.releaseFromLander();
         setRobotStartingAngle();
 
+
         telemetry.addData("Frontleft voltage", fl.getController().getMotorPower(0));
         telemetry.addData("Frontright voltage", fr.getController().getMotorPower(1));
         telemetry.addData("backleft voltage", bl.getController().getMotorPower(2));
