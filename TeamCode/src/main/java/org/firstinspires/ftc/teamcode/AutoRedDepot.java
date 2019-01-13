@@ -46,20 +46,21 @@ public class AutoRedDepot extends AutoBase {
         hopper.setPosition(0.9);
         // Lower the robot and detach from the lander
         this.releaseFromLander();
+
         setRobotStartingAngle();
 
         telemetry.addData("Frontleft voltage", fl.getController().getMotorPower(0));
         telemetry.addData("Frontright voltage", fr.getController().getMotorPower(1));
         telemetry.addData("backleft voltage", bl.getController().getMotorPower(2));
         telemetry.addData("backright voltage", br.getController().getMotorPower(3));
-        telemetry.addData("battery voltage", voltageSensor.getVoltage());
+//        telemetry.addData("battery voltage", voltageSensor.getVoltage());
 
         telemetry.update();
         Log.i("[phoenix]:F-left vol", Double.toString(fl.getController().getMotorPower(0)));
         Log.i("[phoenix]:F-right volt", Double.toString(fr.getController().getMotorPower(1)));
         Log.i("[phoenix]:B-left volt", Double.toString(bl.getController().getMotorPower(2)));
         Log.i("[phoenix]:B-right volt", Double.toString(br.getController().getMotorPower(3)));
-        Log.i("battery voltage", Double.toString(voltageSensor.getVoltage()));
+//        Log.i("battery voltage", Double.toString(voltageSensor.getVoltage()));
 
         // Prep steps a) Move forward 3 inches, b) strafe, c) turn about 45 degree, ready to scan mineral
         drivetrain.Drive(0.4f, 3.5f, Direction.FORWARD); //3.5

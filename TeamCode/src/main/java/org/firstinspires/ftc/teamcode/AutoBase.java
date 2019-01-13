@@ -126,8 +126,8 @@ public abstract class AutoBase extends LinearOpMode {
         PwmControl.PwmRange armPwmRange = new PwmControl.PwmRange(1480, 1700);
         armController.setServoPwmRange(armServoPort, armPwmRange);
 
-        // voltage sensor
-        voltageSensor = hardwareMap.voltageSensor.get("Motor Controller 1");
+//         voltage sensor
+//        voltageSensor = hardwareMap.voltageSensor.get("Motor Controller 1");
 
         imu = new MyBoschIMU(hardwareMap);
 
@@ -678,7 +678,7 @@ public abstract class AutoBase extends LinearOpMode {
 
             scan_outcome = confirm_Close_Gold_Mineral(known_max_mineral_bottom,this);
 
-            if (currentPosition < (firstHitEncoderCount + 900) && (scan_outcome == 0)) {//900+312 = 1112 //300+firsthit = 612,about 3.5 inches extra(currentTime < (secondHitTime - 500)) { // this is first time hit
+            if (currentPosition < (firstHitEncoderCount + 900) && (scan_outcome == 1)) {//900+312 = 1112 //300+firsthit = 612,about 3.5 inches extra(currentTime < (secondHitTime - 500)) { // this is first time hit
 
                 drivetrain.Drive(0.3f, 3.75f, Direction.FORWARD); // was 3
                 sleep(100);
@@ -702,14 +702,14 @@ public abstract class AutoBase extends LinearOpMode {
 
                 drivetrain.Drive(0.4f, 16f, Direction.FORWARD);
                 // scan again for C
-                scan_outcome = confirm_Close_Gold_Mineral(known_max_mineral_bottom, this);
+                /*scan_outcome = confirm_Close_Gold_Mineral(known_max_mineral_bottom, this);
                 if (scan_outcome == 1) {
                     currentTime = Math.round(runtime.milliseconds());
                     Log.i("[phoenix]:2nd goldtime ", Double.toString(currentTime));
                     currentPosition = Math.abs(fl.getCurrentPosition());
                     opMode.telemetry.addData("2nd G encoder ", currentPosition);
                     Log.i("[phoenix]:2nd G encoder", Integer.toString(currentPosition));
-                    opMode.telemetry.update();
+                    opMode.telemetry.update();*/
 
                     drivetrain.Drive(0.3f, 3.0f, Direction.FORWARD);
                     sleep(100);
@@ -727,14 +727,14 @@ public abstract class AutoBase extends LinearOpMode {
                     opMode.telemetry.addData("at end of gold loop", "gold 3");
                     Log.i("[phoenix]:goldloop", "at end of gold loop 3");
                     opMode.telemetry.update();
-                }
+                //}
             }
         }
 
 
          opMode.telemetry.update();
 
-        if (scan_outcome == 2) { // if time out before gold is found..need to adjust position of robot and avoid hitting lander
+        if (scan_outcome == 0) {  //???? please review this part if time out before gold is found..need to adjust position of robot and avoid hitting lander
             currentTime = Math.round(runtime.milliseconds());
             currentPosition = fl.getCurrentPosition();
             opMode.telemetry.addData("no gold found, current time ", currentTime);
@@ -1092,7 +1092,7 @@ public abstract class AutoBase extends LinearOpMode {
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
                         opMode.telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        if (updatedRecognitions.size() <= 10) {
+                        if (updatedRecognitions.size() <= 10 && updatedRecognitions.size() != 0) { // add != 0, to handle null
 
                             for (Recognition recognition : updatedRecognitions) {
                                 // here needs a loop to find out bottom value for each mineral, and the highest..
@@ -1238,7 +1238,7 @@ public abstract class AutoBase extends LinearOpMode {
                         i = i + 1; // will just scan five times.
                         Log.i("[phoenix]:iteration", Integer.toString(i));
                         Log.i("[phoenix]:#objects", Integer.toString(numberOfScanObjects));
-                        if (numberOfScanObjects <= 10) {
+                        if (numberOfScanObjects <= 10 && numberOfScanObjects != 0) { // add != 0, to handle null
 
                             min_Mineral_Bottom = 1100;
                             index_Min_Bottom_Mineral = -1;
@@ -1468,7 +1468,7 @@ public abstract class AutoBase extends LinearOpMode {
             sleep(100);
             drivetrain.Strafe(0.3f, 7.5f, Direction.LEFT); // was 8
             sleep(100);
-            firstTurningAngle = Math.abs(robotStartingAngle + 90f - imu.getAngularOrientation().firstAngle);
+            firstTurningAngle = Math.abs(robotStartingAngle + 87f - imu.getAngularOrientation().firstAngle);
             drivetrain.Turn(0.4f, (int) firstTurningAngle, Direction.COUNTERCLOCKWISE, imu, this); // was 44, shouid be 45, compensate for wheel issue
             sleep(100);
             drivetrain.Drive(0.3f, 31.5f, Direction.FORWARD);} // was 25, seems too shore, and will hit lander
@@ -1478,7 +1478,7 @@ public abstract class AutoBase extends LinearOpMode {
             // strafe to the right position
             drivetrain.Strafe(0.3f, 8.5f, Direction.RIGHT);  // was 8.5, thinking about change to 9 to evaluate teh event if no gold found(this can shorten time as alternative solution,
             sleep(100);
-            firstTurningAngle = Math.abs(robotStartingAngle + 90f - imu.getAngularOrientation().firstAngle);
+            firstTurningAngle = Math.abs(robotStartingAngle + 87f - imu.getAngularOrientation().firstAngle);
             drivetrain.Turn(0.4f, (int) firstTurningAngle, Direction.COUNTERCLOCKWISE, imu, this); // was 40, should be 45, compensate for wheels issue
             telemetry.addData("Silver aft turn", "after turn");
             Log.i("[phoenix]:Silv aft turn", "aft turn");
@@ -1491,7 +1491,7 @@ public abstract class AutoBase extends LinearOpMode {
             sleep(100);
             // here no need to drive back, will assume be able to see mineral after first turn
             //drivetrain.Drive(0.3f, 2.75f, Direction.BACKWARD), no need to drive back..
-            sleep(100);
+//            sleep(100);
             // scan the next two minerals for GOLD, with the simple method
             scanGold_Diagonal_Filter_Simple(reference_Bottom_Y, this);
         }

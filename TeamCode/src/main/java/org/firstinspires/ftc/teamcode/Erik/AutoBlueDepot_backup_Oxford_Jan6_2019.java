@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Erik;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.AutoBase;
 import org.firstinspires.ftc.teamcode.Direction;
@@ -11,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Direction;
  * Created by Steve on 7/22/2018.
  */
 
-//@Disabled
+@Disabled
 @Autonomous(name="M_W BlueDepot_Backup", group="none")
 public class AutoBlueDepot_backup_Oxford_Jan6_2019 extends AutoBase {
     @Override

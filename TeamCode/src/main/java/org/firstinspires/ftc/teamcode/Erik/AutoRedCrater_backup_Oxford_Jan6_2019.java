@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.Erik;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.AutoBase;
 import org.firstinspires.ftc.teamcode.Direction;
 
@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Direction;
  * Created by Steve on 7/22/2018.
  */
 
-//@Disabled
+@Disabled
 @Autonomous(name="M_W RedCrater_Backup", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
 
 public class AutoRedCrater_backup_Oxford_Jan6_2019 extends AutoBase {
