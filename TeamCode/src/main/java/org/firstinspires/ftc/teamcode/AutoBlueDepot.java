@@ -74,7 +74,7 @@ public class AutoBlueDepot extends AutoBase {
         sleep(100);
         drivetrain.Turn(.5f, 180, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(100);
-        drivetrain.Strafe(.4F, 3.5f, Direction.LEFT);
+        drivetrain.Strafe(.4F, 4.0f, Direction.LEFT);
 
         telemetry.addData(" after the strafe to image", "after strafe to image");
         Log.i("[phoenix]:after strafe", "after strafe to image");
