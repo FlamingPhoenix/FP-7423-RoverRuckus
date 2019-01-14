@@ -89,7 +89,7 @@ public class AutoRedDepot extends AutoBase {
         sleep(100);
         drivetrain.Turn(.5f, 180, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(100);
-        drivetrain.Strafe(.4F, 3.5f, Direction.LEFT); // strafe back more to ensure touch the wall
+        drivetrain.Strafe(.4F, 4.0f, Direction.LEFT); // strafe back more to ensure touch the wall
 
         telemetry.addData(" after the strafe to image", "after strafe to image");
         Log.i("[phoenix]:after strafe", "after strafe to image");
