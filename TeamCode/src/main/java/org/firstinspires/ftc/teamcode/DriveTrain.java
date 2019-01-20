@@ -213,7 +213,7 @@ public class DriveTrain {
         if (imageListener.isVisible()) {
             OpenGLMatrix pos = imageListener.getPose();
             float d = pos.getColumn(3).get(2); //distance to the image in millimeter;
-            float x = pos.getColumn(3).get(0) * -1;
+            float x = pos.getColumn(3).get(1);
             float additionalpower = 0;
 
 
@@ -232,7 +232,7 @@ public class DriveTrain {
                 lastKnownPosition.orientation = adjustedOrientation;
 
                 d = lastKnownPosition.translation.get(2);
-                x = lastKnownPosition.translation.get(0) * -1;
+                x = lastKnownPosition.translation.get(1);
 
                 opMode.telemetry.addData("x: ", "x = %f", x);
 
@@ -256,11 +256,11 @@ public class DriveTrain {
                 float rotationMargin = 3f * Math.abs(d) / 10f;
 
 
-                if (adjustedOrientation.secondAngle < -3 && x > -rotationMargin) {
-                    flTurnAdjust = actualPower * 1.25F * (Math.abs(adjustedOrientation.secondAngle) / 40F) * ((1200F-distanceAdjustment) / 1200F);
+                if (adjustedOrientation.firstAngle < -3 && x > -rotationMargin) {
+                    flTurnAdjust = actualPower * 1.25F * (Math.abs(adjustedOrientation.firstAngle) / 40F) * ((1200F-distanceAdjustment) / 1200F);
                 }
-                else if (adjustedOrientation.secondAngle > 3 && x < rotationMargin) {
-                    blTurnAdjust = actualPower * -1.25F * (Math.abs(adjustedOrientation.secondAngle) / 40F) * ((1200F-distanceAdjustment) / 1200F);
+                else if (adjustedOrientation.firstAngle > 3 && x < rotationMargin) {
+                    blTurnAdjust = actualPower * -1.25F * (Math.abs(adjustedOrientation.firstAngle) / 40F) * ((1200F-distanceAdjustment) / 1200F);
                 }
 
                 float flPower, frPower, blPower, brPower;

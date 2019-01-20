@@ -1420,7 +1420,7 @@ public abstract class AutoBase extends LinearOpMode {
             telemetry.addData("Silver found", "during first scan");
             Log.i("[phoenix]:Silv detected", "found silver");
             // strafe to the right position
-            drivetrain.Strafe(0.3f, 8.5f, Direction.RIGHT);  // was 8.5, thinking about change to 9 to evaluate teh event if no gold found(this can shorten time as alternative solution,
+            drivetrain.Strafe(0.3f, 8.5f, Direction.RIGHT);  // can be 9.0, was 8.5, thinking about change to 9 to evaluate teh event if no gold found(this can shorten time as alternative solution,
             sleep(100);
             firstTurningAngle = Math.abs(robotStartingAngle + 90f - imu.getAngularOrientation().firstAngle);
             drivetrain.Turn(0.4f, (int) firstTurningAngle, Direction.COUNTERCLOCKWISE, imu, this); // was 40, should be 45, compensate for wheels issue
@@ -1438,6 +1438,32 @@ public abstract class AutoBase extends LinearOpMode {
             //scanGold_Diagonal(0.13f, 200, 420, this); // was 240 and 380
             scanGold_Diagonal_Filter(0.14f, 100, 340, reference_Bottom_Y, this);
         }
+    }
+
+    public MineralPosition goldPosition() {
+        if (tfod != null) {
+            int left = 0;
+            boolean foundGold = false;
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+
+            for (Recognition r : updatedRecognitions) {
+                if (r.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                    foundGold = true;
+                    telemetry.addData("Top Left: ", String.format("%f %f", r.getTop(), r.getLeft()));
+                    if (r.getTop() < 360f) {
+                        return MineralPosition.RIGHT;
+                    }
+                    else {
+                        return MineralPosition.CENTER;
+                    }
+
+                }
+            }
+
+            return MineralPosition.LEFT;
+        }
+
+        return MineralPosition.LEFT;
     }
 
     // this method will not drive and scan, but rather drive forward a fixed distance, and then scan
@@ -1476,7 +1502,7 @@ public abstract class AutoBase extends LinearOpMode {
             telemetry.addData("Silver found", "during first scan");
             Log.i("[phoenix]:Silv detected", "found silver");
             // strafe to the right position
-            drivetrain.Strafe(0.3f, 8.5f, Direction.RIGHT);  // was 8.5, thinking about change to 9 to evaluate teh event if no gold found(this can shorten time as alternative solution,
+            drivetrain.Strafe(0.3f, 8.5f, Direction.RIGHT);  // can be 9.0, was 8.5, thinking about change to 9 to evaluate teh event if no gold found(this can shorten time as alternative solution,
             sleep(100);
             firstTurningAngle = Math.abs(robotStartingAngle + 87f - imu.getAngularOrientation().firstAngle);
             drivetrain.Turn(0.4f, (int) firstTurningAngle, Direction.COUNTERCLOCKWISE, imu, this); // was 40, should be 45, compensate for wheels issue
