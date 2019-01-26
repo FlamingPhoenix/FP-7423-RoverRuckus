@@ -115,7 +115,9 @@ public class DX_RedDepot extends AutoBase {
         // Lower the robot and detach from the lander
         this.releaseFromLander();
 
+        sleep(50);
         setRobotStartingAngle();
+        sleep(50);
 
         // Prep steps a) Move forward 3 inches, b) strafe, c) turn about 45 degree, ready to scan mineral
         drivetrain.Drive(0.4f, 3.5f, Direction.FORWARD); //3.5
