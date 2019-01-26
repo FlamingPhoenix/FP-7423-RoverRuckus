@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  */
 
 @Disabled
-@Autonomous(name="Dover RedDepot", group="none")
+@Autonomous(name="Dover RedDepot V2", group="none")
 public class DX_RedDepot extends AutoBase {
 
     @Override
@@ -143,7 +143,7 @@ public class DX_RedDepot extends AutoBase {
         sleep(100);
         drivetrain.Turn(.5f, 180, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(100);
-        drivetrain.Strafe(.4F, 4.0f, Direction.LEFT); // strafe back more to ensure touch the wall
+        drivetrain.Strafe(.4F, 4.5f, Direction.LEFT); // strafe back more to ensure touch the wall
 
         telemetry.addData(" after the strafe to image", "after strafe to image");
         Log.i("[phoenix]:after strafe", "after strafe to image");
