@@ -80,9 +80,9 @@ public class AutoRedCrater extends AutoBase {
         else
             drivetrain.Drive(.40f, 25, Direction.FORWARD);
         drivetrain.Turn(.40f, 50, Direction.COUNTERCLOCKWISE, imu, this);
-        sleep(1000);
+        sleep(500);
 
-        drivetrain.StrafeToImage(0.3f, backTarget, this);
+        drivetrain.StrafeToImage(0.3f, redTarget, this);
 
         sleep(100);
         // VERY IMPORTANT, PLEASE KEEP THIS PART WHEN UPDATING FINAL VERSION OF AUTONOMOUS PROGRAM !!
@@ -102,11 +102,12 @@ public class AutoRedCrater extends AutoBase {
             tfod.shutdown();
         }
 
-        drivetrain.Drive(.7f, 40f, Direction.FORWARD);
+        drivetrain.Drive(0.6f, 54.5f, Direction.FORWARD);
         sleep(100);
+//        // drop marker
         markerHook.setPosition(0.1);
-        sleep(500 );
-        drivetrain.Drive(.7f, 66.5f, Direction.BACKWARD);
+        sleep(500);
+       drivetrain.Drive(.65f, 68f, Direction.BACKWARD); // continue to drive to crater
 
 
         //this.sampleGold(this);
