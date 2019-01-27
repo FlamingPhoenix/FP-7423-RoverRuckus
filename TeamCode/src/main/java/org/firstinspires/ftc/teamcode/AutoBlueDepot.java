@@ -27,7 +27,7 @@ import java.util.List;
  */
 
 //@Disabled
-@Autonomous(name="M_W BlueDepot_Test_Simple_Diagonal_Scan", group="none")
+@Autonomous(name="DE BlueDepot", group="none")
 public class AutoBlueDepot extends AutoBase {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -86,7 +86,7 @@ public class AutoBlueDepot extends AutoBase {
         else
             drivetrain.Drive(.40f, 25, Direction.FORWARD);
         drivetrain.Turn(.40f, 50, Direction.COUNTERCLOCKWISE, imu, this);
-        sleep(1000);
+        sleep(500);
 
         drivetrain.StrafeToImage(0.3f, frontTarget, this);
 
@@ -112,7 +112,7 @@ public class AutoBlueDepot extends AutoBase {
         sleep(100);
         markerHook.setPosition(0.1);
         sleep(500 );
-        drivetrain.Drive(.7f, 66.5f, Direction.BACKWARD);
+        drivetrain.Drive(.7f, 68f, Direction.BACKWARD);
 
 
         /*

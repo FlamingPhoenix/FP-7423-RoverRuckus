@@ -218,7 +218,7 @@ public class DriveTrain {
 
 
             while ((Math.abs(d) >= 200) && (imageListener.isVisible()) && opMode.opModeIsActive()) {
-                pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
+                pos = ((VuforiaTrackableDefaultListener) imageTarget.getListener()).getPose();
 
                 Orientation orientation = Orientation.getOrientation(pos, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
@@ -242,13 +242,10 @@ public class DriveTrain {
                 else if (distanceAdjustment < 700F)
                     distanceAdjustment = 0;
 
-                if(x > 15)
-                {
-                    additionalpower = actualPower * 0.5F * (Math.abs(x) / 150F) * ((1200F-distanceAdjustment) / 1200F);
-                }
-                else if(x < -15)
-                {
-                    additionalpower = actualPower * -0.5F * (Math.abs(x) / 150F) * ((1200F-distanceAdjustment) / 1200F);
+                if (x > 15) {
+                    additionalpower = actualPower * 0.5F * (Math.abs(x) / 150F) * ((1200F - distanceAdjustment) / 1200F);
+                } else if (x < -15) {
+                    additionalpower = actualPower * -0.5F * (Math.abs(x) / 150F) * ((1200F - distanceAdjustment) / 1200F);
                 }
 
                 float flTurnAdjust = 0;
@@ -257,10 +254,9 @@ public class DriveTrain {
 
 
                 if (adjustedOrientation.firstAngle < -3 && x > -rotationMargin) {
-                    flTurnAdjust = actualPower * 1.25F * (Math.abs(adjustedOrientation.firstAngle) / 40F) * ((1200F-distanceAdjustment) / 1200F);
-                }
-                else if (adjustedOrientation.firstAngle > 3 && x < rotationMargin) {
-                    blTurnAdjust = actualPower * -1.25F * (Math.abs(adjustedOrientation.firstAngle) / 40F) * ((1200F-distanceAdjustment) / 1200F);
+                    flTurnAdjust = actualPower * 1.25F * (Math.abs(adjustedOrientation.firstAngle) / 40F) * ((1200F - distanceAdjustment) / 1200F);
+                } else if (adjustedOrientation.firstAngle > 3 && x < rotationMargin) {
+                    blTurnAdjust = actualPower * -1.25F * (Math.abs(adjustedOrientation.firstAngle) / 40F) * ((1200F - distanceAdjustment) / 1200F);
                 }
 
                 float flPower, frPower, blPower, brPower;
@@ -272,10 +268,10 @@ public class DriveTrain {
 
                 float max = Max(flPower, frPower, blPower, brPower);
 
-                fl.setPower(flPower/max);
-                fr.setPower(frPower/max);
-                bl.setPower(blPower/max);
-                br.setPower(brPower/max);
+                fl.setPower(flPower / max);
+                fr.setPower(frPower / max);
+                bl.setPower(blPower / max);
+                br.setPower(brPower / max);
 
                 Log.i("[phoenix:StrafeToImage]", String.format("x = %f, d = %f, addpower = %f, actpower = %f, distadj = %f", x, d, additionalpower, actualPower, distanceAdjustment));
                 // Log.i("[phoenix:StrafeToImage]", String.format("raw x=%f, y=%f, z=%f", orientation.firstAngle, orientation.secondAngle, orientation.thirdAngle));
@@ -283,8 +279,12 @@ public class DriveTrain {
                 opMode.telemetry.update();
             }
         }
+        else {
+            this.Strafe(.4F, 10, Direction.RIGHT);
+            StopAll();
+            return;
+        }
         StopAll();
-
         float remainDistance = (Math.abs(lastKnownPosition.translation.get(2)) - 100) * .0254F;
         opMode.telemetry.addData("Remaining Distance: ", "x = %f", remainDistance);
         if (remainDistance > 4F)
@@ -298,7 +298,8 @@ public class DriveTrain {
         return lastKnownPosition;
      }
 
-    // put an O there to designate old version of uncompleted method
+    // put an O there to designate old version of uncomp
+    // eted method
     public void TurnToImage(float initialPower, Direction d, VuforiaTrackable imageTarget, MyBoschIMU imu, OpMode opMode) {
         OpenGLMatrix pos = ((VuforiaTrackableDefaultListener)imageTarget.getListener()).getPose();
         //float turningVelocity = Math.abs(imu.getAngularVelocity().xRotationRate);

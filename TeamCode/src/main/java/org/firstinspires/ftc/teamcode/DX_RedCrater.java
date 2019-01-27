@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  * Created by Steve on 7/22/2018.
  */
 
-@Disabled
+//@Disabled
 @Autonomous(name="Dover RedCrater V2", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
 
 public class DX_RedCrater extends AutoBase {

@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  * Created by Steve on 7/22/2018.
  */
 
-@Disabled
+//@Disabled
 @Autonomous(name="Dover RedDepot V2", group="none")
 public class DX_RedDepot extends AutoBase {
 

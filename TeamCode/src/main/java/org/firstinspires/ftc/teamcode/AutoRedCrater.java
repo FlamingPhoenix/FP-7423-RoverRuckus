@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 //@Disabled
-@Autonomous(name="M_W RedCrater", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
+@Autonomous(name="DE RedCrater", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
 
 public class AutoRedCrater extends AutoBase {
 
@@ -45,7 +45,7 @@ public class AutoRedCrater extends AutoBase {
         drivetrain.Drive(0.40f, 3.5f, Direction.FORWARD); //3.5
         sleep(100);
         drivetrain.Turn(0.2f, 70, Direction.COUNTERCLOCKWISE, imu, this);
-        sleep(1000);
+        sleep(100);
         telemetry.addData("tfod: ", tfod == null);
         //drivetrain.Turn(0.25f, 44, Direction.COUNTERCLOCKWISE, imu, this); // 46 too much, 43 44 maybe right.
         MineralPosition position = goldPosition();
@@ -68,7 +68,7 @@ public class AutoRedCrater extends AutoBase {
         if (position == MineralPosition.RIGHT)
             turnToImage = 115;
         else if (position == MineralPosition.CENTER)
-            turnToImage = 90;
+            turnToImage = 85;
         else
             turnToImage = 45;
 
@@ -78,12 +78,13 @@ public class AutoRedCrater extends AutoBase {
         else if (position == MineralPosition.CENTER)
             drivetrain.Drive(.40f, 27, Direction.FORWARD);
         else
-            drivetrain.Drive(.40f, 25, Direction.FORWARD);
+            drivetrain.Drive(.40f, 23, Direction.FORWARD);
         drivetrain.Turn(.40f, 50, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(500);
 
         drivetrain.StrafeToImage(0.3f, redTarget, this);
-
+        sleep(4000);
+/*
         sleep(100);
         // VERY IMPORTANT, PLEASE KEEP THIS PART WHEN UPDATING FINAL VERSION OF AUTONOMOUS PROGRAM !!
         drivetrain.Strafe(.4F, 3f, Direction.LEFT);
@@ -96,18 +97,19 @@ public class AutoRedCrater extends AutoBase {
         Log.i("[phoenix]:after strafe", "after strafe to image");
         // this sleep could be tuned to accommodate alliance partner, depending on when they coming to depot and drop their maker
         sleep(100);
+        */
 
         if (tfod != null) { // now it is ok to shutdown tfod/vuforia
             tfod.deactivate();
             tfod.shutdown();
         }
 
-        drivetrain.Drive(0.6f, 54.5f, Direction.FORWARD);
+        drivetrain.Drive(0.6f, 52f, Direction.FORWARD);
         sleep(100);
 //        // drop marker
         markerHook.setPosition(0.1);
         sleep(500);
-       drivetrain.Drive(.65f, 68f, Direction.BACKWARD); // continue to drive to crater
+        drivetrain.Drive(.65f, 68f, Direction.BACKWARD); // continue to drive to crater
 
 
         //this.sampleGold(this);

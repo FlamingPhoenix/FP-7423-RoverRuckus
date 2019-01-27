@@ -27,7 +27,7 @@ import java.util.List;
  */
 
 //@Disabled
-@Autonomous(name="M_W RedDepot", group="none")
+@Autonomous(name="DE RedDepot", group="none")
 public class AutoRedDepot extends AutoBase {
 
     @Override
@@ -87,7 +87,7 @@ public class AutoRedDepot extends AutoBase {
         else
             drivetrain.Drive(.40f, 25, Direction.FORWARD);
         drivetrain.Turn(.40f, 50, Direction.COUNTERCLOCKWISE, imu, this);
-        sleep(1000);
+        sleep(500);
 
         drivetrain.StrafeToImage(0.3f, backTarget, this);
 
@@ -113,7 +113,7 @@ public class AutoRedDepot extends AutoBase {
         sleep(100);
         markerHook.setPosition(0.1);
         sleep(500 );
-        drivetrain.Drive(.7f, 66.5f, Direction.BACKWARD);
+        drivetrain.Drive(.7f, 68f, Direction.BACKWARD);
 
 
         /*
