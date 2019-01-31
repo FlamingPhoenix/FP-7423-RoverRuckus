@@ -26,16 +26,10 @@ public class MyFirstMechanumDrive extends OpMode {
     boolean isHookOpen = false;
     DigitalChannel liftSensor;
     int magZero = 0;
-    Servo arm;
-    boolean isArmInitiliazed = false;
-    Servo hopper;
-    Servo bucket;
     boolean isAPressed = false;
-    boolean isReadyToDropMineral = false;
     boolean isLatchenabled = true;
     float x1, x2, y1;
-    boolean isPickingMineral = false;
-
+    DcMotor intakeMotor;
 
 
     public void drive(float x1, float y1, float x2) {
@@ -64,35 +58,19 @@ public class MyFirstMechanumDrive extends OpMode {
         rightLift = hardwareMap.dcMotor.get("rightlift");
         leftLift = hardwareMap.dcMotor.get("leftlift");
 
-        arm = hardwareMap.servo.get("arm");
-        ServoControllerEx armController = (ServoControllerEx) arm.getController();
-        int armServoPort = arm.getPortNumber();
-        PwmControl.PwmRange armPwmRange = new PwmControl.PwmRange(1480, 1705);
-        armController.setServoPwmRange(armServoPort, armPwmRange);
-
         hook = hardwareMap.servo.get("hook");
         ServoControllerEx hookController = (ServoControllerEx) hook.getController();
         int hookServoPort = hook.getPortNumber();
         PwmControl.PwmRange hookPwmRange = new PwmControl.PwmRange(899, 2000);
         hookController.setServoPwmRange(hookServoPort, hookPwmRange);
 
-        hopper = hardwareMap.servo.get("hopper");
-        ServoControllerEx hopperController = (ServoControllerEx) hopper.getController();
-        int hopperServoPort = hopper.getPortNumber();
-        PwmControl.PwmRange hopperPwmRange = new PwmControl.PwmRange(899, 2105);
-        hopperController.setServoPwmRange(hopperServoPort, hopperPwmRange);
-        hopper.setPosition(0.2);
-
-        bucket = hardwareMap.servo.get("bucket");
-        ServoControllerEx bucketController = (ServoControllerEx) bucket.getController();
-        int bucketServoPort = bucket.getPortNumber();
-        PwmControl.PwmRange bucketPwmRange = new PwmControl.PwmRange(899, 2105);
-        bucketController.setServoPwmRange(bucketServoPort, hopperPwmRange);
-        bucket.setPosition(1);
-
         liftSensor = hardwareMap.get(DigitalChannel.class, "liftsensor");
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        intakeMotor = hardwareMap.dcMotor.get("intaketh");
+        intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
         fl.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -100,13 +78,6 @@ public class MyFirstMechanumDrive extends OpMode {
 
     @Override
     public void loop() {
-
-
-        if (!isArmInitiliazed)
-        {
-            arm.setPosition(0.3);
-            isArmInitiliazed = true;
-        }
 
         x1 = gamepad1.left_stick_x;
         y1 = gamepad1.left_stick_y;
@@ -146,12 +117,6 @@ public class MyFirstMechanumDrive extends OpMode {
 
             leftLift.setPower(power);
             rightLift.setPower(power);
-
-            //prevent arm to get in harms way
-
-                if (arm.getPosition() < 0.3d) {
-                    arm.setPosition(0.3d);
-                }
 
         }
         else if (power > 0.2)
@@ -203,65 +168,30 @@ public class MyFirstMechanumDrive extends OpMode {
             }
         }
 
-        //driver 2 control buckets
-        if (gamepad2.right_trigger > 0.5) {
-            bucket.setPosition(0);
-        }
-
-        else if (gamepad2.right_bumper) {
-            bucket.setPosition(1);
-        }
-
-        //driver 1 control arm position
-        if (gamepad1.right_trigger > 0.5)
-        {
-            arm.setPosition(1);
-            isReadyToDropMineral = false;
-            isPickingMineral = true;
-        }
-        else if (gamepad1.right_bumper)
-        {
-            arm.setPosition(0.7);
-            isReadyToDropMineral = false;
-            isPickingMineral = true;
-        }
-        else if (gamepad1.y)
-        {
-            if (rightLift.getCurrentPosition() > magZero) {
-                double newArmPosition = arm.getPosition() - 0.075d;
-                if (newArmPosition < 0.075)
-                    newArmPosition = 0.075d;
-                arm.setPosition(newArmPosition);
-                isReadyToDropMineral = true;
-                isPickingMineral = false;
+        if (gamepad1.right_trigger > 0.2 && gamepad1.right_trigger < 0.8) {
+            if (intakeMotor.getCurrentPosition() > -800) {
+                intakeMotor.setPower(-0.5);
+            } else {
+                intakeMotor.setPower(-0.1);
             }
         }
-
-
-        if (gamepad1.a)
-        {
-            hopper.setPosition(0);
-            isAPressed = true;
-        }
-        else if (!isAPressed)
-        {
-            double armAngle = arm.getPosition();
-
-            telemetry.addData("arm position", armAngle);
-            double hopperPosition = 0.13d + (120.0d * (1d - armAngle)) * 0.0078d;
-            if (hopperPosition > 1.0d) {
-                hopperPosition = 1.0d;
-            }
-            hopper.setPosition(hopperPosition);
-        }
-        else if (isAPressed)
-        {
-            if (arm.getPosition() > 0.5)
-            {
-                isAPressed = false;
+        else if (gamepad1.right_trigger > 0.8) {
+            if (intakeMotor.getCurrentPosition() > -800) {
+                intakeMotor.setPower(-1);
+            } else {
+                intakeMotor.setPower(-0.1);
             }
         }
+        else if (gamepad1.right_bumper) {
+            if (intakeMotor.getCurrentPosition() > 0)
+                intakeMotor.setPower(0);
+            else
+                intakeMotor.setPower(0.4);
+        } else {
+            intakeMotor.setPower(0);
+        }
 
+        telemetry.addData("encoder: ", intakeMotor.getCurrentPosition());
         telemetry.update(); //graffiti
     }
 }
