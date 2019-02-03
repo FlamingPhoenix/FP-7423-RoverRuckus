@@ -119,7 +119,7 @@ public class MyFirstMechanumDrive extends OpMode {
         bucket = hardwareMap.servo.get("bucket");
         ServoControllerEx bucketController = (ServoControllerEx) bucket.getController();
         int bucketServoPort = bucket.getPortNumber();
-        PwmControl.PwmRange bucketPwmRange = new PwmControl.PwmRange(899, 2105);
+        PwmControl.PwmRange bucketPwmRange = new PwmControl.PwmRange(700, 2300);
         bucketController.setServoPwmRange(bucketServoPort, hopperPwmRange);
         bucket.setPosition(1);
 
