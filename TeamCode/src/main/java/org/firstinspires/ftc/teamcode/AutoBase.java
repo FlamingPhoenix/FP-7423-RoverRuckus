@@ -16,7 +16,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.vuforia.HINT;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -138,7 +137,7 @@ public abstract class AutoBase extends LinearOpMode {
         VuforiaLocalizer.Parameters param = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         param.vuforiaLicenseKey = "AbYPrgD/////AAAAGbvKMH3NcEVFmPLgunQe4K0d1ZQi+afRLxricyooCq+sgY9Yh1j+bBrd0CdDCcoieA6trLCKBzymC515+Ps/FECtXv3+CTW6fg3/3+nvKZ6QA18h/cNZHg5HYHmghlcCgVUmSzOLRvdOpbS4S+0Y/sWGXwFK0PbuGPSN82w8XPDBoRYSWjAf8GXeitmNSlm9n4swrMoYNpMDuWCDjSm1kWnoErjFA9NuNoFzAgO+C/rYzoYjTJRk40ETVcAsahzatRlP7PJCvNNXiBhE6iVR+x7lFlTZ841xifOIOPkfVc54olC5XYe4A5ZmQ6WFD03W5HHdQrnmKPmkgcr1yqXAJ3rLTK8FZK3KVgbxz3Eeqps0";
         //param.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        param.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        param.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         com.vuforia.Vuforia.setHint(HINT.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, 4);
 
         vuforia = ClassFactory.getInstance().createVuforia(param);
@@ -1523,5 +1522,17 @@ public abstract class AutoBase extends LinearOpMode {
             // scan the next two minerals for GOLD, with the simple method
             scanGold_Diagonal_Filter_Simple(reference_Bottom_Y, this);
         }
+    }
+
+    public double angleToMineral(float moveDistance)
+    {
+        double d1 = 24 - (23.3/Math.sqrt(2));
+        double d2 = Math.sqrt(576 + Math.pow(d1, 2));
+        double y1 = Math.sqrt(Math.pow(d2, 2) - Math.pow((23.3/2.0), 2));
+        double y = y1 + (12 * Math.sqrt(2));
+        double d = y - moveDistance - 9;
+        double angleToMineral = Math.toDegrees(Math.atan(14.5/d));
+
+        return angleToMineral;
     }
 }

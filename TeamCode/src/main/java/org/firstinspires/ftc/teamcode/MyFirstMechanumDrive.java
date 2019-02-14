@@ -62,7 +62,7 @@ public class MyFirstMechanumDrive extends OpMode {
     boolean isAPressed = false;
     boolean isReadyToDropMineral = false;
     boolean isLatchenabled = true;
-    float x1, x2, y1;
+    float x1, x2, y1, y2;
     boolean isPickingMineral = false;
     DcMotor intakeMotor;
     Servo rotate;
@@ -154,10 +154,17 @@ public class MyFirstMechanumDrive extends OpMode {
         x1 = gamepad1.left_stick_x;
         y1 = gamepad1.left_stick_y;
         x2 = gamepad1.right_stick_x;
-        if (gamepad1.left_bumper){
-            x1 = x1/2f;
-            y1 = y1/2f;
-            x2 = x2/2f;
+        y2 = gamepad1.right_stick_y;
+        double joystickLeftDistance = Math.pow(x1, 2) + Math.pow(y1, 2);
+        if (joystickLeftDistance < 0.9)
+        {
+            x1 = x1/2;
+            y1 = y1/2;
+        }
+        double joystickRightDistance = Math.pow(x2, 2) + Math.pow(y2, 2);
+        if (joystickRightDistance < 0.9)
+        {
+            x2 = x2/2;
         }
         drive(x1,  y1 * -1, x2);
         //telemetry.addData("y1;", gamepad1.left_stick_y);
@@ -293,27 +300,49 @@ public class MyFirstMechanumDrive extends OpMode {
             sweep.setPower(0);
 
 
-        if (gamepad1.right_trigger > 0.2 && gamepad1.right_trigger < 0.8) {
-            if (intakeMotor.getCurrentPosition() > -800) {
+        if (gamepad1.right_trigger > 0.2 && gamepad1.right_trigger < 0.8)
+        {
+            if (intakeMotor.getCurrentPosition() > -800)
+            {
                 intakeMotor.setPower(-0.5);
-            } else {
+            }
+            else
+            {
                 intakeMotor.setPower(-0.1);
             }
         }
-        else if (gamepad1.right_trigger > 0.8) {
-            if (intakeMotor.getCurrentPosition() > -800) {
+        else if (gamepad1.right_trigger > 0.8)
+        {
+            if (intakeMotor.getCurrentPosition() > -800)
+            {
                 intakeMotor.setPower(-1);
-            } else {
+            }
+            else
+            {
                 intakeMotor.setPower(-0.1);
             }
         }
-        else if (gamepad1.right_bumper) {
+        else if (gamepad1.right_bumper)
+        {
             if (intakeMotor.getCurrentPosition() > 0)
                 intakeMotor.setPower(0);
             else
                 intakeMotor.setPower(0.4);
-        } else {
-            intakeMotor.setPower(0);
+        }
+        else
+        {
+            if (intakeMotor.getCurrentPosition() > -140)
+            {
+                intakeMotor.setPower(0);
+            }
+            else if (intakeMotor.getCurrentPosition() > -500)
+            {
+                intakeMotor.setPower(-0.2);
+            }
+            else
+            {
+                intakeMotor.setPower(-0.3);
+            }
         }
 
         telemetry.addData("encoder: ", intakeMotor.getCurrentPosition());
