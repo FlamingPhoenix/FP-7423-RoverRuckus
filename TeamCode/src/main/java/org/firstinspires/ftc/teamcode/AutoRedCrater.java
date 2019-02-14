@@ -83,6 +83,7 @@ public class AutoRedCrater extends AutoBase {
         sleep(500);
 
         drivetrain.StrafeToImage(0.3f, redTarget, this);
+        float angleAfterStrafe = imu.getAngularOrientation().firstAngle;
         sleep(4000);
 /*
         sleep(100);
@@ -104,7 +105,7 @@ public class AutoRedCrater extends AutoBase {
             tfod.shutdown();
         }
 
-        drivetrain.Drive(0.6f, 52f, Direction.FORWARD);
+        drivetrain.Drive(0.6f, 48f, Direction.FORWARD);
         sleep(100);
 //        // drop marker
         markerHook.setPosition(0.1);

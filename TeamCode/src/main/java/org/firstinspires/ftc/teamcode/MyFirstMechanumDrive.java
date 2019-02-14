@@ -13,6 +13,35 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoControllerEx;
 import com.qualcomm.robotcore.util.Range;
 
+
+// Start + A to assign controller to Player 1
+// Start + B to assign controller to Player 2
+//
+//////////////////////////////////////////////////////////////////////////
+// Player 1 Controller
+//////////////////////////////////////////////////////////////////////////
+//
+// Driving and collecting minerals with the linear slide into collector
+//
+//  Right Stick = Turning
+//  Left Stick = Forward/ Backward, Strafing
+//  RB = Contract Linear Extension
+//  RT = Extend Linear Extension
+//  LB =
+//  LT =
+//
+///////////////////////////////////////////////////////////////////////////
+// Player 2 Controller
+///////////////////////////////////////////////////////////////////////////
+//
+// Operating lift system and dropping minerals from collector
+//
+//  Right Stick = Controls lift up and down
+//  RB = Return collector
+//  RT = Dump Collector
+//  LB = Latch control (toggle)
+
+
 @TeleOp(name = "Mechanum", group = "none")
 public class MyFirstMechanumDrive extends OpMode {
 
@@ -35,7 +64,9 @@ public class MyFirstMechanumDrive extends OpMode {
     boolean isLatchenabled = true;
     float x1, x2, y1;
     boolean isPickingMineral = false;
-
+    DcMotor intakeMotor;
+    Servo rotate;
+    DcMotor sweep;
 
 
     public void drive(float x1, float y1, float x2) {
@@ -63,6 +94,11 @@ public class MyFirstMechanumDrive extends OpMode {
         bl = hardwareMap.dcMotor.get("backleft");
         rightLift = hardwareMap.dcMotor.get("rightlift");
         leftLift = hardwareMap.dcMotor.get("leftlift");
+        sweep = hardwareMap.dcMotor.get("sweep");
+
+        intakeMotor = hardwareMap.dcMotor.get("intaketh");
+        intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         arm = hardwareMap.servo.get("arm");
         ServoControllerEx armController = (ServoControllerEx) arm.getController();
@@ -86,9 +122,16 @@ public class MyFirstMechanumDrive extends OpMode {
         bucket = hardwareMap.servo.get("bucket");
         ServoControllerEx bucketController = (ServoControllerEx) bucket.getController();
         int bucketServoPort = bucket.getPortNumber();
-        PwmControl.PwmRange bucketPwmRange = new PwmControl.PwmRange(899, 2105);
-        bucketController.setServoPwmRange(bucketServoPort, hopperPwmRange);
+        PwmControl.PwmRange bucketPwmRange = new PwmControl.PwmRange(900, 2100);
+        bucketController.setServoPwmRange(bucketServoPort, bucketPwmRange);
         bucket.setPosition(1);
+
+        rotate = hardwareMap.servo.get("rotate");
+        ServoControllerEx rotateController = (ServoControllerEx) rotate.getController();
+        int rotateServoPort = rotate.getPortNumber();
+        PwmControl.PwmRange rotatePwmRange = new PwmControl.PwmRange(900, 2100);
+        rotateController.setServoPwmRange(rotateServoPort, rotatePwmRange);
+        rotate.setPosition(0.4);
 
         liftSensor = hardwareMap.get(DigitalChannel.class, "liftsensor");
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -237,30 +280,43 @@ public class MyFirstMechanumDrive extends OpMode {
             }
         }
 
+        if(gamepad1.a)
+            rotate.setPosition(0.4);
+        else if(gamepad1.y)
+            rotate.setPosition(1);
 
-        if (gamepad1.a)
-        {
-            hopper.setPosition(0);
-            isAPressed = true;
-        }
-        else if (!isAPressed)
-        {
-            double armAngle = arm.getPosition();
+        if(gamepad1.left_trigger > 0.5)
+            sweep.setPower(-1);
+        else if(gamepad1.left_bumper)
+            sweep.setPower(1);
+        else
+            sweep.setPower(0);
 
-            telemetry.addData("arm position", armAngle);
-            double hopperPosition = 0.13d + (120.0d * (1d - armAngle)) * 0.0078d;
-            if (hopperPosition > 1.0d) {
-                hopperPosition = 1.0d;
-            }
-            hopper.setPosition(hopperPosition);
-        }
-        else if (isAPressed)
-        {
-            if (arm.getPosition() > 0.5)
-            {
-                isAPressed = false;
+
+        if (gamepad1.right_trigger > 0.2 && gamepad1.right_trigger < 0.8) {
+            if (intakeMotor.getCurrentPosition() > -800) {
+                intakeMotor.setPower(-0.5);
+            } else {
+                intakeMotor.setPower(-0.1);
             }
         }
+        else if (gamepad1.right_trigger > 0.8) {
+            if (intakeMotor.getCurrentPosition() > -800) {
+                intakeMotor.setPower(-1);
+            } else {
+                intakeMotor.setPower(-0.1);
+            }
+        }
+        else if (gamepad1.right_bumper) {
+            if (intakeMotor.getCurrentPosition() > 0)
+                intakeMotor.setPower(0);
+            else
+                intakeMotor.setPower(0.4);
+        } else {
+            intakeMotor.setPower(0);
+        }
+
+        telemetry.addData("encoder: ", intakeMotor.getCurrentPosition());
 
         telemetry.update(); //graffiti
     }
