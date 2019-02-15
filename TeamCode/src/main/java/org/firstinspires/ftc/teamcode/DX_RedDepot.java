@@ -110,7 +110,6 @@ public class DX_RedDepot extends AutoBase {
         // Wait for the start button
         waitForStart();
 
-        arm.setPosition(0.1);
         hopper.setPosition(0.9);
         // Lower the robot and detach from the lander
         this.releaseFromLander();

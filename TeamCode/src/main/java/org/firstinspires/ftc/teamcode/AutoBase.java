@@ -69,6 +69,10 @@ public abstract class AutoBase extends LinearOpMode {
     boolean isHookOpen = false;
     DigitalChannel liftSensor;
     int magZero = 0;
+    DcMotor intakeMotor;
+    Servo rotate;
+    DcMotor sweep;
+    Servo door;
 
     protected VuforiaTrackable backTarget;
     protected VuforiaTrackable frontTarget;
@@ -80,7 +84,6 @@ public abstract class AutoBase extends LinearOpMode {
 
     protected VoltageSensor voltageSensor;
     protected Servo markerHook;
-    protected Servo arm;
     protected Servo hopper;
     float robotStartingAngle = 0;
 
@@ -92,6 +95,20 @@ public abstract class AutoBase extends LinearOpMode {
         br = hardwareMap.dcMotor.get("backright");
         fl.setDirection(DcMotorSimple.Direction.REVERSE);
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        rotate = hardwareMap.servo.get("rotate");
+        ServoControllerEx rotateController = (ServoControllerEx) rotate.getController();
+        int rotateServoPort = rotate.getPortNumber();
+        PwmControl.PwmRange rotatePwmRange = new PwmControl.PwmRange(900, 2100);
+        rotateController.setServoPwmRange(rotateServoPort, rotatePwmRange);
+        rotate.setPosition(0.4);
+
+        door = hardwareMap.servo.get("door");
+        door.setPosition(0);
+
+        intakeMotor = hardwareMap.dcMotor.get("intaketh");
+        intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         rightLift = hardwareMap.dcMotor.get("rightlift");
         leftLift = hardwareMap.dcMotor.get("leftlift");
@@ -120,11 +137,6 @@ public abstract class AutoBase extends LinearOpMode {
         PwmControl.PwmRange grabberPwmRange = new PwmControl.PwmRange(899, 2150);
         primaryController.setServoPwmRange(grabberServoPort, grabberPwmRange);
 
-        arm = hardwareMap.servo.get("arm");
-        ServoControllerEx armController = (ServoControllerEx) arm.getController();
-        int armServoPort = arm.getPortNumber();
-        PwmControl.PwmRange armPwmRange = new PwmControl.PwmRange(1480, 1700);
-        armController.setServoPwmRange(armServoPort, armPwmRange);
 
 //         voltage sensor
 //        voltageSensor = hardwareMap.voltageSensor.get("Motor Controller 1");

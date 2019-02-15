@@ -29,7 +29,6 @@ public class AutoRedCrater_backup_Oxford_Jan6_2019 extends AutoBase {
         // Wait for the start button
         waitForStart();
 //
-        arm.setPosition(0.1);
         hopper.setPosition(0.9);
         // Lower the robot and detach from the lander
         this.releaseFromLander();

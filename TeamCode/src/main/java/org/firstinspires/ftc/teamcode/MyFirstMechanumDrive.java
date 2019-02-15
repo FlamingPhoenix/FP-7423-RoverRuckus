@@ -55,7 +55,6 @@ public class MyFirstMechanumDrive extends OpMode {
     boolean isHookOpen = false;
     DigitalChannel liftSensor;
     int magZero = 0;
-    Servo arm;
     boolean isArmInitiliazed = false;
     Servo hopper;
     Servo bucket;
@@ -67,6 +66,7 @@ public class MyFirstMechanumDrive extends OpMode {
     DcMotor intakeMotor;
     Servo rotate;
     DcMotor sweep;
+    Servo door;
 
 
     public void drive(float x1, float y1, float x2) {
@@ -100,12 +100,6 @@ public class MyFirstMechanumDrive extends OpMode {
         intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        arm = hardwareMap.servo.get("arm");
-        ServoControllerEx armController = (ServoControllerEx) arm.getController();
-        int armServoPort = arm.getPortNumber();
-        PwmControl.PwmRange armPwmRange = new PwmControl.PwmRange(1480, 1705);
-        armController.setServoPwmRange(armServoPort, armPwmRange);
-
         hook = hardwareMap.servo.get("hook");
         ServoControllerEx hookController = (ServoControllerEx) hook.getController();
         int hookServoPort = hook.getPortNumber();
@@ -133,6 +127,9 @@ public class MyFirstMechanumDrive extends OpMode {
         rotateController.setServoPwmRange(rotateServoPort, rotatePwmRange);
         rotate.setPosition(0.4);
 
+        door = hardwareMap.servo.get("door");
+        door.setPosition(0);
+
         liftSensor = hardwareMap.get(DigitalChannel.class, "liftsensor");
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -145,11 +142,6 @@ public class MyFirstMechanumDrive extends OpMode {
     public void loop() {
 
 
-        if (!isArmInitiliazed)
-        {
-            arm.setPosition(0.3);
-            isArmInitiliazed = true;
-        }
 
         x1 = gamepad1.left_stick_x;
         y1 = gamepad1.left_stick_y;
@@ -199,9 +191,6 @@ public class MyFirstMechanumDrive extends OpMode {
 
             //prevent arm to get in harms way
 
-                if (arm.getPosition() < 0.3d) {
-                    arm.setPosition(0.3d);
-                }
 
         }
         else if (power > 0.2)
@@ -262,35 +251,15 @@ public class MyFirstMechanumDrive extends OpMode {
             bucket.setPosition(1);
         }
 
-        //driver 1 control arm position
-        if (gamepad1.right_trigger > 0.5)
-        {
-            arm.setPosition(1);
-            isReadyToDropMineral = false;
-            isPickingMineral = true;
-        }
-        else if (gamepad1.right_bumper)
-        {
-            arm.setPosition(0.7);
-            isReadyToDropMineral = false;
-            isPickingMineral = true;
-        }
-        else if (gamepad1.y)
-        {
-            if (rightLift.getCurrentPosition() > magZero) {
-                double newArmPosition = arm.getPosition() - 0.075d;
-                if (newArmPosition < 0.075)
-                    newArmPosition = 0.075d;
-                arm.setPosition(newArmPosition);
-                isReadyToDropMineral = true;
-                isPickingMineral = false;
-            }
-        }
+
 
         if(gamepad1.a)
             rotate.setPosition(0.4);
         else if(gamepad1.y)
+        {
             rotate.setPosition(1);
+            door.setPosition(0);    //automatically close trap door to prevent balls form falling out
+        }
 
         if(gamepad1.left_trigger > 0.5)
             sweep.setPower(-1);
@@ -344,6 +313,11 @@ public class MyFirstMechanumDrive extends OpMode {
                 intakeMotor.setPower(-0.3);
             }
         }
+
+        if (gamepad2.dpad_up)
+            door.setPosition(.5);
+        else if(gamepad2.dpad_down)
+            door.setPosition(0);
 
         telemetry.addData("encoder: ", intakeMotor.getCurrentPosition());
 
