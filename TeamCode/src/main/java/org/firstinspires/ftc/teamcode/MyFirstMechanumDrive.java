@@ -125,7 +125,7 @@ public class MyFirstMechanumDrive extends OpMode {
         int rotateServoPort = rotate.getPortNumber();
         PwmControl.PwmRange rotatePwmRange = new PwmControl.PwmRange(900, 2100);
         rotateController.setServoPwmRange(rotateServoPort, rotatePwmRange);
-        rotate.setPosition(0.4);
+        rotate.setPosition(0.15);
 
         door = hardwareMap.servo.get("door");
         door.setPosition(0);
@@ -257,7 +257,7 @@ public class MyFirstMechanumDrive extends OpMode {
             rotate.setPosition(0.15);
         else if(gamepad1.y)
         {
-            rotate.setPosition(1);
+            rotate.setPosition(0.9);
             door.setPosition(0);    //automatically close trap door to prevent balls form falling out
         }
 
