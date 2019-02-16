@@ -19,7 +19,6 @@ import org.firstinspires.ftc.teamcode.MyClass.PositionToImage;
  * Created by Steve on 7/22/2018.
  */
 
-@Disabled
 @Autonomous(name="Test Turn", group="none")
 public class TestTurn extends LinearOpMode {
     DcMotor fl;
@@ -82,12 +81,12 @@ public class TestTurn extends LinearOpMode {
 
         */
 
-        drivetrain.Turn(0.3F, 90, Direction.CLOCKWISE, imu, this);
+        drivetrain.Turn(0.3F, 35, Direction.CLOCKWISE, imu, this);
         sleep (2000);
-        drivetrain.Turn(0.3F, 90, Direction.CLOCKWISE, imu, this);
+        drivetrain.Turn(0.3F, 35, Direction.CLOCKWISE, imu, this);
         sleep(2000);
-        drivetrain.Turn(0.3F, 90, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.3F, 35, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(2000);
-        drivetrain.Turn(0.3F, 90, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.3F, 35, Direction.COUNTERCLOCKWISE, imu, this);
     }
 }

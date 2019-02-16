@@ -118,7 +118,7 @@ public class MyFirstMechanumDrive extends OpMode {
         int bucketServoPort = bucket.getPortNumber();
         PwmControl.PwmRange bucketPwmRange = new PwmControl.PwmRange(900, 2100);
         bucketController.setServoPwmRange(bucketServoPort, bucketPwmRange);
-        bucket.setPosition(1);
+        bucket.setPosition(0.95);
 
         rotate = hardwareMap.servo.get("rotate");
         ServoControllerEx rotateController = (ServoControllerEx) rotate.getController();
@@ -244,17 +244,17 @@ public class MyFirstMechanumDrive extends OpMode {
 
         //driver 2 control buckets
         if (gamepad2.right_trigger > 0.5) {
-            bucket.setPosition(0);
+            bucket.setPosition(0.2);
         }
 
         else if (gamepad2.right_bumper) {
-            bucket.setPosition(1);
+            bucket.setPosition(0.95);
         }
 
 
 
         if(gamepad1.a)
-            rotate.setPosition(0.4);
+            rotate.setPosition(0.15);
         else if(gamepad1.y)
         {
             rotate.setPosition(1);
@@ -277,7 +277,7 @@ public class MyFirstMechanumDrive extends OpMode {
             }
             else
             {
-                intakeMotor.setPower(-0.1);
+                intakeMotor.setPower(-0.3);
             }
         }
         else if (gamepad1.right_trigger > 0.8)
@@ -293,7 +293,7 @@ public class MyFirstMechanumDrive extends OpMode {
         }
         else if (gamepad1.right_bumper)
         {
-            if (intakeMotor.getCurrentPosition() > 0)
+            if (intakeMotor.getCurrentPosition() > -200)
                 intakeMotor.setPower(0);
             else
                 intakeMotor.setPower(0.4);
@@ -310,7 +310,7 @@ public class MyFirstMechanumDrive extends OpMode {
             }
             else
             {
-                intakeMotor.setPower(-0.3);
+                intakeMotor.setPower(-0.2);
             }
         }
 
