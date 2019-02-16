@@ -101,7 +101,7 @@ public abstract class AutoBase extends LinearOpMode {
         int rotateServoPort = rotate.getPortNumber();
         PwmControl.PwmRange rotatePwmRange = new PwmControl.PwmRange(900, 2100);
         rotateController.setServoPwmRange(rotateServoPort, rotatePwmRange);
-        rotate.setPosition(0.4);
+        rotate.setPosition(0.2);
 
         door = hardwareMap.servo.get("door");
         door.setPosition(0);

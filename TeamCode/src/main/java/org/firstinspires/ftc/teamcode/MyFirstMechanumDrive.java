@@ -125,7 +125,7 @@ public class MyFirstMechanumDrive extends OpMode {
         int rotateServoPort = rotate.getPortNumber();
         PwmControl.PwmRange rotatePwmRange = new PwmControl.PwmRange(900, 2100);
         rotateController.setServoPwmRange(rotateServoPort, rotatePwmRange);
-        rotate.setPosition(0.15);
+        rotate.setPosition(0.2);
 
         door = hardwareMap.servo.get("door");
         door.setPosition(0);
@@ -180,6 +180,7 @@ public class MyFirstMechanumDrive extends OpMode {
         //driver 2 control lift
         if (power < -0.2)
         {
+            door.setPosition(0.5);door.setPosition(0.5);
             if ((rightLift.getCurrentPosition() - magZero) < -7000)
             {
                 if (power < -0.5)
@@ -195,6 +196,7 @@ public class MyFirstMechanumDrive extends OpMode {
         }
         else if (power > 0.2)
         {
+
             if ((rightLift.getCurrentPosition() - magZero) > 2500)// why positive 2500 ? while above is -7000 ?
             {
                 if (power > 0.5)
@@ -254,10 +256,10 @@ public class MyFirstMechanumDrive extends OpMode {
 
 
         if(gamepad1.a)
-            rotate.setPosition(0.15);
+            rotate.setPosition(0.2);
         else if(gamepad1.y)
         {
-            rotate.setPosition(0.9);
+            rotate.setPosition(0.95);
             door.setPosition(0);    //automatically close trap door to prevent balls form falling out
         }
 

@@ -83,7 +83,6 @@ public class AutoRedCrater extends AutoBase {
 
         drivetrain.StrafeToImage(0.3f, redTarget, this);
         float angleAfterStrafe = imu.getAngularOrientation().firstAngle;
-        sleep(4000);
 /*
         sleep(100);
         // VERY IMPORTANT, PLEASE KEEP THIS PART WHEN UPDATING FINAL VERSION OF AUTONOMOUS PROGRAM !!
