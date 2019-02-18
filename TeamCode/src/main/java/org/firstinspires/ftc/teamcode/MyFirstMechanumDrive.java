@@ -255,11 +255,11 @@ public class MyFirstMechanumDrive extends OpMode {
 
 
 
-        if(gamepad1.a)
+        if(gamepad1.y)
             rotate.setPosition(0.2);
-        else if(gamepad1.y)
+        else if(gamepad1.a)
         {
-            rotate.setPosition(0.95);
+            rotate.setPosition(1);
             door.setPosition(0);    //automatically close trap door to prevent balls form falling out
         }
 
@@ -295,7 +295,7 @@ public class MyFirstMechanumDrive extends OpMode {
         }
         else if (gamepad1.right_bumper)
         {
-            if (intakeMotor.getCurrentPosition() > -200)
+            if (intakeMotor.getCurrentPosition() > -100)
                 intakeMotor.setPower(0);
             else
                 intakeMotor.setPower(0.4);

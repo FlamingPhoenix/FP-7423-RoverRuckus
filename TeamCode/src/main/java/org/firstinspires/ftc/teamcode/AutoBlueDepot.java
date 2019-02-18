@@ -73,7 +73,7 @@ public class AutoBlueDepot extends AutoBase {
         if (position == MineralPosition.RIGHT)
             turnToImage = 115;
         else if (position == MineralPosition.CENTER)
-            turnToImage = 90;
+            turnToImage = 85;
         else
             turnToImage = 45;
 

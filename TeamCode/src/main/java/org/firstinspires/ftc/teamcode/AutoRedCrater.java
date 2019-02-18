@@ -67,7 +67,7 @@ public class AutoRedCrater extends AutoBase {
         if (position == MineralPosition.RIGHT)
             turnToImage = 115;
         else if (position == MineralPosition.CENTER)
-            turnToImage = 85;
+            turnToImage = 80;
         else
             turnToImage = 45;
 
@@ -83,6 +83,7 @@ public class AutoRedCrater extends AutoBase {
 
         drivetrain.StrafeToImage(0.3f, redTarget, this);
         float angleAfterStrafe = imu.getAngularOrientation().firstAngle;
+        sleep(3000);
 /*
         sleep(100);
         // VERY IMPORTANT, PLEASE KEEP THIS PART WHEN UPDATING FINAL VERSION OF AUTONOMOUS PROGRAM !!

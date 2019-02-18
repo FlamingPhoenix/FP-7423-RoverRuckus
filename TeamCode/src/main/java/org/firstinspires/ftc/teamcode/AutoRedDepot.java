@@ -74,7 +74,7 @@ public class AutoRedDepot extends AutoBase {
         if (position == MineralPosition.RIGHT)
             turnToImage = 115;
         else if (position == MineralPosition.CENTER)
-            turnToImage = 90;
+            turnToImage = 85;
         else
             turnToImage = 45;
 
@@ -89,6 +89,7 @@ public class AutoRedDepot extends AutoBase {
         sleep(500);
 
         drivetrain.StrafeToImage(0.3f, backTarget, this);
+        sleep(3000);
 
         sleep(100);
         // VERY IMPORTANT, PLEASE KEEP THIS PART WHEN UPDATING FINAL VERSION OF AUTONOMOUS PROGRAM !!

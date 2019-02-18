@@ -77,7 +77,7 @@ public class AutoBlueCrater extends AutoBase {
             if (position == MineralPosition.RIGHT)
                 turnToImage = 115;
             else if (position == MineralPosition.CENTER)
-                turnToImage = 85;
+                turnToImage = 80;
             else
                 turnToImage = 45;
 
@@ -113,7 +113,7 @@ public class AutoBlueCrater extends AutoBase {
                 tfod.shutdown();
             }
 
-            drivetrain.Drive(0.6f, 52f, Direction.FORWARD);
+            drivetrain.Drive(0.6f, 48f, Direction.FORWARD);
             sleep(100);
 //        // drop marker
             markerHook.setPosition(0.1);
