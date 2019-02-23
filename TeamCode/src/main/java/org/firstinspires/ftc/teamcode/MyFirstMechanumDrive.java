@@ -246,7 +246,7 @@ public class MyFirstMechanumDrive extends OpMode {
 
         //driver 2 control buckets
         if (gamepad2.right_trigger > 0.5) {
-            bucket.setPosition(0.2);
+            bucket.setPosition(0.1);
         }
 
         else if (gamepad2.right_bumper) {
@@ -295,10 +295,43 @@ public class MyFirstMechanumDrive extends OpMode {
         }
         else if (gamepad1.right_bumper)
         {
-            if (intakeMotor.getCurrentPosition() > -100)
+            if (intakeMotor.getCurrentPosition() > 100)
                 intakeMotor.setPower(0);
             else
                 intakeMotor.setPower(0.4);
+        }
+        /*
+        else if (gamepad2.y)
+        {
+            if (intakeMotor.getCurrentPosition() > -800)
+            {
+                intakeMotor.setPower(-0.5);
+            }
+            else
+            {
+                intakeMotor.setPower(-0.3);
+            }
+        }
+        */
+        else if (gamepad2.y)
+        {
+            if (intakeMotor.getCurrentPosition() > -800)
+            {
+                intakeMotor.setPower(-1);
+            }
+            else
+            {
+                intakeMotor.setPower(-0.3);
+            }
+        }
+        else if (gamepad2.a) {
+            if (intakeMotor.getCurrentPosition() > 100)
+                intakeMotor.setPower(0);
+            else {
+                door.setPosition(0);
+                rotate.setPosition(0.2);
+                intakeMotor.setPower(0.4);
+            }
         }
         else
         {
