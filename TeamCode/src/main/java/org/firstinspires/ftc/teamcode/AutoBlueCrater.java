@@ -92,6 +92,7 @@ public class AutoBlueCrater extends AutoBase {
             sleep(500);
 
             drivetrain.StrafeToImage(0.3f, blueTarget, this);
+            sleep(1000);
 /*
             sleep(100);
             // VERY IMPORTANT, PLEASE KEEP THIS PART WHEN UPDATING FINAL VERSION OF AUTONOMOUS PROGRAM !!

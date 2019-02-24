@@ -22,28 +22,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 
 @Autonomous(name="Plot Angular Velocity", group="none")
-public class PlotAngularVelocity extends LinearOpMode {
-    DcMotor fl;
-    DcMotor fr;
-    DcMotor bl;
-    DcMotor br;
-    DriveTrain drivetrain;
-    MyBoschIMU imu;
+public class PlotAngularVelocity extends AutoBase {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        fl = hardwareMap.dcMotor.get("frontleft");
-        fr = hardwareMap.dcMotor.get("frontright");
-        bl = hardwareMap.dcMotor.get("backleft");
-        br = hardwareMap.dcMotor.get("backright");
-
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
-        bl.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        //drivetrain = new DriveTrain(fl, fr, bl, br);
-        imu = new MyBoschIMU(hardwareMap); // erik and Aryan made changes using myBoschIMU
-        imu.initialize(new BNO055IMU.Parameters());
-
+        initialize();
         waitForStart();
 
         //Log.i("[phoenix:PlotAngVel]", String.format("Initiating loop"));
@@ -53,18 +36,16 @@ public class PlotAngularVelocity extends LinearOpMode {
             float velocityAverage = 0;
 
             for (int i = 0; i < 4; i++){
-
+                imu.initialize(new BNO055IMU.Parameters());
                 Orientation startOrientation = imu.resetAndStart(Direction.COUNTERCLOCKWISE);
-                float startAngle = 0;
-                if (startOrientation != null)
-                    startAngle = startOrientation.firstAngle;
-
+                float startAngle = startOrientation.firstAngle;
+                sleep(1000);
                 float v = Turn(power);
                 sleep (3000);
                 float currentAngle = imu.getAngularOrientation().firstAngle;
 
                 velocityAverage += v;
-                diffAverage += (currentAngle - startAngle);
+                diffAverage += (startAngle - currentAngle);
 
 
             }
@@ -98,7 +79,14 @@ public class PlotAngularVelocity extends LinearOpMode {
              bl.setPower(power);
              fr.setPower(-power);
              br.setPower(-power);
+
              currentAngle = imu.getAngularOrientation().firstAngle;
+
+             if ((startAngle < 90) && (currentAngle > 200))
+                 currentAngle = currentAngle - 360;
+
+             Log.d("[phoenix:PlotAngVel]", String.format("%f",
+                     currentAngle));
          }
 
         //Log.i("[phoenix:PlotAngVel]", String.format("Getting angular velocity"));

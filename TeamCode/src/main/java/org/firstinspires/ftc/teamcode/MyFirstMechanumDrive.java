@@ -11,7 +11,10 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoControllerEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+import java.sql.Time;
 
 
 // Start + A to assign controller to Player 1
@@ -67,6 +70,8 @@ public class MyFirstMechanumDrive extends OpMode {
     Servo rotate;
     DcMotor sweep;
     Servo door;
+    long cycleStartTime;
+    long doorClosingStartTime;
 
 
     public void drive(float x1, float y1, float x2) {
@@ -140,7 +145,11 @@ public class MyFirstMechanumDrive extends OpMode {
 
     @Override
     public void loop() {
-
+        telemetry.addData("Time: ", cycleStartTime);
+        if ((System.currentTimeMillis() - cycleStartTime) > 1000L) {
+            sweep.setPower(0);
+            cycleStartTime = 0L;
+        }
 
 
         x1 = gamepad1.left_stick_x;
@@ -180,7 +189,7 @@ public class MyFirstMechanumDrive extends OpMode {
         //driver 2 control lift
         if (power < -0.2)
         {
-            door.setPosition(0.5);
+            door.setPosition(1);
             if ((rightLift.getCurrentPosition() - magZero) < -7000)
             {
                 if (power < -0.5)
@@ -246,7 +255,7 @@ public class MyFirstMechanumDrive extends OpMode {
 
         //driver 2 control buckets
         if (gamepad2.right_trigger > 0.5) {
-            bucket.setPosition(0.1);
+            bucket.setPosition(0.15);
         }
 
         else if (gamepad2.right_bumper) {
@@ -255,43 +264,68 @@ public class MyFirstMechanumDrive extends OpMode {
 
 
 
-        if(gamepad1.y)
+        if(gamepad1.y) {
             rotate.setPosition(0.2);
-        else if(gamepad1.a)
+            cycleStartTime = System.currentTimeMillis();
+            sweep.setPower(-1);
+        }
+        else if (gamepad1.a)
         {
             rotate.setPosition(1);
             door.setPosition(0);    //automatically close trap door to prevent balls form falling out
         }
 
-        if(gamepad1.left_trigger > 0.5)
+        if(gamepad1.left_trigger > 0.5) {
             sweep.setPower(-1);
-        else if(gamepad1.left_bumper)
+            cycleStartTime = 0L;
+        }
+        else if(gamepad1.left_bumper) {
             sweep.setPower(1);
-        else
-            sweep.setPower(0);
+            cycleStartTime = 0L;
+        }
+        else {
+            if (System.currentTimeMillis() - cycleStartTime > 3000)
+                sweep.setPower(0);
+        }
 
 
         if (gamepad1.right_trigger > 0.2 && gamepad1.right_trigger < 0.8)
         {
-            if (intakeMotor.getCurrentPosition() > -800)
+            if (door.getPosition() > 0.5)
             {
-                intakeMotor.setPower(-0.5);
+                door.setPosition(0);
+                doorClosingStartTime = 0;
             }
-            else
+            else if (System.currentTimeMillis() - doorClosingStartTime > 100)
             {
-                intakeMotor.setPower(-0.3);
+                if (intakeMotor.getCurrentPosition() > -800)
+                {
+                    intakeMotor.setPower(-0.5);
+                }
+                else
+                {
+                    intakeMotor.setPower(-0.3);
+                }
             }
         }
         else if (gamepad1.right_trigger > 0.8)
         {
-            if (intakeMotor.getCurrentPosition() > -800)
+            if (door.getPosition() > 0.5)
             {
-                intakeMotor.setPower(-1);
+                door.setPosition(0);
+                doorClosingStartTime = 0;
             }
-            else
-            {
-                intakeMotor.setPower(-0.1);
+            else if (System.currentTimeMillis() - doorClosingStartTime > 100) {
+                if (intakeMotor.getCurrentPosition() > -800)
+                {
+                    intakeMotor.setPower(-1);
+                }
+                else
+                {
+                    intakeMotor.setPower(-0.1);
+                }
             }
+
         }
         else if (gamepad1.right_bumper)
         {
@@ -300,28 +334,22 @@ public class MyFirstMechanumDrive extends OpMode {
             else
                 intakeMotor.setPower(0.4);
         }
-        /*
         else if (gamepad2.y)
         {
-            if (intakeMotor.getCurrentPosition() > -800)
+            if (door.getPosition() > 0.5)
             {
-                intakeMotor.setPower(-0.5);
+                door.setPosition(0);
+                doorClosingStartTime = 0;
             }
-            else
-            {
-                intakeMotor.setPower(-0.3);
-            }
-        }
-        */
-        else if (gamepad2.y)
-        {
-            if (intakeMotor.getCurrentPosition() > -800)
-            {
-                intakeMotor.setPower(-1);
-            }
-            else
-            {
-                intakeMotor.setPower(-0.3);
+            else if (System.currentTimeMillis() - doorClosingStartTime > 100) {
+                if (intakeMotor.getCurrentPosition() > -800)
+                {
+                    intakeMotor.setPower(-1);
+                }
+                else
+                {
+                    intakeMotor.setPower(-0.3);
+                }
             }
         }
         else if (gamepad2.a) {
@@ -331,6 +359,10 @@ public class MyFirstMechanumDrive extends OpMode {
                 door.setPosition(0);
                 rotate.setPosition(0.2);
                 intakeMotor.setPower(0.4);
+                if (intakeMotor.getCurrentPosition() < -800) {
+                    cycleStartTime = System.currentTimeMillis();
+                    sweep.setPower(-1);
+                }
             }
         }
         else
@@ -350,7 +382,7 @@ public class MyFirstMechanumDrive extends OpMode {
         }
 
         if (gamepad2.dpad_up)
-            door.setPosition(.5);
+            door.setPosition(1);
         else if(gamepad2.dpad_down)
             door.setPosition(0);
 

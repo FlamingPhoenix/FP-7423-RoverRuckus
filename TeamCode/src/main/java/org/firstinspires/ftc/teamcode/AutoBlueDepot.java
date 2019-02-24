@@ -88,7 +88,6 @@ public class AutoBlueDepot extends AutoBase {
         sleep(500);
 
         drivetrain.StrafeToImage(0.3f, frontTarget, this);
-
         sleep(100);
         // VERY IMPORTANT, PLEASE KEEP THIS PART WHEN UPDATING FINAL VERSION OF AUTONOMOUS PROGRAM !!
         drivetrain.Strafe(.4F, 3f, Direction.LEFT);

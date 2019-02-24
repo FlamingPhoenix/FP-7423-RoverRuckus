@@ -166,7 +166,7 @@ public class DriveTrain {
                 currentAngle = imu.getAngularOrientation().firstAngle;
                 AngularVelocity v =  imu.getAngularVelocity();
                 float speed = Math.abs(v.xRotationRate);
-                stoppingAngle = Math.abs(( 0.25f * speed) - 7.5f);
+                stoppingAngle = Math.abs(( 0.26f * speed) - 7.5f);
                 Log.i("[phoenix:turnTest]", String.format("StartingAngle=%f, CurrentAngle=%f, AngularVelocity=%f, StoppingAngle=%f", startOrientation.firstAngle, currentAngle, speed, stoppingAngle));
 
                 fl.setPower(-(actualPower));
