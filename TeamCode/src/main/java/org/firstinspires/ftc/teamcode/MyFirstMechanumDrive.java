@@ -180,7 +180,7 @@ public class MyFirstMechanumDrive extends OpMode {
         //driver 2 control lift
         if (power < -0.2)
         {
-            door.setPosition(0.5);door.setPosition(0.5);
+            door.setPosition(0.5);
             if ((rightLift.getCurrentPosition() - magZero) < -7000)
             {
                 if (power < -0.5)
