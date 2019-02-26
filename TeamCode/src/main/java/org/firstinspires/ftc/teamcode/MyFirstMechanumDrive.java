@@ -72,6 +72,8 @@ public class MyFirstMechanumDrive extends OpMode {
     Servo door;
     long cycleStartTime;
     long doorClosingStartTime;
+    boolean isRaisingLift = false;
+    long raiseLiftStartTime;
 
 
     public void drive(float x1, float y1, float x2) {
@@ -189,23 +191,36 @@ public class MyFirstMechanumDrive extends OpMode {
         //driver 2 control lift
         if (power < -0.2)
         {
-            door.setPosition(1);
-            if ((rightLift.getCurrentPosition() - magZero) < -7000)
-            {
-                if (power < -0.5)
-                    power = -0.5f;
+            if ((System.currentTimeMillis() - raiseLiftStartTime) > 1000) {
+                door.setPosition(1);
+                if (!isRaisingLift) {
+                    raiseLiftStartTime = System.currentTimeMillis();
+                }
+
+                isRaisingLift = true;
+                if ((rightLift.getCurrentPosition() - magZero) < -7000)
+                {
+                    if (power < -0.5)
+                        power = -0.5f;
+                }
+
+                leftLift.setPower(power);
+                rightLift.setPower(power);
+            }
+            else {
+                if (intakeMotor.getCurrentPosition() > -300 && isRaisingLift) {
+                    intakeMotor.setPower(-1f);
+                }
+                else if (isRaisingLift) {
+                    intakeMotor.setPower(-0.1f);
+                }
             }
 
-            leftLift.setPower(power);
-            rightLift.setPower(power);
-
             //prevent arm to get in harms way
-
-
         }
         else if (power > 0.2)
         {
-
+            isRaisingLift = false;
             if ((rightLift.getCurrentPosition() - magZero) > 2500)// why positive 2500 ? while above is -7000 ?
             {
                 if (power > 0.5)
