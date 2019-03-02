@@ -116,7 +116,7 @@ public abstract class AutoBase extends LinearOpMode {
         hook = hardwareMap.servo.get("hook");
         ServoControllerEx hookController = (ServoControllerEx) hook.getController();
         int hookServoPort = hook.getPortNumber();
-        PwmControl.PwmRange hookPwmRange = new PwmControl.PwmRange(899, 2000);
+        PwmControl.PwmRange hookPwmRange = new PwmControl.PwmRange(899, 1931);
         hookController.setServoPwmRange(hookServoPort, hookPwmRange);
 
         hopper = hardwareMap.servo.get("hopper");
@@ -1378,9 +1378,9 @@ public abstract class AutoBase extends LinearOpMode {
     {
         int startLiftPosition = rightLift.getCurrentPosition();
 
-        while (liftSensor.getState() == true && this.opModeIsActive() && (rightLift.getCurrentPosition() - startLiftPosition) > -5000) // was -5150
+        while (liftSensor.getState() == true && this.opModeIsActive() && (rightLift.getCurrentPosition() - startLiftPosition) > -5100) // was -5150
         {
-            if (rightLift.getCurrentPosition() > -3000)
+            if (rightLift.getCurrentPosition() > -3100)
             {
                 rightLift.setPower(-1.0);
                 leftLift.setPower(-1.0);

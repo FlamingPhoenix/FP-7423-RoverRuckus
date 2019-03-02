@@ -36,10 +36,8 @@ public class PlotAngularVelocity extends AutoBase {
             float velocityAverage = 0;
 
             for (int i = 0; i < 4; i++){
-                imu.initialize(new BNO055IMU.Parameters());
-                Orientation startOrientation = imu.resetAndStart(Direction.COUNTERCLOCKWISE);
+                Orientation startOrientation = imu.resetAndStart(Direction.CLOCKWISE);
                 float startAngle = startOrientation.firstAngle;
-                sleep(1000);
                 float v = Turn(power);
                 sleep (3000);
                 float currentAngle = imu.getAngularOrientation().firstAngle;
@@ -66,7 +64,7 @@ public class PlotAngularVelocity extends AutoBase {
 
 
         //Log.i("[phoenix:PlotAngVel]", String.format("Beginning Turn at %f power.", power))
-        Orientation startOrientation = imu.resetAndStart(Direction.COUNTERCLOCKWISE);
+        Orientation startOrientation = imu.resetAndStart(Direction.CLOCKWISE);
          float startAngle = 0;
          if (startOrientation != null)
             startAngle = startOrientation.firstAngle;

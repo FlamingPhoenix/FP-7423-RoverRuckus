@@ -110,7 +110,7 @@ public class MyFirstMechanumDrive extends OpMode {
         hook = hardwareMap.servo.get("hook");
         ServoControllerEx hookController = (ServoControllerEx) hook.getController();
         int hookServoPort = hook.getPortNumber();
-        PwmControl.PwmRange hookPwmRange = new PwmControl.PwmRange(899, 2000);
+        PwmControl.PwmRange hookPwmRange = new PwmControl.PwmRange(899, 1931);
         hookController.setServoPwmRange(hookServoPort, hookPwmRange);
 
         hopper = hardwareMap.servo.get("hopper");
@@ -191,13 +191,9 @@ public class MyFirstMechanumDrive extends OpMode {
         //driver 2 control lift
         if (power < -0.2)
         {
-            if ((System.currentTimeMillis() - raiseLiftStartTime) > 1000) {
+            if (intakeMotor.getCurrentPosition() < -100) {
                 door.setPosition(1);
-                if (!isRaisingLift) {
-                    raiseLiftStartTime = System.currentTimeMillis();
-                }
 
-                isRaisingLift = true;
                 if ((rightLift.getCurrentPosition() - magZero) < -7000)
                 {
                     if (power < -0.5)
@@ -208,7 +204,7 @@ public class MyFirstMechanumDrive extends OpMode {
                 rightLift.setPower(power);
             }
             else {
-                if (intakeMotor.getCurrentPosition() > -300 && isRaisingLift) {
+                if (intakeMotor.getCurrentPosition() >= -100) {
                     intakeMotor.setPower(-1f);
                 }
                 else if (isRaisingLift) {
@@ -253,20 +249,6 @@ public class MyFirstMechanumDrive extends OpMode {
         }
         else if (!gamepad2.left_bumper)
             isLatchenabled = true;
-
-        if (gamepad2.a && liftSensor.getState())
-        {
-            if(rightLift.getCurrentPosition() < (magZero + 200))
-            {
-                rightLift.setPower(0.4);
-                leftLift.setPower(0.4);
-            }
-            else if ((rightLift.getCurrentPosition() > (magZero - 200)))
-            {
-                rightLift.setPower(-0.4);
-                leftLift.setPower(-0.4);
-            }
-        }
 
         //driver 2 control buckets
         if (gamepad2.right_trigger > 0.5) {
@@ -344,7 +326,7 @@ public class MyFirstMechanumDrive extends OpMode {
         }
         else if (gamepad1.right_bumper)
         {
-            if (intakeMotor.getCurrentPosition() > 100)
+            if (intakeMotor.getCurrentPosition() > 40)
                 intakeMotor.setPower(0);
             else
                 intakeMotor.setPower(0.4);
