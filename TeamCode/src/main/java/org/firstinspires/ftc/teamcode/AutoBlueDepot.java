@@ -49,7 +49,7 @@ public class AutoBlueDepot extends AutoBase {
         float a = imu.getAngularOrientation().firstAngle;
         drivetrain.Drive(0.40f, 3.5f, Direction.FORWARD); //3.5
         sleep(100);
-        drivetrain.Turn(0.2f, 70, Direction.COUNTERCLOCKWISE, imu, this);
+        drivetrain.Turn(0.3f, 70, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(500);
         telemetry.addData("tfod: ", tfod == null);
         //drivetrain.Turn(0.25f, 44, Direction.COUNTERCLOCKWISE, imu, this); // 46 too much, 43 44 maybe right.
