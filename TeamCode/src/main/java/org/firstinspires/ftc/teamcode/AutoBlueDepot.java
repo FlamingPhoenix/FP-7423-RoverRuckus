@@ -19,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.MyClass.Calculator;
 
 import java.util.List;
 
@@ -47,7 +48,15 @@ public class AutoBlueDepot extends AutoBase {
 
         // Prep steps a) Move forward 3 inches, b) strafe, c) turn about 45 degree, ready to scan mineral
         float a = imu.getAngularOrientation().firstAngle;
-        drivetrain.Drive(0.40f, 3.5f, Direction.FORWARD); //3.5
+        float distanceFromLander = 3.5f;
+        drivetrain.Drive(0.40f, distanceFromLander, Direction.FORWARD); //3.5
+
+        float rightMineralAngle = Calculator.getMineralAngle(distanceFromLander);
+        telemetry.addData("angle: ", rightMineralAngle);
+        Log.i("[phoenix]: ", String.format("%f", rightMineralAngle));
+        telemetry.update();
+        sleep(30000);
+
         sleep(100);
         drivetrain.Turn(0.3f, 70, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(500);
