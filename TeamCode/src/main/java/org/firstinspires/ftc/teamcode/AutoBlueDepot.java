@@ -41,6 +41,7 @@ public class AutoBlueDepot extends AutoBase {
         // need to set up Marker first.
         // Wait for the start button
         waitForStart();
+        Log.i("[phoenix]: ", String.format("imu1 = %f", imu.getAngularOrientation().firstAngle));
 
         hopper.setPosition(0.9);
         // Lower the robot and detach from the lander
@@ -48,6 +49,7 @@ public class AutoBlueDepot extends AutoBase {
 
         // Prep steps a) Move forward 3 inches, b) strafe, c) turn about 45 degree, ready to scan mineral
         float a = imu.getAngularOrientation().firstAngle;
+        Log.i("[phoenix]: ", String.format("imu2 = %f", a));
         float distanceFromLander = 3.5f;
         drivetrain.Drive(0.40f, distanceFromLander, Direction.FORWARD); //3.5
 
@@ -55,7 +57,6 @@ public class AutoBlueDepot extends AutoBase {
         telemetry.addData("angle: ", rightMineralAngle);
         Log.i("[phoenix]: ", String.format("%f", rightMineralAngle));
         telemetry.update();
-        sleep(30000);
 
         sleep(100);
         drivetrain.Turn(0.3f, 70, Direction.COUNTERCLOCKWISE, imu, this);
@@ -68,13 +69,16 @@ public class AutoBlueDepot extends AutoBase {
         sleep(100);
         float nextTurn = 0;
         if (position == MineralPosition.RIGHT)
-            nextTurn = a - 32f - imu.getAngularOrientation().firstAngle;
+            nextTurn = a - rightMineralAngle - imu.getAngularOrientation().firstAngle;
         else if (position == MineralPosition.CENTER)
             nextTurn = a - imu.getAngularOrientation().firstAngle;
         else
-            nextTurn = a + 32f - imu.getAngularOrientation().firstAngle;
+            nextTurn = a + rightMineralAngle - imu.getAngularOrientation().firstAngle;
 
         drivetrain.Turn(.40f, (int) Math.abs(nextTurn), Direction.CLOCKWISE, imu, this);
+        sleep(500);
+        Log.i("[phoenix]: ", String.format("imu3 = %f", imu.getAngularOrientation().firstAngle));
+
         drivetrain.Drive(.40f, 24, Direction.FORWARD);
         drivetrain.Drive(.40f, 13, Direction.BACKWARD);
 
