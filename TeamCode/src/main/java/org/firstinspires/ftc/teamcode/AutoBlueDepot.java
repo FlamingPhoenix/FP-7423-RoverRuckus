@@ -79,8 +79,10 @@ public class AutoBlueDepot extends AutoBase {
         sleep(500);
         Log.i("[phoenix]: ", String.format("imu3 = %f", imu.getAngularOrientation().firstAngle));
 
-        drivetrain.Drive(.40f, 24, Direction.FORWARD);
-        drivetrain.Drive(.40f, 13, Direction.BACKWARD);
+//        grabGold(position);
+//        drivetrain.Drive(.40f, 24, Direction.FORWARD);
+//        drivetrain.Drive(.40f, 13, Direction.BACKWARD);
+        sleep(100000000);
 
         int turnToImage = 0;
         if (position == MineralPosition.RIGHT)

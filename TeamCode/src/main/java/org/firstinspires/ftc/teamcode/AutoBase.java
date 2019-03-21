@@ -95,6 +95,7 @@ public abstract class AutoBase extends LinearOpMode {
         br = hardwareMap.dcMotor.get("backright");
         fl.setDirection(DcMotorSimple.Direction.REVERSE);
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        sweep = hardwareMap.dcMotor.get("sweep");
 
         rotate = hardwareMap.servo.get("rotate");
         ServoControllerEx rotateController = (ServoControllerEx) rotate.getController();
@@ -1546,5 +1547,35 @@ public abstract class AutoBase extends LinearOpMode {
         double angleToMineral = Math.toDegrees(Math.atan(14.5/d));
 
         return angleToMineral;
+    }
+
+    public void grabGold(MineralPosition goldPosition) {
+        while (Math.abs(intakeMotor.getCurrentPosition()) <= 840) {
+            intakeMotor.setPower(-1);
+            if (goldPosition == MineralPosition.CENTER) {
+                if (Math.abs(intakeMotor.getCurrentPosition()) >= 400) {
+                    rotate.setPosition(1); //lower the collection box
+                }
+            } else {
+                if (Math.abs(intakeMotor.getCurrentPosition()) >= 550) {
+                    rotate.setPosition(1);
+                }
+            }
+        }
+
+        intakeMotor.setPower(-0.2);
+
+        sweep.setPower(-1);
+        sleep(1000);
+
+        rotate.setPosition(0.2);
+        sleep(200);
+        sweep.setPower(0);
+
+        while (intakeMotor.getCurrentPosition() < 0) {
+            intakeMotor.setPower(0.3);
+        }
+        intakeMotor.setPower(0);
+
     }
 }
