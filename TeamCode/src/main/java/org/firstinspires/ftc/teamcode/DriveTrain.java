@@ -411,4 +411,30 @@ public class DriveTrain {
         return transformationMatrix.formatAsTransform();
     }
 
+    public void driveAndSwerve(float power, double swerveRatio, float distanceBefore, double targetAngle, double fullDistance, MyBoschIMU imu)
+    {
+        double startEncoderValue = fl.getCurrentPosition();
+        double targetEncoderValue = (PPR * fullDistance)/(4F * (float)Math.PI);
+        Drive(power, distanceBefore, Direction.FORWARD);
+        while ((imu.getAngularOrientation().firstAngle < targetAngle) && (fl.getCurrentPosition() - startEncoderValue < targetEncoderValue))
+        {
+            fl.setPower(power * swerveRatio);
+            bl.setPower(power * swerveRatio);
+            fr.setPower(power);
+            br.setPower(power);
+        }
+        StopAll();
+        if (fl.getCurrentPosition() - startEncoderValue < targetEncoderValue)
+        {
+            while (fl.getCurrentPosition() - startEncoderValue < targetEncoderValue)
+            {
+                fl.setPower(power);
+                bl.setPower(power);
+                fr.setPower(power);
+                br.setPower(power);
+            }
+        }
+        StopAll();
+    }
+
 }

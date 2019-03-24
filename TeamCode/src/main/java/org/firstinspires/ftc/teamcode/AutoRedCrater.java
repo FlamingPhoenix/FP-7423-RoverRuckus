@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
+import org.firstinspires.ftc.teamcode.MyClass.MyRobot;
 
 import java.util.List;
 
@@ -81,6 +82,7 @@ public class AutoRedCrater extends AutoBase {
         drivetrain.Turn(.40f, 50, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(500);
 
+        MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
         drivetrain.StrafeToImage(0.3f, redTarget, this);
         float angleAfterStrafe = imu.getAngularOrientation().firstAngle;
         sleep(5000);
@@ -111,42 +113,7 @@ public class AutoRedCrater extends AutoBase {
         sleep(500);
         drivetrain.Drive(.65f, 68f, Direction.BACKWARD); // continue to drive to crater
 
-
-        //this.sampleGold(this);
-
-//        sleep(100);
-//
-//        drivetrain.Turn(0.4f, 42, Direction.COUNTERCLOCKWISE, imu, this); // was 52
-//        // then turn to image
-//        sleep(100);
-//        telemetry.addData(" after the turn, before strafe to image", "before strafe to image");
-//        Log.i("[phoenix]:after turn", "before strafe to image");
-//        // this is optional, as most likely the robot will see image after above 52 degree turn.
-//        drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, redTarget, imu, this);
-//        //strafe to image
-//        drivetrain.StrafeToImage(0.4f, redTarget, this); // was 0.4
-//        telemetry.addData(" after the strafe to image", "after strafe to image");
-//        Log.i("[phoenix]:after strafe", "after strafe to image");
-//
-//
-//        // this sleep could be tuned to accommodate alliance partner, depending on when they coming to depot and drop their maker
-//        sleep(100);
-//
-//        if (tfod != null) { // now it is ok to shutdown tfod/vuforia
-//            tfod.deactivate();
-//            tfod.shutdown();
-//        }
-//
-//        // drive backward for to depot, it was 58
-//       drivetrain.Drive(0.6f, 54.5f, Direction.FORWARD);
-//        sleep(100);
-//        // drop marker
-//        markerHook.setPosition(0);
-//        sleep(500);
-//       drivetrain.Drive(.65f, 68f, Direction.BACKWARD); // continue to drive to crater
-//
-//        // end of auto routine.
-
+        MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
         }
 
 }

@@ -29,6 +29,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
 import org.firstinspires.ftc.teamcode.MyClass.MineralPositionViewModel;
+import org.firstinspires.ftc.teamcode.MyClass.MyRobot;
 
 import java.util.List;
 
@@ -1552,6 +1553,7 @@ public abstract class AutoBase extends LinearOpMode {
     public void grabGold(MineralPosition goldPosition) {
         while (Math.abs(intakeMotor.getCurrentPosition()) <= 840) {
             intakeMotor.setPower(-1);
+            MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
             if (goldPosition == MineralPosition.CENTER) {
                 if (Math.abs(intakeMotor.getCurrentPosition()) >= 400) {
                     rotate.setPosition(1); //lower the collection box
@@ -1574,8 +1576,10 @@ public abstract class AutoBase extends LinearOpMode {
 
         while (intakeMotor.getCurrentPosition() < 0) {
             intakeMotor.setPower(0.3);
+            MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
         }
         intakeMotor.setPower(0);
+        MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
 
     }
 }

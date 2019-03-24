@@ -14,6 +14,8 @@ import com.qualcomm.robotcore.hardware.ServoControllerEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.MyClass.MyRobot;
+
 import java.sql.Time;
 
 
@@ -74,6 +76,8 @@ public class MyFirstMechanumDrive extends OpMode {
     long doorClosingStartTime;
     boolean isRaisingLift = false;
     long raiseLiftStartTime;
+    int intakeMotorZero = 0;
+    int intakeMotorMax = -800;
 
 
     public void drive(float x1, float y1, float x2) {
@@ -106,6 +110,9 @@ public class MyFirstMechanumDrive extends OpMode {
         intakeMotor = hardwareMap.dcMotor.get("intaketh");
         intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeMotorZero = MyRobot.linearSlidePosition * -1;
+        intakeMotorMax -= MyRobot.linearSlidePosition;
+
 
         hook = hardwareMap.servo.get("hook");
         ServoControllerEx hookController = (ServoControllerEx) hook.getController();
@@ -191,7 +198,7 @@ public class MyFirstMechanumDrive extends OpMode {
         //driver 2 control lift
         if (power < -0.2)
         {
-            if (intakeMotor.getCurrentPosition() < -100) {
+            if (intakeMotor.getCurrentPosition() < intakeMotorZero - 50) {
                 door.setPosition(1);
 
                 if ((rightLift.getCurrentPosition() - magZero) < -7000)
@@ -204,7 +211,7 @@ public class MyFirstMechanumDrive extends OpMode {
                 rightLift.setPower(power);
             }
             else {
-                if (intakeMotor.getCurrentPosition() >= -100) {
+                if (intakeMotor.getCurrentPosition() >= intakeMotorZero - 50) {
                     intakeMotor.setPower(-1f);
                 }
                 else if (isRaisingLift) {
@@ -295,7 +302,7 @@ public class MyFirstMechanumDrive extends OpMode {
             }
             else if (System.currentTimeMillis() - doorClosingStartTime > 100)
             {
-                if (intakeMotor.getCurrentPosition() > -800)
+                if (intakeMotor.getCurrentPosition() > intakeMotorMax)
                 {
                     intakeMotor.setPower(-0.5);
                 }
@@ -313,7 +320,7 @@ public class MyFirstMechanumDrive extends OpMode {
                 doorClosingStartTime = 0;
             }
             else if (System.currentTimeMillis() - doorClosingStartTime > 100) {
-                if (intakeMotor.getCurrentPosition() > -800)
+                if (intakeMotor.getCurrentPosition() > intakeMotorMax)
                 {
                     intakeMotor.setPower(-1);
                 }
@@ -326,7 +333,7 @@ public class MyFirstMechanumDrive extends OpMode {
         }
         else if (gamepad1.right_bumper)
         {
-            if (intakeMotor.getCurrentPosition() > 40)
+            if (intakeMotor.getCurrentPosition() > intakeMotorZero + 40)
                 intakeMotor.setPower(0);
             else
                 intakeMotor.setPower(0.4);
@@ -339,7 +346,7 @@ public class MyFirstMechanumDrive extends OpMode {
                 doorClosingStartTime = 0;
             }
             else if (System.currentTimeMillis() - doorClosingStartTime > 100) {
-                if (intakeMotor.getCurrentPosition() > -800)
+                if (intakeMotor.getCurrentPosition() > intakeMotorMax)
                 {
                     intakeMotor.setPower(-1);
                 }
@@ -350,13 +357,13 @@ public class MyFirstMechanumDrive extends OpMode {
             }
         }
         else if (gamepad2.a) {
-            if (intakeMotor.getCurrentPosition() > 100)
+            if (intakeMotor.getCurrentPosition() > intakeMotorZero + 40)
                 intakeMotor.setPower(0);
             else {
                 door.setPosition(0);
                 rotate.setPosition(0.2);
                 intakeMotor.setPower(0.4);
-                if (intakeMotor.getCurrentPosition() < -800) {
+                if (intakeMotor.getCurrentPosition() < intakeMotorMax) {
                     cycleStartTime = System.currentTimeMillis();
                     sweep.setPower(-1);
                 }
@@ -364,11 +371,11 @@ public class MyFirstMechanumDrive extends OpMode {
         }
         else
         {
-            if (intakeMotor.getCurrentPosition() > -140)
+            if (intakeMotor.getCurrentPosition() > intakeMotorZero -140)
             {
                 intakeMotor.setPower(0);
             }
-            else if (intakeMotor.getCurrentPosition() > -500)
+            else if (intakeMotor.getCurrentPosition() > intakeMotorZero -500)
             {
                 intakeMotor.setPower(-0.2);
             }
