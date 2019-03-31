@@ -1378,11 +1378,20 @@ public abstract class AutoBase extends LinearOpMode {
 
     public void releaseFromLander()
     {
+        int startIntakeMotorPosition = intakeMotor.getCurrentPosition();
+        while (intakeMotor.getCurrentPosition() - startIntakeMotorPosition > -100)
+        {
+            intakeMotor.setPower(-0.3);
+            telemetry.addData("intake motor: ", intakeMotor.getCurrentPosition());
+            telemetry.update();
+        }
+        intakeMotor.setPower(0);
+
         int startLiftPosition = rightLift.getCurrentPosition();
 
         while (liftSensor.getState() == true && this.opModeIsActive() && (rightLift.getCurrentPosition() - startLiftPosition) > -5100) // was -5150
         {
-            if (rightLift.getCurrentPosition() > -3100)
+            if (rightLift.getCurrentPosition() > -3100/3)
             {
                 rightLift.setPower(-1.0);
                 leftLift.setPower(-1.0);

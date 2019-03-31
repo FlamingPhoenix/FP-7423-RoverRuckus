@@ -72,6 +72,7 @@ public class MyFirstMechanumDrive extends OpMode {
     Servo rotate;
     DcMotor sweep;
     Servo door;
+    Servo pusher;
     long cycleStartTime;
     long doorClosingStartTime;
     boolean isRaisingLift = false;
@@ -113,6 +114,12 @@ public class MyFirstMechanumDrive extends OpMode {
         intakeMotorZero = MyRobot.linearSlidePosition * -1;
         intakeMotorMax -= MyRobot.linearSlidePosition;
 
+        pusher = hardwareMap.servo.get("pusher");
+        ServoControllerEx pusherController = (ServoControllerEx) pusher.getController();
+        int pusherServoPort = pusher.getPortNumber();
+        PwmControl.PwmRange pusherPwmRange = new PwmControl.PwmRange(1400, 2050);
+        pusherController.setServoPwmRange(pusherServoPort, pusherPwmRange);
+        pusher.setPosition(1);
 
         hook = hardwareMap.servo.get("hook");
         ServoControllerEx hookController = (ServoControllerEx) hook.getController();
@@ -201,7 +208,7 @@ public class MyFirstMechanumDrive extends OpMode {
             if (intakeMotor.getCurrentPosition() < intakeMotorZero - 50) {
                 door.setPosition(1);
 
-                if ((rightLift.getCurrentPosition() - magZero) < -7000)
+                if ((rightLift.getCurrentPosition() - magZero) < -7000/3)
                 {
                     if (power < -0.5)
                         power = -0.5f;
@@ -224,7 +231,7 @@ public class MyFirstMechanumDrive extends OpMode {
         else if (power > 0.2)
         {
             isRaisingLift = false;
-            if ((rightLift.getCurrentPosition() - magZero) > 2500)// why positive 2500 ? while above is -7000 ?
+            if ((rightLift.getCurrentPosition() - magZero) > 2500/3)
             {
                 if (power > 0.5)
                     power = 0.5f;
@@ -266,8 +273,6 @@ public class MyFirstMechanumDrive extends OpMode {
             bucket.setPosition(0.95);
         }
 
-
-
         if(gamepad1.y) {
             rotate.setPosition(0.2);
             cycleStartTime = System.currentTimeMillis();
@@ -292,6 +297,11 @@ public class MyFirstMechanumDrive extends OpMode {
                 sweep.setPower(0);
         }
 
+        if (gamepad2.left_stick_y < -0.5) {
+            pusher.setPosition(1);
+        } else if (gamepad2.left_stick_y > 0.5) {
+            pusher.setPosition(0);
+        }
 
         if (gamepad1.right_trigger > 0.2 && gamepad1.right_trigger < 0.8)
         {
