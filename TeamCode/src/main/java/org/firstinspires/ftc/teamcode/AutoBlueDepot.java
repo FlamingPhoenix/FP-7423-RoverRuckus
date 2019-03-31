@@ -70,17 +70,17 @@ public class AutoBlueDepot extends AutoBase {
         sleep(100);
         float nextTurn = 0;
         if (position == MineralPosition.RIGHT)
-            nextTurn = a - rightMineralAngle - imu.getAngularOrientation().firstAngle - 3.7f;
+            nextTurn = a - rightMineralAngle - imu.getAngularOrientation().firstAngle + 3.7f;
         else if (position == MineralPosition.CENTER)
-            nextTurn = a - imu.getAngularOrientation().firstAngle - 4.24f;
+            nextTurn = a - imu.getAngularOrientation().firstAngle + 4.24f;
         else
-            nextTurn = a + rightMineralAngle - imu.getAngularOrientation().firstAngle - 3.7f;
+            nextTurn = a + rightMineralAngle - imu.getAngularOrientation().firstAngle + 3.7f;
 
         drivetrain.Turn(.40f, (int) Math.abs(nextTurn), Direction.CLOCKWISE, imu, this);
         sleep(500);
         Log.i("[phoenix]: ", String.format("imu3 = %f", imu.getAngularOrientation().firstAngle));
 
-//        grabGold(position);
+        grabGold(position);
 //        drivetrain.Drive(.40f, 24, Direction.FORWARD);
 //        drivetrain.Drive(.40f, 13, Direction.BACKWARD);
 
@@ -93,6 +93,7 @@ public class AutoBlueDepot extends AutoBase {
 //            turnToImage = 45;
 
         drivetrain.Turn(.40f, (int)nextTurn, Direction.COUNTERCLOCKWISE, imu, this);
+        // drivetrain.driveAndSwerve();
         if (position == MineralPosition.RIGHT)
             drivetrain.Drive(.40f, 30, Direction.FORWARD);
         else if (position == MineralPosition.CENTER)
