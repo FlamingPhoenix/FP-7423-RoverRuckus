@@ -222,7 +222,7 @@ public class MyFirstMechanumDrive extends OpMode {
                     intakeMotor.setPower(-1f);
                 }
                 else if (isRaisingLift) {
-                    intakeMotor.setPower(-0.1f);
+                    intakeMotor.setPower(-0.4f);
                 }
             }
 
@@ -280,7 +280,7 @@ public class MyFirstMechanumDrive extends OpMode {
         }
         else if (gamepad1.a)
         {
-            rotate.setPosition(1);
+            rotate.setPosition(.95);
             door.setPosition(0);    //automatically close trap door to prevent balls form falling out
         }
 
