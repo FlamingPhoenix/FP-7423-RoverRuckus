@@ -86,32 +86,21 @@ public class AutoRedCrater extends AutoBase {
         drivetrain.StrafeToImage(0.3f, redTarget, this);
         float angleAfterStrafe = imu.getAngularOrientation().firstAngle;
         sleep(5000);
-/*
-        sleep(100);
-        // VERY IMPORTANT, PLEASE KEEP THIS PART WHEN UPDATING FINAL VERSION OF AUTONOMOUS PROGRAM !!
-        drivetrain.Strafe(.4F, 3f, Direction.LEFT);
-        sleep(100);
-        drivetrain.Turn(.5f, 180, Direction.COUNTERCLOCKWISE, imu, this);
-        sleep(100);
-        drivetrain.Strafe(.4F, 5f, Direction.LEFT);
-
-        telemetry.addData(" after the strafe to image", "after strafe to image");
-        Log.i("[phoenix]:after strafe", "after strafe to image");
-        // this sleep could be tuned to accommodate alliance partner, depending on when they coming to depot and drop their maker
-        sleep(100);
-        */
 
         if (tfod != null) { // now it is ok to shutdown tfod/vuforia
             tfod.deactivate();
             tfod.shutdown();
         }
 
+        MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
+
         drivetrain.Drive(0.6f, 48f, Direction.FORWARD);
         sleep(100);
 //        // drop marker
         markerHook.setPosition(0.1);
         sleep(500);
-        drivetrain.Drive(.65f, 68f, Direction.BACKWARD); // continue to drive to crater
+        drivetrain.Drive(1f, 68f, Direction.BACKWARD); // continue to drive to crater
+        markerHook.setPosition(1);
 
         MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
         }

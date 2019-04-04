@@ -109,12 +109,14 @@ public class AutoRedDepot extends AutoBase {
             tfod.deactivate();
             tfod.shutdown();
         }
+        MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
 
         drivetrain.Drive(.7f, 40f, Direction.FORWARD);
         sleep(100);
         markerHook.setPosition(0.1);
         sleep(500 );
-        drivetrain.Drive(.7f, 68f, Direction.BACKWARD);
+        drivetrain.Drive(1f, 68f, Direction.BACKWARD);
+        markerHook.setPosition(1);
 
         MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
     }

@@ -101,12 +101,15 @@ public class AutoBlueCrater extends AutoBase {
                 tfod.shutdown();
             }
 
+            MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
+
             drivetrain.Drive(0.6f, 48f, Direction.FORWARD);
             sleep(100);
 //        // drop marker
             markerHook.setPosition(0.1);
             sleep(500);
-            drivetrain.Drive(.65f, 68f, Direction.BACKWARD); // continue to drive to crater
+            drivetrain.Drive(1f, 68f, Direction.BACKWARD); // continue to drive to crater
+            markerHook.setPosition(1);
 
             MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
         }

@@ -70,19 +70,19 @@ public class AutoBlueDepot extends AutoBase {
         sleep(100);
         float nextTurn = 0;
         if (position == MineralPosition.RIGHT)
-            nextTurn = a - rightMineralAngle - imu.getAngularOrientation().firstAngle + 3.7f;
+            nextTurn = a - rightMineralAngle - imu.getAngularOrientation().firstAngle; //3.7f
         else if (position == MineralPosition.CENTER)
-            nextTurn = a - imu.getAngularOrientation().firstAngle + 4.24f;
+            nextTurn = a - imu.getAngularOrientation().firstAngle; //4.24f
         else
-            nextTurn = a + rightMineralAngle - imu.getAngularOrientation().firstAngle + 3.7f;
+            nextTurn = a + rightMineralAngle - imu.getAngularOrientation().firstAngle; //3.7f
 
         drivetrain.Turn(.40f, (int) Math.abs(nextTurn), Direction.CLOCKWISE, imu, this);
         sleep(500);
         Log.i("[phoenix]: ", String.format("imu3 = %f", imu.getAngularOrientation().firstAngle));
 
-        grabGold(position);
-//        drivetrain.Drive(.40f, 24, Direction.FORWARD);
-//        drivetrain.Drive(.40f, 13, Direction.BACKWARD);
+//        grabGold(position);
+        drivetrain.Drive(.40f, 24, Direction.FORWARD);
+        drivetrain.Drive(.40f, 13, Direction.BACKWARD);
 
 //        int turnToImage = 0;
 //        if (position == MineralPosition.RIGHT)
@@ -123,11 +123,14 @@ public class AutoBlueDepot extends AutoBase {
             tfod.shutdown();
         }
 
+        MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
+
         drivetrain.Drive(.7f, 40f, Direction.FORWARD);
         sleep(100);
         markerHook.setPosition(0.1);
         sleep(500 );
-        drivetrain.Drive(.7f, 68f, Direction.BACKWARD);
+        drivetrain.Drive(1f, 68f, Direction.BACKWARD);
+        markerHook.setPosition(1);
 
         MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
     }

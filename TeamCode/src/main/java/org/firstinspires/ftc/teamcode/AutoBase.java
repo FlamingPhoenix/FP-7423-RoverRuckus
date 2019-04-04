@@ -74,6 +74,7 @@ public abstract class AutoBase extends LinearOpMode {
     Servo rotate;
     DcMotor sweep;
     Servo door;
+    Servo pusher;
 
     protected VuforiaTrackable backTarget;
     protected VuforiaTrackable frontTarget;
@@ -97,6 +98,13 @@ public abstract class AutoBase extends LinearOpMode {
         fl.setDirection(DcMotorSimple.Direction.REVERSE);
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
         sweep = hardwareMap.dcMotor.get("sweep");
+
+        pusher = hardwareMap.servo.get("pusher");
+        ServoControllerEx pusherController = (ServoControllerEx) pusher.getController();
+        int pusherServoPort = pusher.getPortNumber();
+        PwmControl.PwmRange pusherPwmRange = new PwmControl.PwmRange(1400, 2050);
+        pusherController.setServoPwmRange(pusherServoPort, pusherPwmRange);
+        pusher.setPosition(1);
 
         rotate = hardwareMap.servo.get("rotate");
         ServoControllerEx rotateController = (ServoControllerEx) rotate.getController();
@@ -138,7 +146,6 @@ public abstract class AutoBase extends LinearOpMode {
         int grabberServoPort = markerHook.getPortNumber();
         PwmControl.PwmRange grabberPwmRange = new PwmControl.PwmRange(899, 2150);
         primaryController.setServoPwmRange(grabberServoPort, grabberPwmRange);
-
 
 //         voltage sensor
 //        voltageSensor = hardwareMap.voltageSensor.get("Motor Controller 1");
@@ -1398,8 +1405,8 @@ public abstract class AutoBase extends LinearOpMode {
             }
             else
             {
-                rightLift.setPower(-0.3);
-                leftLift.setPower(-0.3);
+                rightLift.setPower(-0.8);
+                leftLift.setPower(-0.8);
             }
         }
         rightLift.setPower(0);

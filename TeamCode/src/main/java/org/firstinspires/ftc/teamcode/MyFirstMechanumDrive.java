@@ -144,7 +144,7 @@ public class MyFirstMechanumDrive extends OpMode {
         rotate = hardwareMap.servo.get("rotate");
         ServoControllerEx rotateController = (ServoControllerEx) rotate.getController();
         int rotateServoPort = rotate.getPortNumber();
-        PwmControl.PwmRange rotatePwmRange = new PwmControl.PwmRange(900, 2100);
+        PwmControl.PwmRange rotatePwmRange = new PwmControl.PwmRange(900, 2000);
         rotateController.setServoPwmRange(rotateServoPort, rotatePwmRange);
         rotate.setPosition(0.2);
 
@@ -205,7 +205,7 @@ public class MyFirstMechanumDrive extends OpMode {
         //driver 2 control lift
         if (power < -0.2)
         {
-            if (intakeMotor.getCurrentPosition() < intakeMotorZero - 50) {
+            if (intakeMotor.getCurrentPosition() < intakeMotorZero - 100) {
                 door.setPosition(1);
 
                 if ((rightLift.getCurrentPosition() - magZero) < -7000/3)
@@ -218,7 +218,7 @@ public class MyFirstMechanumDrive extends OpMode {
                 rightLift.setPower(power);
             }
             else {
-                if (intakeMotor.getCurrentPosition() >= intakeMotorZero - 50) {
+                if (intakeMotor.getCurrentPosition() >= intakeMotorZero - 100) {
                     intakeMotor.setPower(-1f);
                 }
                 else if (isRaisingLift) {
@@ -401,6 +401,7 @@ public class MyFirstMechanumDrive extends OpMode {
             door.setPosition(0);
 
         telemetry.addData("encoder: ", intakeMotor.getCurrentPosition());
+        telemetry.addData("intakeMotorZero: ", intakeMotorZero);
 
         telemetry.update(); //graffiti
     }
