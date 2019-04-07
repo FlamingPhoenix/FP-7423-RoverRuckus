@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.MyClass.MyRobot;
 
 import java.sql.Time;
 
+// -50 is the value
 
 // Start + A to assign controller to Player 1
 // Start + B to assign controller to Player 2
@@ -184,15 +185,10 @@ public class MyFirstMechanumDrive extends OpMode {
             x2 = x2/2;
         }
         drive(x1,  y1 * -1, x2);
-        //telemetry.addData("y1;", gamepad1.left_stick_y);
-        //telemetry.addData("x1;", gamepad1.left_stick_x);
-        //telemetry.update();
-
         float power = gamepad2.right_stick_y;
 
         telemetry.addData("lift power: ", power);
         telemetry.addData("lift encoder: ", rightLift.getCurrentPosition());
-        telemetry.update();
         Log.i("lift power: ", Float.toString(power));
         Log.i("lift encoder: ", Integer.toString(rightLift.getCurrentPosition()));
 
@@ -201,6 +197,8 @@ public class MyFirstMechanumDrive extends OpMode {
         {
             magZero = rightLift.getCurrentPosition();
         }
+
+        telemetry.addData("magZero: ", magZero);
 
         //driver 2 control lift
         if (power < -0.2)
@@ -388,6 +386,7 @@ public class MyFirstMechanumDrive extends OpMode {
             else if (intakeMotor.getCurrentPosition() > intakeMotorZero -500)
             {
                 intakeMotor.setPower(-0.2);
+
             }
             else
             {
@@ -400,8 +399,8 @@ public class MyFirstMechanumDrive extends OpMode {
         else if(gamepad2.dpad_down)
             door.setPosition(0);
 
-        telemetry.addData("encoder: ", intakeMotor.getCurrentPosition());
-        telemetry.addData("intakeMotorZero: ", intakeMotorZero);
+//        telemetry.addData("encoder: ", intakeMotor.getCurrentPosition());
+//        telemetry.addData("intakeMotorZero: ", intakeMotorZero);
 
         telemetry.update(); //graffiti
     }
