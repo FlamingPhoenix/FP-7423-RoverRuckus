@@ -28,6 +28,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.Library.MyBoschIMU;
+import org.firstinspires.ftc.teamcode.MyClass.Calculator;
 import org.firstinspires.ftc.teamcode.MyClass.MineralPositionViewModel;
 import org.firstinspires.ftc.teamcode.MyClass.MyRobot;
 
@@ -1572,11 +1573,11 @@ public abstract class AutoBase extends LinearOpMode {
             MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
             if (goldPosition == MineralPosition.CENTER) {
                 if (Math.abs(intakeMotor.getCurrentPosition()) >= 300) {
-                    rotate.setPosition(1); //lower the collection box
+                    rotate.setPosition(.95); //lower the collection box
                 }
             } else {
                 if (Math.abs(intakeMotor.getCurrentPosition()) >= 550) {
-                    rotate.setPosition(1);
+                    rotate.setPosition(.95);
                 }
             }
         }
@@ -1587,7 +1588,7 @@ public abstract class AutoBase extends LinearOpMode {
         sleep(1000);
 
         rotate.setPosition(0.2);
-        sleep(200);
+        sleep(500);
         sweep.setPower(0);
 
         while (intakeMotor.getCurrentPosition() < 0) {
@@ -1597,5 +1598,98 @@ public abstract class AutoBase extends LinearOpMode {
         intakeMotor.setPower(0);
         MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
 
+    }
+
+    public void sampleByMoving(float distanceFromLander, float initialAngleAfterDrop)
+    {
+        float rightMineralAngle = Calculator.getMineralAngle(distanceFromLander);
+        telemetry.addData("angle: ", rightMineralAngle);
+        Log.i("[phoenix]: ", String.format("%f", rightMineralAngle));
+        telemetry.update();
+
+        sleep(100);
+        drivetrain.Turn(0.3f, 70, Direction.COUNTERCLOCKWISE, imu, this);
+        sleep(500);
+        telemetry.addData("tfod: ", tfod == null);
+        //drivetrain.Turn(0.25f, 44, Direction.COUNTERCLOCKWISE, imu, this); // 46 too much, 43 44 maybe right.
+        MineralPosition position = goldPosition();
+        telemetry.addData("GoldPosition", position.toString());
+        telemetry.update();
+        sleep(100);
+        float nextTurn = 0;
+        if (position == MineralPosition.RIGHT)
+            nextTurn = initialAngleAfterDrop - rightMineralAngle - imu.getAngularOrientation().firstAngle; //3.7f
+        else if (position == MineralPosition.CENTER)
+            nextTurn = initialAngleAfterDrop - imu.getAngularOrientation().firstAngle; //4.24f
+        else
+            nextTurn = initialAngleAfterDrop + rightMineralAngle - imu.getAngularOrientation().firstAngle; //3.7f
+
+        drivetrain.Turn(.40f, (int) Math.abs(nextTurn), Direction.CLOCKWISE, imu, this);
+        sleep(500);
+        Log.i("[phoenix]: ", String.format("imu3 = %f", imu.getAngularOrientation().firstAngle));
+
+//        grabGold(position);
+        drivetrain.Drive(.40f, 24, Direction.FORWARD);
+        drivetrain.Drive(.40f, 13, Direction.BACKWARD);
+
+        int turnToImage = 0;
+        if (position == MineralPosition.RIGHT)
+            turnToImage = 115;
+        else if (position == MineralPosition.CENTER)
+           turnToImage = 85;
+        else
+            turnToImage = 45;
+
+        drivetrain.Turn(.40f, turnToImage, Direction.COUNTERCLOCKWISE, imu, this);
+        // drivetrain.driveAndSwerve();
+        if (position == MineralPosition.RIGHT)
+            drivetrain.Drive(.40f, 30, Direction.FORWARD);
+        else if (position == MineralPosition.CENTER)
+            drivetrain.Drive(.40f, 27, Direction.FORWARD);
+        else
+            drivetrain.Drive(.40f, 25, Direction.FORWARD);
+        drivetrain.Turn(.40f, 50, Direction.COUNTERCLOCKWISE, imu, this);
+        sleep(500);
+    }
+
+    public void sampleByGrabbing(float distanceFromLander, float initialAngleAfterDrop)
+    {
+        float rightMineralAngle = Calculator.getMineralAngle(distanceFromLander);
+        telemetry.addData("angle: ", rightMineralAngle);
+        Log.i("[phoenix]: ", String.format("%f", rightMineralAngle));
+        telemetry.update();
+
+        sleep(100);
+        drivetrain.Turn(0.3f, 70, Direction.COUNTERCLOCKWISE, imu, this);
+        sleep(500);
+        telemetry.addData("tfod: ", tfod == null);
+        //drivetrain.Turn(0.25f, 44, Direction.COUNTERCLOCKWISE, imu, this); // 46 too much, 43 44 maybe right.
+        MineralPosition position = goldPosition();
+        telemetry.addData("GoldPosition", position.toString());
+        telemetry.update();
+        sleep(100);
+        float nextTurn = 0;
+        if (position == MineralPosition.RIGHT)
+            nextTurn = initialAngleAfterDrop - rightMineralAngle - imu.getAngularOrientation().firstAngle + 3.7f; //3.7f
+        else if (position == MineralPosition.CENTER)
+            nextTurn = initialAngleAfterDrop - imu.getAngularOrientation().firstAngle + 4.24f; //4.24f
+        else
+            nextTurn = initialAngleAfterDrop + rightMineralAngle - imu.getAngularOrientation().firstAngle + 3.7f; //3.7f
+
+        drivetrain.Turn(.40f, (int) Math.abs(nextTurn), Direction.CLOCKWISE, imu, this);
+        sleep(500);
+        Log.i("[phoenix]: ", String.format("imu3 = %f", imu.getAngularOrientation().firstAngle));
+
+        grabGold(position);
+
+        int angleTowardsImage = 56 + (int)initialAngleAfterDrop;
+        float turnAngleToImage = angleTowardsImage - imu.getAngularOrientation().firstAngle;
+        drivetrain.Turn(.4f, (int)turnAngleToImage, Direction.COUNTERCLOCKWISE, imu, this);
+
+        telemetry.addData("Initial Angle", initialAngleAfterDrop);
+        telemetry.update();
+        sleep(10000);
+        drivetrain.driveAndSwerve(1f, 13, 25f, initialAngleAfterDrop + 135, 42f, imu, this);
+        sleep(10000);
     }
 }

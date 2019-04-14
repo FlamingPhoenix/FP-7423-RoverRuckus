@@ -127,6 +127,7 @@ public class MyFirstMechanumDrive extends OpMode {
         int hookServoPort = hook.getPortNumber();
         PwmControl.PwmRange hookPwmRange = new PwmControl.PwmRange(899, 1931);
         hookController.setServoPwmRange(hookServoPort, hookPwmRange);
+        hook.setPosition(0.2);
 
         hopper = hardwareMap.servo.get("hopper");
         ServoControllerEx hopperController = (ServoControllerEx) hopper.getController();
@@ -222,8 +223,8 @@ public class MyFirstMechanumDrive extends OpMode {
                 else if (isRaisingLift) {
                     intakeMotor.setPower(-0.4f);
                 }
-            }
 
+            }
             //prevent arm to get in harms way
         }
         else if (power > 0.2)
@@ -237,6 +238,17 @@ public class MyFirstMechanumDrive extends OpMode {
 
             leftLift.setPower(power);
             rightLift.setPower(power);
+        }
+        else if(gamepad2.x)
+        {
+            if (rightLift.getCurrentPosition() < magZero - 50) {
+                rightLift.setPower(1f);
+                leftLift.setPower(1f);
+            }
+            else if (rightLift.getCurrentPosition() > magZero - 10) {
+                rightLift.setPower(-1f);
+                leftLift.setPower(-1f);
+            }
         }
         else
         {
@@ -278,7 +290,7 @@ public class MyFirstMechanumDrive extends OpMode {
         }
         else if (gamepad1.a)
         {
-            rotate.setPosition(.95);
+            rotate.setPosition(.97);
             door.setPosition(0);    //automatically close trap door to prevent balls form falling out
         }
 

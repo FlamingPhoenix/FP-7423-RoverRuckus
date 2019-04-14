@@ -411,20 +411,30 @@ public class DriveTrain {
         return transformationMatrix.formatAsTransform();
     }
 
-    public void driveAndSwerve(float power, double swerveRatio, float distanceBefore, double targetAngle, double fullDistance, MyBoschIMU imu)
+    public void driveAndSwerve(float power, double swerveRatio, float distanceBefore, double targetAngle, double fullDistance, MyBoschIMU imu, LinearOpMode opMode)
     {
-        double startEncoderValue = fl.getCurrentPosition();
-        double targetEncoderValue = (PPR * fullDistance)/(4F * (float)Math.PI);
         Drive(power, distanceBefore, Direction.FORWARD);
-        while ((imu.getAngularOrientation().firstAngle < targetAngle) && (fl.getCurrentPosition() - startEncoderValue < targetEncoderValue))
+        double startEncoderValue = fl.getCurrentPosition();
+        double targetEncoderValue = (PPR * fullDistance - distanceBefore)/(4F * (float)Math.PI);
+        opMode.sleep(1000);
+        double turnAngle = targetAngle - imu.getAngularOrientation().firstAngle;
+        Turn(.5f, (int) turnAngle, Direction.COUNTERCLOCKWISE, imu, opMode);
+        double remainingDistance = fullDistance - distanceBefore;
+        Drive(.3f, (float)remainingDistance, Direction.FORWARD);
+        /*
+        while ((imu.getAngularOrientation().firstAngle < targetAngle) && (Math.abs(fl.getCurrentPosition() - startEncoderValue) < targetEncoderValue))
         {
-            fl.setPower(power * swerveRatio);
-            bl.setPower(power * swerveRatio);
+            fl.setPower(power / swerveRatio);
+            bl.setPower(power / swerveRatio);
             fr.setPower(power);
             br.setPower(power);
+
+            opMode.telemetry.addData("current angle", imu.getAngularOrientation().firstAngle);
+            opMode.telemetry.update();
         }
         StopAll();
-        if (fl.getCurrentPosition() - startEncoderValue < targetEncoderValue)
+        opMode.sleep(1000);
+        if (Math.abs(fl.getCurrentPosition() - startEncoderValue) < targetEncoderValue)
         {
             while (fl.getCurrentPosition() - startEncoderValue < targetEncoderValue)
             {
@@ -435,6 +445,7 @@ public class DriveTrain {
             }
         }
         StopAll();
+        */
     }
 
 }

@@ -56,7 +56,6 @@ public class AutoRedDepot extends AutoBase {
         telemetry.addData("tfod: ", tfod == null);
         //drivetrain.Turn(0.25f, 44, Direction.COUNTERCLOCKWISE, imu, this); // 46 too much, 43 44 maybe right.
         MineralPosition position = goldPosition();
-        telemetry.addData("GoldPosition", position.toString());
         telemetry.update();
         sleep(100);
         float nextTurn = 0;
@@ -87,7 +86,8 @@ public class AutoRedDepot extends AutoBase {
         else
             drivetrain.Drive(.40f, 25, Direction.FORWARD);
         drivetrain.Turn(.40f, 50, Direction.COUNTERCLOCKWISE, imu, this);
-        sleep(500);
+        sleep(500); telemetry.addData("GoldPosition", position.toString());
+
 
         MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
         drivetrain.StrafeToImage(0.3f, backTarget, this);
@@ -115,7 +115,13 @@ public class AutoRedDepot extends AutoBase {
         sleep(100);
         markerHook.setPosition(0.1);
         sleep(500 );
-        drivetrain.Drive(1f, 68f, Direction.BACKWARD);
+        drivetrain.Drive(1f, 40f, Direction.BACKWARD);
+        drivetrain.Strafe(.4F, 3f, Direction.RIGHT);
+        sleep(100);
+        drivetrain.Turn(.5f, 180, Direction.CLOCKWISE, imu, this);
+        sleep(100);
+        drivetrain.Strafe(.4F, 5f, Direction.RIGHT);
+        drivetrain.Drive(1f, 24f, Direction.FORWARD);
         markerHook.setPosition(1);
 
         MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
