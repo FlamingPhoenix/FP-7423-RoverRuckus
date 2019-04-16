@@ -54,7 +54,7 @@ public class AutoBlueDepot extends AutoBase {
         float distanceFromLander = 3.5f;
         drivetrain.Drive(0.40f, distanceFromLander, Direction.FORWARD); //3.5
 
-        sampleByMoving(distanceFromLander, a);
+        sampleByGrabbing(distanceFromLander, a);
 
         MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
         drivetrain.StrafeToImage(0.3f, frontTarget, this);
@@ -79,10 +79,16 @@ public class AutoBlueDepot extends AutoBase {
         MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
 
         drivetrain.Drive(.7f, 40f, Direction.FORWARD);
-        sleep(100);
+        //sleep(100);
         markerHook.setPosition(0.1);
         sleep(500 );
-        drivetrain.Drive(1f, 68f, Direction.BACKWARD);
+        drivetrain.Drive(1f, 40f, Direction.BACKWARD);
+        drivetrain.Strafe(.4F, 3f, Direction.RIGHT);
+        sleep(100);
+        drivetrain.Turn(.5f, 180, Direction.CLOCKWISE, imu, this);
+        sleep(100);
+        drivetrain.Strafe(.4F, 5f, Direction.RIGHT);
+        drivetrain.Drive(1f, 24f, Direction.FORWARD);
         markerHook.setPosition(1);
 
         MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();

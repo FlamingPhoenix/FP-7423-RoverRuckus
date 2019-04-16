@@ -1414,7 +1414,7 @@ public abstract class AutoBase extends LinearOpMode {
         leftLift.setPower(0);
 
         hook.setPosition(0.2);
-        sleep(700);
+        sleep(400);
     }
 
     public void sampleGold(LinearOpMode opMode) {
@@ -1588,7 +1588,7 @@ public abstract class AutoBase extends LinearOpMode {
         sleep(1000);
 
         rotate.setPosition(0.2);
-        sleep(500);
+        sleep(300);
         sweep.setPower(0);
 
         while (intakeMotor.getCurrentPosition() < 0) {
@@ -1677,7 +1677,7 @@ public abstract class AutoBase extends LinearOpMode {
             nextTurn = initialAngleAfterDrop + rightMineralAngle - imu.getAngularOrientation().firstAngle + 3.7f; //3.7f
 
         drivetrain.Turn(.40f, (int) Math.abs(nextTurn), Direction.CLOCKWISE, imu, this);
-        sleep(500);
+        sleep(100);
         Log.i("[phoenix]: ", String.format("imu3 = %f", imu.getAngularOrientation().firstAngle));
 
         grabGold(position);
@@ -1688,8 +1688,8 @@ public abstract class AutoBase extends LinearOpMode {
 
         telemetry.addData("Initial Angle", initialAngleAfterDrop);
         telemetry.update();
-        sleep(10000);
-        drivetrain.driveAndSwerve(1f, 13, 25f, initialAngleAfterDrop + 135, 42f, imu, this);
-        sleep(10000);
+        sleep(50);
+        drivetrain.driveAndSwerve(1f, 13, 20f, initialAngleAfterDrop + 135, 28f, imu, this);
+        sleep(50);
     }
 }
