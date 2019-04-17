@@ -29,7 +29,7 @@ import java.util.List;
  */
 
 //@Disabled
-@Autonomous(name="DE BlueDepot", group="none")
+@Autonomous(name="Worlds BlueDepot", group="none")
 public class AutoBlueDepot extends AutoBase {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -54,12 +54,11 @@ public class AutoBlueDepot extends AutoBase {
         float distanceFromLander = 3.5f;
         drivetrain.Drive(0.40f, distanceFromLander, Direction.FORWARD); //3.5
 
-        sampleByGrabbing(distanceFromLander, a);
+        sampleByMoving(distanceFromLander, a);
 
         MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
-        drivetrain.StrafeToImage(0.3f, frontTarget, this);
+        drivetrain.StrafeToImage(0.3f, frontTarget, this, 10);
         sleep(100);
-        // VERY IMPORTANT, PLEASE KEEP THIS PART WHEN UPDATING FINAL VERSION OF AUTONOMOUS PROGRAM !!
         drivetrain.Strafe(.4F, 3f, Direction.LEFT);
         sleep(100);
         drivetrain.Turn(.5f, 180, Direction.COUNTERCLOCKWISE, imu, this);

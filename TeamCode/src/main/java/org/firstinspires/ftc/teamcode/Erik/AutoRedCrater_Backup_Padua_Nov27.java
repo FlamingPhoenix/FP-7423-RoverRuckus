@@ -141,7 +141,7 @@ public class AutoRedCrater_Backup_Padua_Nov27 extends AutoBase {
 
         drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, redTarget, imu, this);
         //strafe to image
-        drivetrain.StrafeToImage(0.25f, redTarget, this);
+        drivetrain.StrafeToImage(0.25f, redTarget, this, 10);
         sleep(3000);
 
         if (tfod != null) { // now it is ok to shutdown tfod/vuforia

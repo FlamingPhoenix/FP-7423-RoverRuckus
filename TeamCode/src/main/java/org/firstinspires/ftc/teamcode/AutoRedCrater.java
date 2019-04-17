@@ -19,7 +19,7 @@ import java.util.List;
  */
 
 //@Disabled
-@Autonomous(name="DE RedCrater", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
+@Autonomous(name="Worlds RedCrater", group="none")  // this is template for Thursday's auto routine, to be tested and adjusted Monday
 
 public class AutoRedCrater extends AutoBase {
 
@@ -47,9 +47,9 @@ public class AutoRedCrater extends AutoBase {
         sampleByGrabbing(3.5f, a);
 
         MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
-        drivetrain.StrafeToImage(0.3f, redTarget, this);
+        drivetrain.StrafeToImage(0.3f, redTarget, this, 15);
         float angleAfterStrafe = imu.getAngularOrientation().firstAngle;
-        sleep(5000);
+        sleep(1000); //sleep longer depending on alliance partner
 
         if (tfod != null) { // now it is ok to shutdown tfod/vuforia
             tfod.deactivate();
@@ -63,7 +63,13 @@ public class AutoRedCrater extends AutoBase {
 //        // drop marker
         markerHook.setPosition(0.1);
         sleep(500);
-        drivetrain.Drive(1f, 68f, Direction.BACKWARD); // continue to drive to crater
+        drivetrain.Drive(1f, 40f, Direction.BACKWARD);
+        drivetrain.Strafe(.4F, 3f, Direction.LEFT);
+        sleep(100);
+        drivetrain.Turn(.5f, 180, Direction.COUNTERCLOCKWISE, imu, this);
+        sleep(100);
+        drivetrain.Strafe(.4F, 5f, Direction.LEFT);
+        drivetrain.Drive(1f, 24f, Direction.FORWARD);
         markerHook.setPosition(1);
 
         MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();

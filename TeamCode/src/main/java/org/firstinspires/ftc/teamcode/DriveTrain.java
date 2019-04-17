@@ -204,8 +204,12 @@ public class DriveTrain {
 
     }
 
+    public void StrafeToImage(float power, VuforiaTrackable imageTarget, LinearOpMode opMode)
+    {
+        this.StrafeToImage(power, imageTarget, opMode, 10);
+    }
 
-    public void StrafeToImage(float power, VuforiaTrackable imageTarget, LinearOpMode opMode) {
+    public void StrafeToImage(float power, VuforiaTrackable imageTarget, LinearOpMode opMode, float safetyDistance) {
         VuforiaTrackableDefaultListener imageListener = (VuforiaTrackableDefaultListener) imageTarget.getListener();
 
         float actualPower = power;
@@ -280,7 +284,7 @@ public class DriveTrain {
             }
         }
         else {
-            this.Strafe(.4F, 10, Direction.RIGHT);
+            this.Strafe(.4F, safetyDistance, Direction.RIGHT);
             StopAll();
             return;
         }

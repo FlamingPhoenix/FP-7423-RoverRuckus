@@ -51,7 +51,7 @@ public class AutoRedCrater_backup_Oxford_Jan6_2019 extends AutoBase {
         // this is optional, as most likely the robot will see image after above 52 degree turn.
         drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, redTarget, imu, this);
         //strafe to image
-        drivetrain.StrafeToImage(0.4f, redTarget, this); // was 0.4
+        drivetrain.StrafeToImage(0.4f, redTarget, this, 10); // was 0.4
         telemetry.addData(" after the strafe to image", "after strafe to image");
         Log.i("[phoenix]:after strafe", "after strafe to image");
 

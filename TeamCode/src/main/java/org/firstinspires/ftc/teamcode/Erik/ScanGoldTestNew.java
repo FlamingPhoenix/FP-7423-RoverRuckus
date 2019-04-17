@@ -134,7 +134,7 @@ public class ScanGoldTestNew extends AutoBase {
         //sleep(1000);
         drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, blueTarget, imu, this);
         //strafe to image
-        drivetrain.StrafeToImage(0.25f, redTarget, this);
+        drivetrain.StrafeToImage(0.25f, redTarget, this, 10);
         sleep(500);
 
         if (tfod != null) { // now it is ok to shutdown tfod/vuforia

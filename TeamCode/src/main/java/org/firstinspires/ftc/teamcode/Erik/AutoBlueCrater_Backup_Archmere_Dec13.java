@@ -121,7 +121,7 @@ public class AutoBlueCrater_Backup_Archmere_Dec13 extends AutoBase {
             // this is optional, as most likely the robot will see image after above 52 degree turn.
             drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, blueTarget, imu, this);
             //strafe to image
-            drivetrain.StrafeToImage(0.25f, blueTarget, this); // was 0.4
+            drivetrain.StrafeToImage(0.25f, blueTarget, this, 10); // was 0.4
             telemetry.addData(" after the strafe to image", "after strafe to image");
             Log.i("[phoenix]:after strafe", "after strafe to image");
             // this sleep could be tuned to accommodate alliance partner, depending on when they coming to depot and drop their maker

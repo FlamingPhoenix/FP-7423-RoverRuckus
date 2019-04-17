@@ -371,7 +371,7 @@ public class ErikAutoRedCrater extends LinearOpMode {
         drivetrain.StopAll();
         sleep(500);
 
-        drivetrain.StrafeToImage(0.25F, backTarget, this);  //
+        drivetrain.StrafeToImage(0.25F, backTarget, this, 10);  //
 
         drivetrain.StopAll();
         /* this is reserved for waiting for alliance partner to set marker..

@@ -323,7 +323,7 @@ public class ErikAutoRedDepot extends LinearOpMode {
 
         drivetrain.StopAll();
 
-        drivetrain.StrafeToImage(0.3F, backTarget, this);  //
+        drivetrain.StrafeToImage(0.3F, backTarget, this, 10);  //
 
         drivetrain.StopAll();
 

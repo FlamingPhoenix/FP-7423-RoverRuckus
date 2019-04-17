@@ -1573,11 +1573,11 @@ public abstract class AutoBase extends LinearOpMode {
             MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
             if (goldPosition == MineralPosition.CENTER) {
                 if (Math.abs(intakeMotor.getCurrentPosition()) >= 300) {
-                    rotate.setPosition(.95); //lower the collection box
+                    rotate.setPosition(.92); //lower the collection box
                 }
             } else {
                 if (Math.abs(intakeMotor.getCurrentPosition()) >= 550) {
-                    rotate.setPosition(.95);
+                    rotate.setPosition(.92);
                 }
             }
         }
@@ -1588,7 +1588,7 @@ public abstract class AutoBase extends LinearOpMode {
         sleep(1000);
 
         rotate.setPosition(0.2);
-        sleep(500);
+        sleep(200);
         sweep.setPower(0);
 
         while (intakeMotor.getCurrentPosition() < 0) {

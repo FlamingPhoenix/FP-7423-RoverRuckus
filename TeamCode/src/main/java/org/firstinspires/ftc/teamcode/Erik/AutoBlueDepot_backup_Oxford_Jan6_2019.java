@@ -49,7 +49,7 @@ public class AutoBlueDepot_backup_Oxford_Jan6_2019 extends AutoBase {
         // this is optional, as most likely the robot will see image after above 52 degree turn.
         drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, frontTarget, imu, this);
         //strafe to image
-        drivetrain.StrafeToImage(0.40f, frontTarget, this); // was 0.4
+        drivetrain.StrafeToImage(0.40f, frontTarget, this, 10); // was 0.4
 
         sleep(100);
         // VERY IMPORTANT, PLEASE KEEP THIS PART WHEN UPDATING FINAL VERSION OF AUTONOMOUS PROGRAM !!

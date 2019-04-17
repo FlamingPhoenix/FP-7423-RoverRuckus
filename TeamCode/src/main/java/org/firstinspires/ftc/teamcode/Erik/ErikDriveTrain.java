@@ -56,7 +56,7 @@ public class ErikDriveTrain extends DriveTrain {
     // add function used to be called DriveToImageErik, now changed name to StrafeToImage and then inherit from super class
 
     @Override
-    public void StrafeToImage(float power, VuforiaTrackable imageTarget, LinearOpMode opMode) {
+    public void StrafeToImage(float power, VuforiaTrackable imageTarget, LinearOpMode opMode, float safetyDistance) {
 
         //super.StrafeToImage(float power, VuforiaTrackable imageTarget, OpMode opMode) // no constructor for method  
 

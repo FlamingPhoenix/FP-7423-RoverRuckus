@@ -118,7 +118,7 @@ public class TestStrafeToGold extends AutoBase {
         // this is optional, as most likely the robot will see image after above 95 degree turn.
         drivetrain.TurnToImage(0.13f, Direction.COUNTERCLOCKWISE, redTarget, imu, this);
         //strafe to image
-        drivetrain.StrafeToImage(0.25f, redTarget, this);
+        drivetrain.StrafeToImage(0.25f, redTarget, this, 10);
         sleep(300);
 
         if (tfod != null) { // now it is ok to shutdown tfod/vuforia
