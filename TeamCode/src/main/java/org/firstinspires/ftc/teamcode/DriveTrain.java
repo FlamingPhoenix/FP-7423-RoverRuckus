@@ -166,7 +166,7 @@ public class DriveTrain {
                 currentAngle = imu.getAngularOrientation().firstAngle;
                 AngularVelocity v =  imu.getAngularVelocity();
                 float speed = Math.abs(v.xRotationRate);
-                stoppingAngle = Math.abs(( 0.2884f * speed) - 10.19f);
+                stoppingAngle = Math.abs(( 0.2648f * speed) - 8.5609f);
                 Log.i("[phoenix:turnTest]", String.format("StartingAngle=%f, CurrentAngle=%f, AngularVelocity=%f, StoppingAngle=%f", startOrientation.firstAngle, currentAngle, speed, stoppingAngle));
 
                 fl.setPower(-(actualPower));
@@ -190,7 +190,7 @@ public class DriveTrain {
                 currentAngle = imu.getAngularOrientation().firstAngle;
                 AngularVelocity v =  imu.getAngularVelocity();
                 float speed = Math.abs(v.xRotationRate);
-                stoppingAngle = Math.abs(( 0.2884f * speed) - 10.19f);
+                stoppingAngle = Math.abs(( 0.2648f * speed) - 8.5609f);
 
                 fl.setPower(-(actualPower));
                 fr.setPower(actualPower);
@@ -405,7 +405,6 @@ public class DriveTrain {
     }*/
 
     public OpenGLMatrix ObtainRobotCenterLocation(float initialPower, VuforiaTrackable imageTarget, MyBoschIMU imu, LinearOpMode opMode) {
-
         OpenGLMatrix lastLocation = null;
 
         return lastLocation;
