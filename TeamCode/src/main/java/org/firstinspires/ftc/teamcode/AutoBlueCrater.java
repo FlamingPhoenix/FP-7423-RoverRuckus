@@ -78,7 +78,7 @@ public class AutoBlueCrater extends AutoBase {
             drivetrain.Turn(.5f, 180, Direction.COUNTERCLOCKWISE, imu, this);
             sleep(100);
             drivetrain.Strafe(.4F, 5f, Direction.LEFT);
-            drivetrain.Drive(1f, 24f, Direction.FORWARD);
+            drivetrain.Drive(1f, 20f, Direction.FORWARD);
             markerHook.setPosition(1);
 
             MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();

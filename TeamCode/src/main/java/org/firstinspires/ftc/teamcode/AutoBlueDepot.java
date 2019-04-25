@@ -51,10 +51,10 @@ public class AutoBlueDepot extends AutoBase {
         // Prep steps a) Move forward 3 inches, b) strafe, c) turn about 45 degree, ready to scan mineral
         float a = imu.getAngularOrientation().firstAngle;
         Log.i("[phoenix]: ", String.format("imu2 = %f", a));
-        float distanceFromLander = 3.5f;
-        drivetrain.Drive(0.40f, distanceFromLander, Direction.FORWARD); //3.5
+        //float distanceFromLander = 3.5f;
+        drivetrain.Drive(0.40f, 3.5f, Direction.FORWARD); //3.5
 
-        sampleByMoving(distanceFromLander, a);
+        sampleByMoving(3.5f, a);
 
         MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
         drivetrain.StrafeToImage(0.3f, frontTarget, this, 10);
@@ -63,7 +63,7 @@ public class AutoBlueDepot extends AutoBase {
         sleep(100);
         drivetrain.Turn(.5f, 180, Direction.COUNTERCLOCKWISE, imu, this);
         sleep(100);
-        drivetrain.Strafe(.4F, 5f, Direction.LEFT);
+        drivetrain.Strafe(.4F, 5.f, Direction.LEFT);
 
         telemetry.addData(" after the strafe to image", "after strafe to image");
         Log.i("[phoenix]:after strafe", "after strafe to image");
@@ -87,7 +87,7 @@ public class AutoBlueDepot extends AutoBase {
         drivetrain.Turn(.5f, 180, Direction.CLOCKWISE, imu, this);
         sleep(100);
         drivetrain.Strafe(.4F, 5f, Direction.RIGHT);
-        drivetrain.Drive(1f, 24f, Direction.FORWARD);
+        drivetrain.Drive(1f, 20f, Direction.FORWARD);
         markerHook.setPosition(1);
 
         MyRobot.linearSlidePosition = intakeMotor.getCurrentPosition();
