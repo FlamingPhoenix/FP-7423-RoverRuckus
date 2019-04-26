@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoControllerEx;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.vuforia.CameraDevice;
 import com.vuforia.HINT;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -154,9 +155,12 @@ public abstract class AutoBase extends LinearOpMode {
         imu = new MyBoschIMU(hardwareMap);
 
         imu.initialize(new BNO055IMU.Parameters());
+        com.vuforia.Vuforia VU = new com.vuforia.Vuforia();
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters param = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        com.vuforia.Vuforia.setInitParameters(null, 3, "" );
+        CameraDevice.getInstance().setField("iso","100");
         param.vuforiaLicenseKey = "AbYPrgD/////AAAAGbvKMH3NcEVFmPLgunQe4K0d1ZQi+afRLxricyooCq+sgY9Yh1j+bBrd0CdDCcoieA6trLCKBzymC515+Ps/FECtXv3+CTW6fg3/3+nvKZ6QA18h/cNZHg5HYHmghlcCgVUmSzOLRvdOpbS4S+0Y/sWGXwFK0PbuGPSN82w8XPDBoRYSWjAf8GXeitmNSlm9n4swrMoYNpMDuWCDjSm1kWnoErjFA9NuNoFzAgO+C/rYzoYjTJRk40ETVcAsahzatRlP7PJCvNNXiBhE6iVR+x7lFlTZ841xifOIOPkfVc54olC5XYe4A5ZmQ6WFD03W5HHdQrnmKPmkgcr1yqXAJ3rLTK8FZK3KVgbxz3Eeqps0";
         //param.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         param.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
@@ -166,6 +170,8 @@ public abstract class AutoBase extends LinearOpMode {
 
         VuforiaTrackables rover = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
         rover.activate();
+        telemetry.addData("iso", CameraDevice.getInstance().getFieldString("iso"));
+        telemetry.update();
 
         blueTarget = rover.get(0);
         blueTarget.setName("bluetarget");
@@ -194,6 +200,7 @@ public abstract class AutoBase extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minimumConfidence = 0.3;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
     }

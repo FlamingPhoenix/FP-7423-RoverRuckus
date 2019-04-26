@@ -29,9 +29,14 @@
 
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.vuforia.CameraDevice;
+import com.vuforia.CameraField;
+
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -50,7 +55,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * is explained below.
  */
 @TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
-@Disabled
+//@Disabled
 public class ConceptTensorFlowObjectDetection extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -173,5 +178,19 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+
+        com.vuforia.Vuforia.setInitParameters(tfodParameters.activity, 0, "");
+        com.vuforia.Vuforia.init();
+
+        int n = CameraDevice.getInstance().getNumFields();
+        for (int i = 0; i < n; i++)
+        {
+            CameraField cf = new CameraField();
+            CameraDevice.getInstance().getCameraField(i, cf);
+            Log.i("[phoenix:v]", String.format("%s, %s", cf.getKey(), cf.getType()));
+        }
+
+        CameraDevice.getInstance().setField("android.control.aeLock", true);
+        CameraDevice.getInstance().setField("android.control.aeExposureCompensation", -1);
     }
 }
